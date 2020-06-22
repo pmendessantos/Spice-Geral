@@ -1,0 +1,10 @@
+---
+title: Tutoriais de Instalação
+description: Instalação dos programas para o curso
+weight: 2000
+collapsible: true
+
+---
+
+
+## Aqui eu vou falar o básico sobre instalação

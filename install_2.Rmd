@@ -1,0 +1,142 @@
+---
+#date: "2020-06-11T00:00:00+01:00"
+draft: false
+linktitle: Instalando o NGSpice
+menu:
+  spice_geral:
+    name: Instalando o NGSpice
+    parent: Tutoriais de Instalação
+    weight: 2002
+title: Instalando o NGSpice
+toc: true
+type: docs
+weight: 2002
+output:
+  html_document:
+    theme: yeti
+    include:
+      in_header: head.html
+      after_body: footer.html
+    mathjax: null
+    lib_dir: libs
+    css: styles.css
+    logo: logo.jpg
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    highlight: pygments
+    highlight_options:
+      linenos: inline
+    pandoc_args: ["--syntax-definition", "spice.xml"]
+# theme: “cerulean”, “cosmo”, “flatly”, “journal”, “lumen”, “paper”, “readable”, “sandstone”, “simplex”, “spacelab”, “united”, and “yeti”
+#   #highlight: “default”, “tango”, “pygments”, “kate”, “monochrome”, “espresso”, “zenburn”, “haddock”, “breezedark”, “textmate”
+---
+
+## NGSpice
+
+O NGSpice é uma versão gratuita da linguagem [Spice3](http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/) (evolução do SPICE original de Berkeley). É uma continuidade da última versão lançada a `3f.5` (1993). Ao longo dos anos, vários problemas foram resolvidos e facilidades adicionadas. Além disso foi feita a integração da linguagem Spice com duas extensões:
+
+* **[Cider](https://www2.eecs.berkeley.edu/Pubs/TechRpts/1993/2382.html)**: permite a simulação de circuitos de sinais mistos: analógicos e digitais num único circuito. Muito útil para sistemas de aquisição de sinais ou conversão de dados (DAC ou ADC).
+
+* **[Xspice](http://ngspice.sourceforge.net/xspice.html)**: permite a inclusão de sistemas e componentes especiais na simulação, tais como blocos no domínio da frequência (modelados pela transformação de Fourier), modelos magnéticos e memristores. Também permite a simulação de sinais mistos, já que conta com várias portas digitais com muitas funções e até máquinas de estado.
+
+Dessa forma, o NGSpice é mais que apenas o Spice3 original e permite que se faça muita coisa com ele. Várias empresas o usam como _backend_ de simulação, construindo uma interface amigável para captura de esquemáticos, entrada e saída de dados e visualização de resultados. 
+
+Como NGSpice não fornece essas ferramentas é preciso que se use outros _software_ para isso. É nesse sentido que usaremos o [Notepad++](install_1.html), o [Electric](install_3.html) e até o [LTSpice](install_4.html).
+
+
+## Linux: Ubuntu / Fedora
+
+O NGSpice é a principal versão gratuita do simulador para Linux e, portanto, já está presente nos repositórios oficiais tanto do Ubuntu quanto do Fedora. Por extensão pode-se encontrá-lo no Debian, que é a distribuição em que se baseia o Ubuntu e também no Red Hat, o análogo para o Fedora.
+
+Assim, para a instalação, a forma mais cômoda é instalar o pacote pré-compilado da distribuição: eles são atualizados com frequência. Para tanto, você precisará de permissões de superusário (ou _root_) para a instalação, bastando abrir um terminal e digitar o comandos abaixo.
+
+No Ubuntu:
+```bash
+sudo apt-get install ngspice
+```
+
+No Fedora:
+```bash
+sudo dnf install ngspice
+```
+
+Uma outra opção é baixar o código-fonte do NGSpice direto da [página](http://ngspice.sourceforge.net/) e compilá-lo segundo as instruções dos desenvolvedores. A versão que será usada nesse curso é a `31.3-2`. No Fedora é possível instalar a versão `32.2` direto do repositório. Embora sejam diferentes, os comandos abordados durante o curso são básicos e não haverá problema usar uma ou outra versão.
+
+Após a instalação, ao chamar o comando `ngspice` no terminal, o console do NGspice será iniciado pronto para a entrada de comandos específicos do programa.
+
+```{r , echo=FALSE, fig.cap="NGSpice rodando no Linux", out.width = '70%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ngspice_run_lnx.png') 
+```
+
+Para sair do NGSpice, basta executar o comando: `exit` no console.
+
+## Windows
+
+A "instalação" no Windows é simples por um lado, mas exige passos adicionais do outro. A simplicidade é que você pode baixar o NGSpice para Windows, descompactá-lo em qualquer pasta e ele já está pronto para usar. A configuração adicional necessária tem a ver com a possibilidade de que você possa rodar o NGSpice de qualquer pasta e não somente da pasta onde se encontra o executável. Na página acima, você poderá fazer o _download_ do programa direto da [Sourceforge](https://sourceforge.net/). Escolha a versão compatível com o seu sistema, 32 ou 64 bits e salve o arquivo numa pasta a que você tenha acesso fácil. Recomenda-se também baixar o manual: `ngspice-32-manual.pdf`.
+
+Você pode descompactar o arquivo em qualquer diretório da sua escolha para ser a base de execução do NGSpice. Para simplicidade desse tutorial, digamos que essa pasta seja `C:\ngspice\`. Agora o passo final é tornar o `ngspice.exe` visível para todo o sistema. Isso é feito alterando-se a variável de ambiente `Path` do sistema. Para isso, veja tutorial dessa [página](https://pt.stackoverflow.com/questions/5024/como-mudar-o-path-nos-windows). Se o computador for compartilhado e mais gente for usar o programa, a recomendação é que seja alterada a variável de **sistema** e não a de **usuário** (veja a [figura](install_2.html#edicao-de-variavel-de-ambiente-no-windows-10) abaixo). No Windows 7, 8 e 8.1 ao clicar em `Editar...` ou dar dois cliques na variável, adiciona-se `;` ao final dos valores e acrescenta-se o caminho para os executáveis. No nosso caso: `...;C:\ngspice\bin\`. Basta clicar em `OK` e reiniciar o computador.
+
+<!---
+> Cuidado ao utilizar diretórios com acentos e espaços!!!
+> Se for utilizar esse tipo de diretório, coloque o conteúdo entre aspas.
+--->
+
+```{r , echo=FALSE, fig.cap="Edição de Variável de Ambiente no Windows 10", out.width = '50%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/sys_variables_win10.png') 
+```
+
+Após reiniciar, para testar se está tudo certo, basta abrir o `Prompt de Comando` e digitar o comando `ngspice`. Se a etapa anterior deu certo, você deverá ver uma tela do console como essa:
+
+```{r , echo=FALSE, fig.cap="NGSpice rodando no Windows 10", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ngspice_run_win.png') 
+```
+
+Para sair do NGSpice, basta executar o comando: `exit` no console.
+
+## Instalação num pendrive
+
+Se você quiser, pode realizar o processo descrito para o Windows direto num pendrive e rodá-lo a partir de lá. Obviamente não recomenda-se que você altere a variável de ambiente `Path` se for fazer isso. E, quando for usar, terá de colocar o caminho de diretório completo para a subpasta `bin` do NGSpice. Embora haja esse "inconveniente", você poderá usar o NGSpice em qualquer computador, mesmo que ele não esteja instalado.
+
+Você poderá também instalar o [LTSpice](install_3.html) e o [Electric](install_4.html) num pendrive e levá-los consigo ficando com um pacote completo de projeto e simulação de circuitos eletroeletrônicos.
+
+
+## Testando o NGSpice
+
+Para testar o NGSpice, crie um arquivo de texto `rc.spi` num diretório à sua escolha, copie e cole o código abaixo.
+
+```spice 
+* Circuito de teste
+R1 1 2 10k
+C1 2 0 10n
+V1 1 0 dc 0 ac 1
+.end
+
+.control
+	ac dec 100 1 10meg
+	plot vdb(2)
+.endc
+```
+
+Salve o arquivo. Abra um terminal na pasta em que está o arquivo (isso é importante), chame o NGspice, como mostrado anteriormente e execute o comando abaixo no console:
+
+```bash
+source rc.spi
+```
+
+Uma janela como essa deverá aparecer com a resposta em frequência do circuito RC série do código:
+
+```{r , echo=FALSE, fig.cap="Teste do NGSpice com circuito RC série", out.width = '70%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/teste_ngspice_rc.png') 
+```
+
+Para sair do NGSpice, basta executar o comando: `exit` no console.
+
+## Suporte
+
+Além do manual que está disponível para _download_ direto da [Sourceforge](http://ngspice.sourceforge.net/docs/ngspice-32-manual.pdf), na [página](http://ngspice.sourceforge.net/) do NGSpice há também uma seção de [tutoriais](http://ngspice.sourceforge.net/tutorials.html), com detalhes sobre o _software_, aplicações, as F.A.Q. e novidades.
+
+Há também uma grande quantidade de vídeos no [Youtube](https://www.youtube.com/results?search_query=ngspice) sobre o NGSpice que você pode acompanhar. Em especial, o canal [`bfestevao`](https://www.youtube.com/user/bfestevao) tem vídeos introdutórios muito bons. 
+
+________________________________________________________________

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Criando Bibliotecas e Circuitos</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<script src="libs/ace-1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/holder-2.9.0/holder.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="snippets/snippets.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77306155-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">A Linguagem Spice</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorais de Instalação
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="install_1.html">Instalando o Notepad++</a>
+    </li>
+    <li>
+      <a href="install_2.html">Instalando o NGSpice</a>
+    </li>
+    <li>
+      <a href="install_3.html">Instalando o LTSpice</a>
+    </li>
+    <li>
+      <a href="install_4.html">Instalando o Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Electric VLSI
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="electric_1.html">Configurando o Electric</a>
+    </li>
+    <li>
+      <a href="electric_2.html">Criando biliotecas e circuitos</a>
+    </li>
+    <li>
+      <a href="electric_3.html">Simulando circuitos a partir do Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Spice
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spice.html">Visão Geral</a>
+    </li>
+    <li>
+      <a href="spice_1.html">Estrutura Básica de Simulação</a>
+    </li>
+    <li>
+      <a href="spice_2.html">Elementos e Simulações Básicas</a>
+    </li>
+    <li>
+      <a href="spice_3.html">Modelos de Dispositivos</a>
+    </li>
+    <li>
+      <a href="spice_4.html">Parâmetros e Inclusões</a>
+    </li>
+    <li>
+      <a href="spice_5.html">Medições</a>
+    </li>
+    <li>
+      <a href="spice_6.html">Subcircuitos</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pmendessantos/spice_geral">
+    <span class="&lt;ion &lt;ion-icon name=&quot;git-branch-outline&quot;&gt;&lt;/ion-icon&gt;"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Criando Bibliotecas e Circuitos</h1>
+
+</div>
+
+
+<div id="organização-geral" class="section level2">
+<h2>Organização Geral</h2>
+<p>Ao lançar o Electric, uma biblioteca vazia <code>noname</code> (sem nome) será criada automaticamente. Você pode continuar editando essa biblioteca sem nome ou poderá salvá-la com o nome que desejar indo até <code>File-&gt;Save Library As...</code>.</p>
+<p>As bibliotecas são as coleções de circuitos que você pode fazer com a organização que você achar melhor. Você poderá trabalhar com várias bibliotecas ao mesmo tempo e usar circuitos de uma biblioteca em outra. Se assim o fizer elas se torna interdependentes, ou seja, uma biblioteca passa a ser dependência da outra para que se possa ver/editar os circuitos de forma adequada. As bibliotecas abertas e a listagem dos circuitos por biblioteca podem ser encontrados no painel lateral esquerdo, na aba <code>Explorer</code> (figura abaixo).</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_lib_detail.png" alt="Organização Geral de Documentos no Electric" width="35%" />
+<p class="caption">
+Organização Geral de Documentos no Electric
+</p>
+</div>
+<p>Os circuitos no Electric são chamados de células e têm um menu próprio para eles: <code>Cell</code>.</p>
+</div>
+<div id="criando-células-circuitos" class="section level2">
+<h2>Criando células (circuitos)</h2>
+<p>Há diversos tipos ou vistas (<code>views</code>) disponíveis para uma célula. Cada uma com uma função diferente. Os principais tipos são:</p>
+<ul>
+<li><em>schematic</em>: vista em que se constrói o esquema de ligações de circuito tal como se conhece.</li>
+<li><em>icon</em>: você pode criar um ícone que representará o circuito em questão quando ele fizer parte de um circuito maior.</li>
+<li><em>layout</em>: vista importante para o projeto de circuitos integrados, com o arranjo físico dos elementos para fabricação.</li>
+<li><em>VHDL</em>: código VHSIC-HDL<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> da célula. Útil para células/circuitos digitais.</li>
+<li><em>Verilog</em>: código Verilog HDL da célula. Útil para células/circuitos digitais.</li>
+<li><em>documentation</em>: célula puramente textual em que você pode colocar suas observações gerais sobre a sua construção. Muito útil quando uma biblioteca está sendo construída por várias pessoas.</li>
+</ul>
+<p>Para criar um esquemático, você pode ir em <code>Cell-&gt;New Cell</code>, coloque o nome do circuito, selecione a vista <em>schematic</em> e clique em <code>OK</code>. Importante dizer que, se houver mais de uma biblioteca aberta, você deverá também selecionar em qual biblioteca o circuito será criado. Veja figura do <a href="https://www.staticfreesoft.com/jmanual/mchap01-11-01.html">manual</a>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://www.staticfreesoft.com/jmanual/fig01-32.png" alt="Criando Célula com Esquemático - [Manual](https://www.staticfreesoft.com/jmanual/mchap01-11-01.html)." width="40%" />
+<p class="caption">
+Criando Célula com Esquemático - <a href="https://www.staticfreesoft.com/jmanual/mchap01-11-01.html">Manual</a>.
+</p>
+</div>
+<p>Depois de criada a vista de esquemático da célula <code>MyCircuit</code> ela será colocada na árvore de circuitos dentro da bilioteca <strong>noname</strong>. O ponto vermelho indica que essa célula tem uma vista de esquemático, bem como o <code>{sch}</code> ao final do nome. Como só há essa célula, só aparece o ponto vermelho. Outros tipos de célula terão outras cores e, se houver mais de uma vista para uma determinada célula, ela será identificada com um círculo de cores.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_cells_detail.png" alt="Célula com múltiplas vistas." width="30%" />
+<p class="caption">
+Célula com múltiplas vistas.
+</p>
+</div>
+<p>Se um circuito estiver sendo editado ainda não tiver sido salvo, as vistas que foram alteradas aparecerão em negrito no navegador de bibliotecas. Assim como também as bibliotecas que foram alteradas.</p>
+</div>
+<div id="editando-esquemáticos" class="section level2">
+<h2>Editando Esquemáticos</h2>
+<div id="criando-circuitos" class="section level3">
+<h3>Criando Circuitos</h3>
+<p>Para editar um esquemático criado, você pode dar dois cliques na vista da célula desejada e ela será invocada para o painel maior de edição, à direita do painel. Na barra de status da janela principal (na parte inferior da janela), aparecerá: <code>TECH: schematic</code>, indicando o tipo de vista que está sendo editada.</p>
+<p>Para escolher os componentes de circuito, no navegador do painel lateral esquerdo, selecione <code>Components</code>. A lista completa irá aparecer. Os campos com uma seta na parte inferior direita possuem várias opções para edição.</p>
+<p>Nem todos os elementos estarão desenhados ou disponíveis como desenho. Por exemplo, as fontes de tensão e corrente que usaremos nas simulações não possuem desenho e é preciso saber o que procurar antes. Elas estão no campo <code>Spice</code>.</p>
+<p>Ao selecionar um componente para inclusão ele já estará para ser incluído no esquemático, bastando levar o cursor para área de edição e clicar com o botão esquerdo.</p>
+<blockquote>
+<p>Importante: um componente colocado num esquemático é uma <strong>instância</strong> (ocorrência) desse componente. Por exemplo, se um circuito tiver 3 resistores, haverá três instâncias do componente <strong>resistor</strong>.</p>
+</blockquote>
+<p>Por isso, é sempre importante você atribuir um nome para esse componente, assim que você posicioná-lo no circuito. É o que irá diferenciá-lo dos demais e que permitirá a você poder rastrear os resultados de simulação.</p>
+</div>
+<div id="editando-componentes" class="section level3">
+<h3>Editando componentes</h3>
+<div id="propriedades" class="section level4">
+<h4>Propriedades</h4>
+<p>Para editar as propriedades de uma instância de um componente basta selecioná-la e:</p>
+<ol style="list-style-type: decimal">
+<li>Dar dois cliques com o botão esquerdo;</li>
+<li>Ou então acionar o atalho: <code>Ctrl+i</code>;</li>
+<li>Ou ainda via menu: <code>Edit-&gt;Properties-&gt;Object Properties...</code>;</li>
+</ol>
+<p>As opções irão variar de componente para componente, mas certamente algumas são comuns a todos:</p>
+<ul>
+<li><em>Name</em>: o nome da instância.</li>
+<li><em>X Position</em>: posição horizontal na tela de edição.</li>
+<li><em>Y Position</em>: posição vertical na tela de edição.</li>
+<li><em>Mirror L-R</em>: se a instância será espelhada da esquerda para a direita e vice-versa.</li>
+<li><em>Mirror U-D</em>: se a instância será espelhada de cima para baixo e vice-versa.</li>
+<li><em>Rotation</em>: rotação da instância, em graus.</li>
+</ul>
+</div>
+<div id="posicionamento-e-rotação" class="section level4">
+<h4>Posicionamento e rotação</h4>
+<p>Além de modificar o posicionamento nas propriedades, você pode clicar, segurar e arrastar um componente para movê-lo (se ele estiver conectado as conexões serão movidas juntamente).</p>
+<p>Para rotacionar uma instância em ângulos de <span class="math inline">90<sup><em>o</em></sup></span> graus, após selecioná-la, você pode acionar o atalho <code>Ctrl+j</code> ou então via menu: <code>Edit-&gt;Rotate</code>.</p>
+</div>
+<div id="zoom-e-visualização" class="section level4">
+<h4>Zoom e Visualização</h4>
+<p>Você pode aumentar ou diminuir o zoom no circuito, com a vista centralizada no cursor, segurando a tecla <code>Ctrl</code> e acionando a roda do mouse.</p>
+<p>Se quiser colocar todos os componentes do circuito visíveis na tela, pressione <code>Ctrl+9</code>.</p>
+<p>Para manter o zoom e mover a visualização você pode:</p>
+<ul>
+<li>Mover a visualização na horizontal: segure <code>Shift</code> e acione a roda do mouse;</li>
+<li>Mover a visulaização na vertical: segure <code>Alt</code> e acione a roda do mouse;</li>
+</ul>
+<p>Para algumas pessoas pode ficar mais fácil de editar um circuito com a grade (<em>grid</em>) de pontos ativada. Ela ajuda a dar a sensação de tamanho, estética e simetria que, para muitos pessoa é considerada essencial.</p>
+<p>Para acionar a grade, pressione <code>Ctrl+g</code> ou vá ao menu <code>Window-&gt;Toggle Grid...</code></p>
+<p>Um outro fator que pode ajudar para algumas pessoas é usar um fundo (<em>background</em>) claro ou mesmo personalizar as cores do Electric<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Para alterar o fundo, vá até <code>Window-&gt;Color Schemes</code>.</p>
+</div>
+</div>
+<div id="conectando-componentes" class="section level3">
+<h3>Conectando componentes</h3>
+<p>Clicando com o botão <strong>esquerdo</strong> perto das extremidades de um componente você o seleciona bem como aquele ponto de conexão.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_component_connection1.png" alt="Conectando componentes." width="100%" />
+<p class="caption">
+Conectando componentes.
+</p>
+</div>
+<p>Após essa seleção basta clicar com o botão <strong>direito</strong> na porta desejada do outro componente e eles estarão conectados. Um som também é emitido quando essa conexão é realizada.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_component_connection2.png" alt="Conectando componentes." width="100%" />
+<p class="caption">
+Conectando componentes.
+</p>
+</div>
+<p>Outra verificação é que os arcos ou conexões são azuis e os componentes são vermelhos. Por fim, como verificação final, na janela de mensagens pode-se verificar <code>No errors found</code>. Essa mensagem aparecerá automaticamente já que selecionanmos <strong>DRC</strong> automática nas configurações realizadas.</p>
+<div id="renomeando-arcos" class="section level4">
+<h4>(Re)nomeando arcos</h4>
+<p>Você pode deixar que o Electric dê nome aos nós (arcos) entre componentes de forma automática ou, para aqueles que considerar mais importante, você pode renomeá-los para poder rastrear os resultados de simulação mais facilmente.</p>
+<p>Para fazer isso, selecione o arco de interesse clicando sobre ele. Ele ficará vermelho. Aí você pode fazer como anteriormente para os componentes: dar dois cliques com o botão esquerdo ou acionar <code>Ctrl+i</code>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_arc_properties.png" alt="Propriedades de um arco." width="40%" />
+<p class="caption">
+Propriedades de um arco.
+</p>
+</div>
+<p>Na figura acima, por exemplo, o nome <code>net@0</code> foi atribuído automaticamente pelo Electric por ser o primeiro arco do circuito. Os próximos seguirão a sequência numérica. Num circuito pequeno pode ser fácil localizar os arcos, mas, à medida em que o circuito aumenta de tamanho, recomenda-se que os arcos importantes sejam renomeados tão logo sejam criados para que não se perca o rastreamento depois.</p>
+<p>Ao clicar no botão <code>More</code>, outras propriedades aparecem, tal como na figura abaixo.</p>
+<div class="figure" style="text-align: center">
+<img src="https://www.staticfreesoft.com/jmanual/fig02-02.png" alt="Propriedades expandidas de um arco - [Manual](https://www.staticfreesoft.com/jmanual/mchap02-05-02.html#mchap02-05-02.html)." width="40%" />
+<p class="caption">
+Propriedades expandidas de um arco - <a href="https://www.staticfreesoft.com/jmanual/mchap02-05-02.html#mchap02-05-02.html">Manual</a>.
+</p>
+</div>
+<p>Ao renomear um arco, o nome dado aparece ostensivamente sobre ele. Por exemplo, ao renomear o arco da <a href="electric_2.html#conectando-componentes">figura</a> para <strong>v1</strong>, o circuito ficará assim:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_component_connection3.png" alt="Conectando componentes." width="100%" />
+<p class="caption">
+Conectando componentes.
+</p>
+</div>
+</div>
+</div>
+<div id="componentes-disponíveis" class="section level3">
+<h3>Componentes disponíveis</h3>
+<p>Os componentes disponíveis estão detalhados na figura abaixo.</p>
+<div class="figure" style="text-align: center">
+<img src="https://www.staticfreesoft.com/jmanual/fig07-03.png" alt="Componentes de Esquemáticos - [Manual](https://www.staticfreesoft.com/jmanual/mchap07-05-01.html)." width="40%" />
+<p class="caption">
+Componentes de Esquemáticos - <a href="https://www.staticfreesoft.com/jmanual/mchap07-05-01.html">Manual</a>.
+</p>
+</div>
+<p>Dentre todos os componentes, destacam-se:</p>
+<ul>
+<li><h4 id="terra-de-circuito-ground">Terra de Circuito (<em>Ground</em>):</h4>
+<p>É o nó zero <code>0</code> da simulação Spice, isto é, a referência geral para todo o circuito. É relativo a esse nó que serão medidas todas as tensões do circuito.</p>
+<p>No código Spice que será gerado será substituído por <code>gnd</code>.</p>
+<p>Um circuito eletroeletrônico pode ter várias referências que não somente o nó zero, mas sem ele a simulação não funciona. O Spice não conseguirá calcular as matrizes de solução do circuito sem ele. Por isso é importante que todo circuito tenha um nó de Terra.</p></li>
+<li><h4 id="nós-globais-global">Nós Globais (<em>Global</em>):</h4>
+<p>Em circuitos grandes é comum setorizá-los por função e cada função separada torna-se um subcircuito. Como nenhum circuito funcionará sem energia e alguns sinais deverão sair e entrar em vários blocos, costuma-se tornar alguns nós como globais. Ou seja, eles são acessíveis dentro de qualquer subcircuito, mesmo que não se tenha declarado uma porta de entrada ou saída de sinal para aquele subcircuito.</p>
+<p>O componente <code>Global</code> serve para isso. Ao criar um nó global você também pode definir, nas suas propriedades, o tipo de sinal que irá fluir, veja na figura abaixo.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_global_node_properties.gif" alt="Propriedades do Nó Global." width="40%" />
+<p class="caption">
+Propriedades do Nó Global.
+</p>
+</div>
+<p>Consequentemente, os nós de terra e alimentação (energia) usualmente são tidos como nós globais. O nó de Terra apresentado é um nó global por definição no Electric. Se houver necessidade de outros sinais, usa-se o componente <code>Global</code>.</p></li>
+<li><h4 id="potência-power">Potência (<em>Power</em>):</h4>
+<p>O nó <em>Power</em> é um caso especial de nó global para ligação de energia. Ele necessariamente irá ser substituído no código Spice por <code>vdd</code> que é o nome comum para circuitos <strong>CMOS</strong> (<em>Complementary MOS</em>). Assim, para circuitos com transistores de efeito de campo, o nó <em>Power</em> pode ser usado para a distribuição de potência pelos circuitos.</p></li>
+<li><h4 id="portas-e-exportações-off-page">Portas e Exportações (<em>Off-Page</em>):</h4>
+<p>São conectores que servem para interconectar pontos do circuito construído com o mundo externo caso esse circuito vá se tornar um subcircuito num projeto maior. Ao criar um nó desses, você pode defini-lo como um nó de exportação/importação de sinais ou simplesmente uma porta de sinal.</p>
+<p>Isso pode ser feito selecionando-se uma porta colocada no circuito e pressionando-se <code>Ctrl+E</code>, ou via menu, <code>Export-&gt;Create Export...</code>. Uma janela (veja figura abaixo) irá aparecer onde define-se o tipo de sinal, tal como mostrado para o nó <a href="electric_2.html#propriedades-do-no-global">global</a>.</p></li>
+</ul>
+</div>
+</div>
+<div id="renomeando-e-reutilizando-células" class="section level2">
+<h2>Renomeando e Reutilizando Células</h2>
+<p>Você pode renomear uma célula em grupo ou por vista. Para fazer em grupo, basta clicar no grupo de células com o botão direito do mouse (figura abaixo).</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_cellgroup_options.png" alt="Opções de célula (grupo)." width="40%" />
+<p class="caption">
+Opções de célula (grupo).
+</p>
+</div>
+<p>Ou então, por vista (figura abaixo). Contudo, alterar uma das vistas irá mudar o nome do grupo, embora o nome de algumas vistas ainda permaneçam o mesmo.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_cell_options.png" alt="Opções de célula (vista)." width="40%" />
+<p class="caption">
+Opções de célula (vista).
+</p>
+</div>
+</div>
+<div id="exemplo-1" class="section level2">
+<h2>Exemplo 1</h2>
+<div id="divisor-resistivo-tensão" class="section level3">
+<h3>Divisor Resistivo (Tensão)</h3>
+<p>Criando um divisor de tensão resistivo.</p>
+</div>
+</div>
+<div id="exemplo-2" class="section level2">
+<h2>Exemplo 2</h2>
+<div id="divisor-resistivo-corrente" class="section level3">
+<h3>Divisor Resistivo (Corrente)</h3>
+<p>Criando um divisor de corrente resistivo.</p>
+</div>
+</div>
+<div id="exemplo-3" class="section level2">
+<h2>Exemplo 3</h2>
+<div id="rc-série" class="section level3">
+<h3>RC Série</h3>
+<p>Criando um circuito RC série.</p>
+</div>
+</div>
+<div id="exemplo-4" class="section level2">
+<h2>Exemplo 4</h2>
+<div id="emissor-comum-com-resistor" class="section level3">
+<h3>Emissor-Comum com Resistor</h3>
+<p>Criando um amplificador Emissor-Comum com carga restiva.</p>
+</div>
+</div>
+<div id="exemplo-5" class="section level2">
+<h2>Exemplo 5</h2>
+<div id="fonte-comum-com-resistor" class="section level3">
+<h3>Fonte-Comum com Resistor</h3>
+<p>Criando um amplificador Fonte-Comum com carga restiva.</p>
+</div>
+</div>
+<div id="exemplo-6" class="section level2">
+<h2>Exemplo 6</h2>
+<div id="emissor-comum-com-carga-ativa" class="section level3">
+<h3>Emissor-Comum com Carga ativa</h3>
+<p>Criando um amplificador Emissor-Comum com carga ativa.</p>
+</div>
+</div>
+<div id="exemplo-7" class="section level2">
+<h2>Exemplo 7</h2>
+<div id="fonte-comum-com-carga-ativa" class="section level3">
+<h3>Fonte-Comum com Carga ativa</h3>
+<p>Criando um amplificador Fonte-Comum com carga ativa.</p>
+</div>
+</div>
+<div id="exemplo-8" class="section level2">
+<h2>Exemplo 8</h2>
+<div id="amplificador-ec-como-subcircuito" class="section level3">
+<h3>Amplificador EC como subcircuito</h3>
+<p>Amplificador emissor-comum com carga ativa como subcircuito.</p>
+</div>
+</div>
+<div id="exemplo-9" class="section level2">
+<h2>Exemplo 9</h2>
+<div id="amplificador-fc-como-subcircuito" class="section level3">
+<h3>Amplificador FC como subcircuito</h3>
+<p>Amplificador fonte-comum com carga ativa como subcircuito.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Very High Speed Integrated Circuit Hardware Description Language.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Embora não se recomende mudar todas as cores de pronto, dada a complexidade de elementos que envolvem toda a interface de edição do Electric.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+
+<p>© Copyright 2020 <a href="https://github.com/pmendessantos">Patrick Mendes dos Santos.</a> </p>
+
+<p>Sob licença <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, v2.0.</a> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Instalando o NGSpice</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<script src="libs/ace-1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/holder-2.9.0/holder.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="snippets/snippets.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77306155-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">A Linguagem Spice</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorais de Instalação
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="install_1.html">Instalando o Notepad++</a>
+    </li>
+    <li>
+      <a href="install_2.html">Instalando o NGSpice</a>
+    </li>
+    <li>
+      <a href="install_3.html">Instalando o LTSpice</a>
+    </li>
+    <li>
+      <a href="install_4.html">Instalando o Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Electric VLSI
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="electric_1.html">Configurando o Electric</a>
+    </li>
+    <li>
+      <a href="electric_2.html">Criando biliotecas e circuitos</a>
+    </li>
+    <li>
+      <a href="electric_3.html">Simulando circuitos a partir do Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Spice
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spice.html">Visão Geral</a>
+    </li>
+    <li>
+      <a href="spice_1.html">Estrutura Básica de Simulação</a>
+    </li>
+    <li>
+      <a href="spice_2.html">Elementos e Simulações Básicas</a>
+    </li>
+    <li>
+      <a href="spice_3.html">Modelos de Dispositivos</a>
+    </li>
+    <li>
+      <a href="spice_4.html">Parâmetros e Inclusões</a>
+    </li>
+    <li>
+      <a href="spice_5.html">Medições</a>
+    </li>
+    <li>
+      <a href="spice_6.html">Subcircuitos</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pmendessantos/spice_geral">
+    <span class="&lt;ion &lt;ion-icon name=&quot;git-branch-outline&quot;&gt;&lt;/ion-icon&gt;"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Instalando o NGSpice</h1>
+
+</div>
+
+
+<div id="ngspice" class="section level2">
+<h2>NGSpice</h2>
+<p>O NGSpice é uma versão gratuita da linguagem <a href="http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/">Spice3</a> (evolução do SPICE original de Berkeley). É uma continuidade da última versão lançada a <code>3f.5</code> (1993). Ao longo dos anos, vários problemas foram resolvidos e facilidades adicionadas. Além disso foi feita a integração da linguagem Spice com duas extensões:</p>
+<ul>
+<li><p><strong><a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1993/2382.html">Cider</a></strong>: permite a simulação de circuitos de sinais mistos: analógicos e digitais num único circuito. Muito útil para sistemas de aquisição de sinais ou conversão de dados (DAC ou ADC).</p></li>
+<li><p><strong><a href="http://ngspice.sourceforge.net/xspice.html">Xspice</a></strong>: permite a inclusão de sistemas e componentes especiais na simulação, tais como blocos no domínio da frequência (modelados pela transformação de Fourier), modelos magnéticos e memristores. Também permite a simulação de sinais mistos, já que conta com várias portas digitais com muitas funções e até máquinas de estado.</p></li>
+</ul>
+<p>Dessa forma, o NGSpice é mais que apenas o Spice3 original e permite que se faça muita coisa com ele. Várias empresas o usam como <em>backend</em> de simulação, construindo uma interface amigável para captura de esquemáticos, entrada e saída de dados e visualização de resultados.</p>
+<p>Como NGSpice não fornece essas ferramentas é preciso que se use outros <em>software</em> para isso. É nesse sentido que usaremos o <a href="install_1.html">Notepad++</a>, o <a href="install_3.html">Electric</a> e até o <a href="install_4.html">LTSpice</a>.</p>
+</div>
+<div id="linux-ubuntu-fedora" class="section level2">
+<h2>Linux: Ubuntu / Fedora</h2>
+<p>O NGSpice é a principal versão gratuita do simulador para Linux e, portanto, já está presente nos repositórios oficiais tanto do Ubuntu quanto do Fedora. Por extensão pode-se encontrá-lo no Debian, que é a distribuição em que se baseia o Ubuntu e também no Red Hat, o análogo para o Fedora.</p>
+<p>Assim, para a instalação, a forma mais cômoda é instalar o pacote pré-compilado da distribuição: eles são atualizados com frequência. Para tanto, você precisará de permissões de superusário (ou <em>root</em>) para a instalação, bastando abrir um terminal e digitar o comandos abaixo.</p>
+<p>No Ubuntu:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">sudo</span> apt-get install ngspice</a></code></pre></div>
+<p>No Fedora:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="fu">sudo</span> dnf install ngspice</a></code></pre></div>
+<p>Uma outra opção é baixar o código-fonte do NGSpice direto da <a href="http://ngspice.sourceforge.net/">página</a> e compilá-lo segundo as instruções dos desenvolvedores. A versão que será usada nesse curso é a <code>31.3-2</code>. No Fedora é possível instalar a versão <code>32.2</code> direto do repositório. Embora sejam diferentes, os comandos abordados durante o curso são básicos e não haverá problema usar uma ou outra versão.</p>
+<p>Após a instalação, ao chamar o comando <code>ngspice</code> no terminal, o console do NGspice será iniciado pronto para a entrada de comandos específicos do programa.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ngspice_run_lnx.png" alt="NGSpice rodando no Linux" width="70%" />
+<p class="caption">
+NGSpice rodando no Linux
+</p>
+</div>
+<p>Para sair do NGSpice, basta executar o comando: <code>exit</code> no console.</p>
+</div>
+<div id="windows" class="section level2">
+<h2>Windows</h2>
+<p>A “instalação” no Windows é simples por um lado, mas exige passos adicionais do outro. A simplicidade é que você pode baixar o NGSpice para Windows, descompactá-lo em qualquer pasta e ele já está pronto para usar. A configuração adicional necessária tem a ver com a possibilidade de que você possa rodar o NGSpice de qualquer pasta e não somente da pasta onde se encontra o executável. Na página acima, você poderá fazer o <em>download</em> do programa direto da <a href="https://sourceforge.net/">Sourceforge</a>. Escolha a versão compatível com o seu sistema, 32 ou 64 bits e salve o arquivo numa pasta a que você tenha acesso fácil. Recomenda-se também baixar o manual: <code>ngspice-32-manual.pdf</code>.</p>
+<p>Você pode descompactar o arquivo em qualquer diretório da sua escolha para ser a base de execução do NGSpice. Para simplicidade desse tutorial, digamos que essa pasta seja <code>C:\ngspice\</code>. Agora o passo final é tornar o <code>ngspice.exe</code> visível para todo o sistema. Isso é feito alterando-se a variável de ambiente <code>Path</code> do sistema. Para isso, veja tutorial dessa <a href="https://pt.stackoverflow.com/questions/5024/como-mudar-o-path-nos-windows">página</a>. Se o computador for compartilhado e mais gente for usar o programa, a recomendação é que seja alterada a variável de <strong>sistema</strong> e não a de <strong>usuário</strong> (veja a <a href="install_2.html#edicao-de-variavel-de-ambiente-no-windows-10">figura</a> abaixo). No Windows 7, 8 e 8.1 ao clicar em <code>Editar...</code> ou dar dois cliques na variável, adiciona-se <code>;</code> ao final dos valores e acrescenta-se o caminho para os executáveis. No nosso caso: <code>...;C:\ngspice\bin\</code>. Basta clicar em <code>OK</code> e reiniciar o computador.</p>
+<!---
+> Cuidado ao utilizar diretórios com acentos e espaços!!!
+> Se for utilizar esse tipo de diretório, coloque o conteúdo entre aspas.
+--->
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/sys_variables_win10.png" alt="Edição de Variável de Ambiente no Windows 10" width="50%" />
+<p class="caption">
+Edição de Variável de Ambiente no Windows 10
+</p>
+</div>
+<p>Após reiniciar, para testar se está tudo certo, basta abrir o <code>Prompt de Comando</code> e digitar o comando <code>ngspice</code>. Se a etapa anterior deu certo, você deverá ver uma tela do console como essa:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ngspice_run_win.png" alt="NGSpice rodando no Windows 10" width="85%" />
+<p class="caption">
+NGSpice rodando no Windows 10
+</p>
+</div>
+<p>Para sair do NGSpice, basta executar o comando: <code>exit</code> no console.</p>
+</div>
+<div id="instalação-num-pendrive" class="section level2">
+<h2>Instalação num pendrive</h2>
+<p>Se você quiser, pode realizar o processo descrito para o Windows direto num pendrive e rodá-lo a partir de lá. Obviamente não recomenda-se que você altere a variável de ambiente <code>Path</code> se for fazer isso. E, quando for usar, terá de colocar o caminho de diretório completo para a subpasta <code>bin</code> do NGSpice. Embora haja esse “inconveniente”, você poderá usar o NGSpice em qualquer computador, mesmo que ele não esteja instalado.</p>
+<p>Você poderá também instalar o <a href="install_3.html">LTSpice</a> e o <a href="install_4.html">Electric</a> num pendrive e levá-los consigo ficando com um pacote completo de projeto e simulação de circuitos eletroeletrônicos.</p>
+</div>
+<div id="testando-o-ngspice" class="section level2">
+<h2>Testando o NGSpice</h2>
+<p>Para testar o NGSpice, crie um arquivo de texto <code>rc.spi</code> num diretório à sua escolha, copie e cole o código abaixo.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb3-1" title="1"><span class="co">* Circuito de teste</span></a>
+<a class="sourceLine" id="cb3-2" title="2">R1 <span class="dv">1</span> <span class="dv">2</span> 10k</a>
+<a class="sourceLine" id="cb3-3" title="3">C1 <span class="dv">2</span> <span class="dv">0</span> 10n</a>
+<a class="sourceLine" id="cb3-4" title="4">V1 <span class="dv">1</span> <span class="dv">0</span> dc <span class="dv">0</span> ac <span class="dv">1</span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="kw">.end</span></a>
+<a class="sourceLine" id="cb3-6" title="6"></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="kw">.control</span></a>
+<a class="sourceLine" id="cb3-8" title="8">    ac dec <span class="dv">100</span> <span class="dv">1</span> 10meg</a>
+<a class="sourceLine" id="cb3-9" title="9">    plot vdb(<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="kw">.endc</span></a></code></pre></div>
+<p>Salve o arquivo. Abra um terminal na pasta em que está o arquivo (isso é importante), chame o NGspice, como mostrado anteriormente e execute o comando abaixo no console:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="bu">source</span> rc.spi</a></code></pre></div>
+<p>Uma janela como essa deverá aparecer com a resposta em frequência do circuito RC série do código:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/teste_ngspice_rc.png" alt="Teste do NGSpice com circuito RC série" width="70%" />
+<p class="caption">
+Teste do NGSpice com circuito RC série
+</p>
+</div>
+<p>Para sair do NGSpice, basta executar o comando: <code>exit</code> no console.</p>
+</div>
+<div id="suporte" class="section level2">
+<h2>Suporte</h2>
+<p>Além do manual que está disponível para <em>download</em> direto da <a href="http://ngspice.sourceforge.net/docs/ngspice-32-manual.pdf">Sourceforge</a>, na <a href="http://ngspice.sourceforge.net/">página</a> do NGSpice há também uma seção de <a href="http://ngspice.sourceforge.net/tutorials.html">tutoriais</a>, com detalhes sobre o <em>software</em>, aplicações, as F.A.Q. e novidades.</p>
+<p>Há também uma grande quantidade de vídeos no <a href="https://www.youtube.com/results?search_query=ngspice">Youtube</a> sobre o NGSpice que você pode acompanhar. Em especial, o canal <a href="https://www.youtube.com/user/bfestevao"><code>bfestevao</code></a> tem vídeos introdutórios muito bons.</p>
+<hr />
+</div>
+
+
+<p>© Copyright 2020 <a href="https://github.com/pmendessantos">Patrick Mendes dos Santos.</a> </p>
+
+<p>Sob licença <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, v2.0.</a> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+
+</body>
+</html>

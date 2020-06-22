@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Patrick Mendes dos Santos" />
+
+
+<title>A Linguagem Spice</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<script src="libs/ace-1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/holder-2.9.0/holder.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="snippets/snippets.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77306155-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">A Linguagem Spice</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fab fa fab fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorais de Instalação
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="install_1.html">Instalando o Notepad++</a>
+    </li>
+    <li>
+      <a href="install_2.html">Instalando o NGSpice</a>
+    </li>
+    <li>
+      <a href="install_3.html">Instalando o LTSpice</a>
+    </li>
+    <li>
+      <a href="install_4.html">Instalando o Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Electric VLSI
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="electric_1.html">Configurando o Electric</a>
+    </li>
+    <li>
+      <a href="electric_2.html">Criando biliotecas e circuitos</a>
+    </li>
+    <li>
+      <a href="electric_3.html">Simulando circuitos a partir do Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Spice
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spice.html">Visão Geral</a>
+    </li>
+    <li>
+      <a href="spice_1.html">Estrutura Básica de Simulação</a>
+    </li>
+    <li>
+      <a href="spice_2.html">Elementos e Simulações Básicas</a>
+    </li>
+    <li>
+      <a href="spice_3.html">Dispositivos Eletrônicos</a>
+    </li>
+    <li>
+      <a href="spice_4.html">Parâmetros e Inclusões</a>
+    </li>
+    <li>
+      <a href="spice_5.html">Medições</a>
+    </li>
+    <li>
+      <a href="spice_6.html">Subcircuitos</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pmendessantos/spice_geral">
+    <span class="fab fa fab fa-github"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://www.linkedin.com/in/patrick-mendes-dos-santos-a93a0a37/">
+    <span class="fab fa fab fa-linkedin"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://stackoverflow.com/users/13710326/patrick-mendes?tab=profile">
+    <span class="fab fa fab fa-stack-overflow"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">A Linguagem Spice</h1>
+<h4 class="author">Patrick Mendes dos Santos</h4>
+
+</div>
+
+
+<p><i class="fab fa-r-project"></I></p>
+<div id="objetivos" class="section level1">
+<h1>Objetivos</h1>
+<p>Os principais objetivos desse curso são:</p>
+<ul>
+<li>Possibilitar que os participantes entendendam como funciona e para que serve a linguagem Spice.</li>
+<li>Mostrar diferenças entre algumas versões Spice.</li>
+<li>Mostrar que, com alguns poucos comandos é possível fazer estudos avançados sobre circuitos elétricos e eletrônicos.</li>
+<li>Mostrar que é possível usar a linguagem para projetar circuitos.</li>
+<li>Fornecer uma visão geral e necessária para que os participantes possam aprender funções avançadas de forma autônoma.</li>
+</ul>
+</div>
+<div id="o-que-você-vai-aprender" class="section level1">
+<h1>O que você vai aprender</h1>
+<ul>
+<li>Especificamente sobre a linguagem Spice:
+<ul>
+<li>Fluxos possíveis para códigos Spice</li>
+<li>Representação de elementos de circuitos (resistores, capacitores, etc.)</li>
+<li>Representação de elementos de circuitos eletrônicos (diodos, transistores, amplificadores, etc.)</li>
+<li>Análises de circuitos possíveis de serem feitas</li>
+<li>Medição de dados específicos dos circuitos simulados</li>
+<li>Visualização de dados de simulação</li>
+<li>Exportação de dados de simulação</li>
+<li>Lista de ferramentas avançadas</li>
+</ul></li>
+<li>Conteúdo adicional e transversal:
+<ul>
+<li>Construção de esquemáticos no Electric VLSI</li>
+<li>Organização de biblioteca de circuitos com o Electric VLSI</li>
+<li>Utilização do Notepad++</li>
+</ul></li>
+</ul>
+</div>
+<div id="duração" class="section level1">
+<h1>Duração</h1>
+<p>O curso está previsto para 4 horas de duração divididas em 2 dias. O conteúdo do curso será flexibilizado no tempo disponível de forma a permitir que todos possam aprender de forma satisfatória.</p>
+</div>
+<div id="material-do-curso" class="section level1">
+<h1>Material do curso</h1>
+<p>Além dos tutoriais de instalação e das demais páginas desse sítio, haverá também material de apoio no AVA (Moodle) do CEFET-MG.</p>
+</div>
+<div id="atividades-pré-curso" class="section level1">
+<h1>Atividades pré-curso</h1>
+<p>Todos os participantes deverão, antes do início do curso seguir os tutoriais de instalação de forma a ter as ferramentas do curso prontas e funcionais para a realização, sendo elas:</p>
+<ul>
+<li><strong><a href="install_1.html">Notepad++</a></strong>: editor avançado de textos para construção dos códigos de simulação.</li>
+<li><strong><a href="install_2.html">NGSpice</a></strong>: simulador Spice gratuito, livre e de código aberto.</li>
+<li><strong><a href="install_3.html">LTSpice</a></strong>: simulador Spice gratuito com funcionalidades diferentes do NGSpice.</li>
+<li><strong><a href="install_4.html">Electric</a></strong>: <em>software</em> para projeto de circuitos integrados (analógicos, digitais e de sinais mistos). Serve também para projetos mais complexos ainda que não sejam integrados, sem suporte à parte da construção de placas de circuito impresso.</li>
+</ul>
+<p>Para que você possa aproveitar melhor esse e os demais cursos do projeto, siga o tutorial abaixo (vídeo) para atrelar o <strong>MindMup 2.0</strong> ao seu <em>Google Drive</em>. Nós o usaremos para fazer mapas mentais, de forma a já introduzirmos uma das ferramentas de aprendizado.</p>
+<iframe src="https://www.youtube.com/embed/uCwUXszPBjI" width="100%" height="315" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<p>  <br />
+</p>
+<p><strong>O mapa mental para teste é este</strong> <a href="https://drive.google.com/file/d/1KglI8L9BBS4emMKmuseXomrv_oLDQHlz/view?usp=sharing">aqui</a>.</p>
+<p>Se a configuração tiver sido bem sucedida, você será capaz de editar o mapa mental no seu Google Drive, tal como na tela abaixo.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/mindmup_teste_conf.png" alt="Corrente versus Tensão no capacitor, no LTSpice." width="60%" />
+<p class="caption">
+Corrente versus Tensão no capacitor, no LTSpice.
+</p>
+</div>
+</div>
+<div id="sala-de-aula-virtual" class="section level1">
+<h1>Sala de aula virtual</h1>
+<p>Os encontros virtuais do projeto serão realizados pelo portal Conferência Web da Rede Nacional de Pesquisas (RNP), na minha sala particular.</p>
+<p>O endereço para a sala é: <a href="https://conferenciaweb.rnp.br/webconf/patrick-mendes-dos-santos">https://conferenciaweb.rnp.br/webconf/patrick-mendes-dos-santos</a>.</p>
+<p>Você não precisará ter login ou estar registrado previamente à plataforma da RNP. Basta colocar o seu nome, completo de preferência, na seção <strong>Não tenho uma conta</strong> (veja figura abaixo) e clicar em <strong>Entrar</strong>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://wiki.rnp.br/download/attachments/89114583/image2017-4-28%2011%3A51%3A26.png?version=1&modificationDate=1493391086000&api=v2" alt="Tela de _login_ na plataforma Conferência Web da RNP." width="100%" />
+<p class="caption">
+Tela de <em>login</em> na plataforma Conferência Web da RNP.
+</p>
+</div>
+<p>Ao entrar na sala o portal irá lhe perguntar se quer entrar como microfone ou só ouvir. Como precisaremos discutir vários aspectos, ainda que você não vá falar o tempo todo, habilite o microfone inicialmente e depois silencie-o até que você vá falar.</p>
+<p>Para aliviar a transmissão, deixe sua câmera desligada até que seja a sua hora de falar. Quando for a sua vez, ative a câmera para que todos possam vê-lo(la).</p>
+<p>Para testar a compatibilidade do seu dispositivo com a plataforma, por favor, use <a href="https://conferenciaweb.rnp.br/teste">esse link</a>.</p>
+<p>Um manual completo e detalhado sobre a plataforma pode ser encontrado <a href="https://portal.unila.edu.br/proagi/ctic/manuais-de-uso/manual-de-conferencia-web-rnp">aqui</a>.</p>
+<blockquote>
+<p>A sala de reuniões será aberta <strong>10 minutos</strong> antes do horário para que cada um possa ir testando as configurações e conexão.</p>
+</blockquote>
+<blockquote>
+<p>Caso você chegue atrasado(a) à reunião, pode ser que demore um pouco para que eu veja a sua chegada e permita a sua entrada. Qualquer coisa pode me acionar no Hangout do Google.</p>
+</blockquote>
+</div>
+<div id="em-caso-de-dúvidas" class="section level1">
+<h1>Em caso de dúvidas</h1>
+<p>Entre em contato pela lista de e-mails do grupo: <a href="mailto:aprendendo_c_foss@googlegroups.com" class="email">aprendendo_c_foss@googlegroups.com</a></p>
+<p>Ou diretamente comigo: <a href="mailto:patrickcefet@gmail.com" class="email">patrickcefet@gmail.com</a></p>
+<hr />
+</div>
+
+
+<p>© Copyright 2020 <a href="https://github.com/pmendessantos">Patrick Mendes dos Santos.</a> </p>
+
+<p>Sob licença <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, v2.0.</a> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+---
+date: "2020-06-10T00:00:00+01:00"
+draft: false
+linktitle: Instalando o Notepad++
+title: Instalando o Notepad++
+#author: Patrick Mendes
+resources:
+- src: "**.{png,jpg}"
+  title: "Image #:counter"
+type: docs
+weight: 2001
+
+#output:
+#  rmdformats::readthedown:
+#    include:
+#      in_header: head.html
+#      after_body: footer.html
+#    highlight: espresso
+#    pandoc_args: ["--syntax-definition", "spice.xml"]
+
+#output:
+#  rmdformats::html_clean:
+#    highlight: espresso
+#    toc: true
+#    toc_float: true
+#    toc_depth: 3
+#    pandoc_args: ["--syntax-definition", "spice.xml"]
+    
+output:
+  html_document:
+    toc_depth: 3
+    include:
+      in_header: head.html
+      after_body: footer.html
+# theme: “cerulean”, “cosmo”, “flatly”, “journal”, “lumen”, “paper”, “readable”, “sandstone”, “simplex”, “spacelab”, “united”, and “yeti”
+    theme: yeti
+    mathjax: null
+    lib_dir: libs
+    css: styles.css
+    logo: logo.jpg
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    highlight: pygments
+    highlight_options:
+      linenos: inline
+    pandoc_args: ["--syntax-definition", "spice.xml"]
+
+#   #highlight: “default”, “tango”, “pygments”, “kate”, “monochrome”, “espresso”, “zenburn”, “haddock”, “breezedark”, “textmate”
+
+#<div style="text-align: justify">
+---
+
+## Notepad++ 
+
+```{r , echo=FALSE, fig.cap="Editor de textos Notepad++", out.width = '50%', fig.align = 'center'}
+knitr::include_graphics('https://notepad-plus-plus.org/assets/images/notepad4ever.gif') 
+```
+
+O `Notepadd++` é um editor de textos avançado, gratuito e de código livre. Ele dá suporte de destaque de linguagem (_syntax highlight_) para diversas linguagens diferentes. Como ele foi desenvolvido para Windows, não está presente nos repositórios oficiais de nenhuma plataforma Linux. Para sua instalação no Linux há duas abordagens.
+
+
+A motivação de sua escolha, além de ser **FOSS**, está no fato de suas capacidades avançadas de edição, leveza (baixo consumo de memória), altamente configurável e suporte a gravação de áreas de trabalh: você pode manter diversos arquivos abertos, salvos ou não, podendo fechar o aplicativo e abri-lo novamente com todos os arquivos que estavam abertos anteriormente.
+
+Como a função do Notepad++ é apenas facilitar a produção de códigos de simulação na linguagem Spice, vários outros editores de texto podem ser usados para essa função, tanto no ambiente Windows como no Linux.
+
+Seguem os métodos de instalação do Notepad++ no Linux e Windows e também as alternativas válidas para substituí-lo.
+
+
+## Linux: Ubuntu / Fedora {.tabset}
+
+
+### Usando o Wine
+
+O **_Wine_** (_Wine Is Not an Emulator_) é um conjunto de programas que fazem a compatilização, em um certo nível de adequação, de aplicativos Windows de forma que possam ser rodados em Linux. Quando se diz em um certo nível de adequação é porque nem todos os _software_ nativos do Windows terão suporte da equipe de desenvolvimento do Wine. Na [página oficial](https://www.winehq.org/) há como obter uma lista dos aplicativos que foram testados em cada uma das versões do Wine, bem como ajuda para a utilização. Não é porque um aplicativo não está na lista dos testados que ele não possa funcionar no Wine. Só quer dizer que não foi testado. Como também é possível, devido à diversos fatores (como versão do Kernel ou _drivers_ específicos de _hardware_, por exemplo), que um aplicativo listado não funcione com o Wine no seu computador.
+
+Quanto mais simples um aplicativo, mais chances há dele funcionar. Menos dependências (_.dll's_), mais chances de sucesso. Menor exigência de _hardware_, maiores chances de sucesso. Esse é o caso do Notepad++.
+
+Tanto no Ubuntu quanto no Fedora você precisará de permissões de superusário (ou _root_) para a instalação, bastando abrir um terminal e digitar o comandos abaixo.
+
+#### Instando o Wine no Ubuntu (18.04/20.04): 
+
+Se você não tem um gerenciador de pacotes (Synaptic, por exemplo), pode fazer a instalação do Wine via linha de comando mesmo.
+
+```bash
+sudo apt-get install wine wine64 wine32 fonts-wine q4wine
+```
+Sendo que:
+
+* wine: suite padrão.
+* wine32: se for necessário o suporte para aplicativos 32 bits.
+* wine64: se for necessário o suporte para aplicativos 64 bits.
+* fonts-wine: fontes básicas para compatibilização da interface de exibição dos aplicativos com o Linux.
+* q4wine: aplicativo que faz uma interface amigável (_front-end_) para a utilização do wine sem a necessidade de linha de comando.
+
+
+#### Instando o Wine no Fedora (30/31/32):
+
+
+Se você não tem um gerenciador de pacotes (dnfdragora, por exemplo), pode fazer a instalação do Wine via linha de comando mesmo.
+
+```bash
+sudo dnf install wine wine-desktop q4wine winetricks wine-fonts 
+```
+Sendo que:
+
+* wine: suite padrão, pronta para suporte a 32 e 64 bits.
+* wine-desktop: cria menus na área de trabalho Linux para os aplicativos Windows, tal como se eles fossem nativos para Linux. Acrescenta também as ferramentas de configuração e suporte do Wine diretamente na área de trabalho.
+* q4wine: aplicativo que faz uma interface amigável (_front-end_) para a utilização do wine sem a necessidade de linha de comando.
+* winetricks: quase a mesma coisa do q4wine, mas pode-se usá-lo como linha de comando ou chamá-lo habilitar uma interface de usuário mais básica. 
+* wine-fonts: fontes básicas para compatibilização da interface de exibição dos aplicativos com o Linux.
+
+#### Instando o Notepad++ com o Wine
+
+
+Vá até a [página do Notepad++](https://notepad-plus-plus.org/) e na seção de **Download** e clique no **Installer** da versão que lhe interessa (32 ou 64 bits). Se estiver usando o `Firefox`, você poderá escolher em baixar o arquivo num diretório ou abri-lo diretamente com o `Q4Wine` (veja a figura abaixo).
+
+```{r , echo=FALSE, fig.cap="Baixando o Notepad++", out.width = '50%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/notepadpp_dwnld_q4wine.png') 
+```
+
+Abrindo diretamente com o `Q4Wine` aparecerá a tela abaixo, em que você pode fazer ajustes de compatibilidade ou modificar parâmetros de instalação tais como diretório. Sugiro continuar sem alterar nenhum dos parâmetros.
+
+```{r , echo=FALSE, fig.cap="Instalação do Notepad++ com o Wine: tela inicial", out.width = '70%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/notepadpp_q4wine_1.png') 
+```
+
+Após clicar em `Ok`, aparecerá a tela original de instalação do programa como se estivesse no Windows:
+
+```{r , echo=FALSE, fig.cap="Instalação do Notepad++ com o Wine: tal como no Windows", out.width = '45%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/notepadpp_q4wine_2.png') 
+```
+
+Aí basta seguir com a instalação normal. Após a instalação o Wine deverá criar links na área de trabalho para o programa recém instalado.
+
+
+### PlayOnLinux: Ubuntu ou Fedora
+
+Uma outra opção que usa o Wine, mas não é completamente dependente dele é o _PlayOnLinux_ que já vem com uma lista de aplicativos compatíveis, com download automático pelo _software_, já embutida. Saiba mais sobre ele [aqui](https://www.playonlinux.com/en/).
+
+######
+
+### Usando a Snap Store
+
+Se você já instalou a [_Snap Store_](https://snapcraft.io/) no seu sistema (Ubuntu ou Fedora), você encontrará o Notepad++ para instalação pronta lá, na forma de contêiner, sem precisar ter o Wine instalado. No caso dos usuários de Ubuntu, a Snap Store já vem pré-instalada
+
+
+```{r , echo=FALSE, fig.cap="Instalação do Notepad++ via Snap Store", out.width = '80%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/notepadpp_snap.png') 
+```
+
+<!-- ```{r , echo=FALSE, fig.cap="A caption", out.width = '99%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/notepadpp_snap.png') 
+``` -->
+
+## Windows
+
+
+A instalação no Windows não apresenta nenhum aspecto relevante específico que precise ser detalhado aqui. Melhor ir direto para a configuração do Notepad++ para habilitar o destaque de sintaxe da linguagem Spice.
+
+
+## Notepad++ com Spice _syntax hightlight_
+
+O destaque de sintaxe não é necessário para que se conclua o curso, mas ajuda muito a visualizar o código e perceber pequenos erros aqui e ali. Principalmente quando os circuito vão se tornando mais complexos.
+
+Para testar o destaque, use o código abaixo: abra um arquivo novo, copie e cole o código nesse arquivo. Sem o destaque de sintaxe o Notepa++ trata como se fosse um texto comum ("Normal Text" no canto inferior esquerdo). 
+
+```spice 
+*** Definicao dos nos globais
+.global gnd vcc vee
+
+*** Circuito principal
+M_1 vo vin gnd gnd CMOSN L=0.6u W=48u
+Rd vdd vo {rd}
+
+*** Definicao de parametros e inclusao de arquivos
+.include ami_c5n_tt.txt
+.param offset=0.73
+.param amp=10m
+.param rd=50k
+
+*** Definicao das fontes do circuito
+vdd vdd gnd dc 5
+v1 vin gnd sine ({offset} {amp} 10k) AC 1
+
+
+*** Definicao das analises
+.op
+.tran 10n 0.3m
+.measure tran vopp pp v(vo)
+
+.END
+```
+
+Algumas versões do Notepad++ (como a da Snap Store, por exemplo) já vem com o destaque de sintaxe pronto e, para ativá-lo basta ir em: `Language->S->Spice` ou, alternativamente, clicar com o botão direito em "Normal text file" no canto inferior esquerdo e selecionar Spice no menu que aparecerá. Esse é o caso da versão do tutorial (7.8.7).
+
+```{r , echo=FALSE, fig.cap="Ativando o destaque de sintaxe no Notepad++", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/notepadpp_seleciona_spice.png') 
+```
+
+Após a ativação o código ficará assim:
+
+```{r , echo=FALSE, fig.cap="Ativando o destaque de sintaxe no Notepad++", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/notepadpp_highlight_ativado.png') 
+```
+
+Se a sua versão não tem ou quer adicionar outra, que tem um destaque ainda maior, basta baixar [dessa página](https://www.i-t.com/blog/notepad-spice-language-file/). Ou, se preferir, pode pegar [esse arquivo](https://pmendessantos.github.io/figuras/files/sintaxe/spice_win.xml)^[Se clicar com o botão esquerdo, o arquivo XML abrirá e o seu conteúdo ficará visível, basta salvar o arquivo (Ctrl+s) ou acessando o menu. Ou então, clique com o botão direito e selecione "Salvar link como...".] que foi gerado a partir da exportação de um que já uso.
+
+Para instalar um arquivo de sintaxe, vá até `Language->User Defined Language->Import` e escolha o arquivo que foi baixado. Salve com o nome que lhe interessa e essa linguagem aparecerá no menu `Language` mostrado anteriormente.
+
+Por fim, vale ressaltar que o Notepad++ tem suporte a uma quantidade enorme de linguagens e métodos de construção e compilação de arquivos. Ele é extremamente útil para produção de _software_ de uma forma geral.
+
+## Suporte
+
+Para detalhes sobre como usar o Notepad++, você pode acessar o [manual](https://npp-user-manual.org/) do _software_.
+
+Há também uma grande quantidade de vídeos no [Youtube](https://www.youtube.com/results?search_query=notepad%2B%2B) sobre o Notepad++ que você pode acompanhar.
+
+
+
+## Alternativas
+
+Há outros editores de texto tão bons quanto ou ainda mais completos que o Notepad++. Há outros que, além de editores de texto, também são suítes de desenvolvimento de _software_ inclusive com suporte para git/github. Abaixo segue uma lista simplificada de alternativas, todas gratuitas, por ordem de simplicida e leveza (recursos de sistema):
+
+* [Vim](https://www.vim.org/)
+* [Kate](https://kate-editor.org/)
+* [Gedit](https://wiki.gnome.org/Apps/Gedit)
+* [Geany](https://www.geany.org/)
+* [Sublime](https://www.sublimetext.com/)
+* [Visual Studio Code](https://code.visualstudio.com/)
+* [Eclipse](https://www.eclipse.org/)
+
+Todos com opções de download para os principais sistemas operacionais.
+
+Por fim, tudo o que será feito poderá utilizar qualquer editor de texto, ainda que não haja destaque de sintaxe, com o é o caso do _Notepad_ do Windows.
+

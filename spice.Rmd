@@ -1,0 +1,378 @@
+---
+#date: "2020-06-13T00:00:00+01:00"
+draft: false
+linktitle: Instalando o Electric
+title: "<span style='font-size: 50px'>SPICE</style> <span style='font-size: 22px'>Simulation Program with Integrated Circuits Emphasis</style>"
+#  | SPICE
+#  | Simulation Program with Integrated Circuits Emphasis
+#  | "<span style='font-size: 30px'>Hello</style> <span style='font-size: 10px'>Everyone</style>"
+
+toc: true
+type: docs
+weight: 2003
+output:
+  html_document:
+    theme: spacelab
+    include:
+      in_header: head.html
+      after_body: footer.html
+    mathjax: null
+    lib_dir: libs
+    css: styles.css
+    logo: logo.jpg
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    highlight: pygments
+    highlight_options:
+      linenos: inline
+    pandoc_args: ["--syntax-definition", "spice.xml"]
+---
+
+# Histórico e Motivação
+
+A linguagem Spice nasceu nos anos 1970 (1973) e foi o resultado de um esforço muito grande de se poder predizer o comportamento de um circuito eletroeletrônico antes que ele fosse montado/construído. A ideia parecia simples: saber exatamente o que fabricar, comprar ou montar antes que se fizesse o gasto. E continua simples, hoje cada vez mais fácil de ser executada, o que não era verdade naquela época.
+
+Hoje isso parece extremamente natural, mas a 47 anos atrás não. Toma-se por natural isso hoje pois o uso de computadores é também natural para muitas pesssoas. Crianças já são ensinadas a lidar com uma tela desde muito cedo. Logo, parece natural que se possa usar um computador para se predizer o comportamento do mundo real.
+
+Esse pensamento foi evoluindo a partir da ideia do Spice e impactou na criação de um ramo extremamente rentável^[Segundo: [essa](https://www.ibisworld.com/united-states/market-research-reports/electronic-design-automation-software-developers-industry/) fonte chegando a 6 bilhões de dólares em 2020, apenas nos EUA.] que hoje se conhece por **EDA**: **_Electronic Design Automation_** ou Automação Eletrônica de Projetos.
+
+Obviamente o que se entende por EDA hoje é muito mais que apenas a simulação, mas a concepção original, a base filosófica é a mesma que deu origem ao Spice: saber a priori o comportamento de um circuito antes que se gaste muito dinheiro para fabricá-lo e colocá-lo à disposição de todos.
+
+Imagine se as engenheiras e engenheiros da Intel ou a Qualcomm enviassem para fabricação um de seus processadores que será usado em milhões de computadores e celulares, respectivamente, sem ter certeza de que ele irá entregar aquilo que se espera em termos de poder de processamento? E se, depois de realizado o gasto para implantação dos processos de fabricação e dos gastos de fabricação em si, viesse ao conhecimento que os processadores não conseguem fazer aquilo que se desejava deles?
+
+Embora seja possível projetar sem simular, não é inteligente que se faça isso. Importante dizer que as simulações de testes de um processador tal como um `i7` ou um `Snapdragon 865` não são feitas com o Spice, mas o que se quer pontuar aqui é que a filosofia segue a mesma. Predizer o comportamento antes do gasto.
+
+O Spice 1 foi desenvolvido em `Fortran` e evoluiu em funcionalidades e técnicas de processamento até o Spice 3, esse último já escrito em `C`.
+
+Como já apresentado [anteriormente](install_2.html), diversas variações do Spice original foram aparecendo ao longo dos anos, sendo que as que mais se destacaram foram:
+
+* PSpice (Orcad, Cadence);
+* Hspice (Synopsys);
+* LTSpice (Linear Technology, Analog Devices);
+* NGSpice (livre, código aberto e gratuito);
+
+Uma longa lista de versões antigas, mas gratuitas, pode ser encontrada [aqui](http://www.repairfaq.org/ELE/F_Free_Spice.html).
+
+O conteúdo que veremos aqui está dividido nas seções abaixo:
+
+## [Estrutura básica de simulação](spice_1.html)
+
+- ### [Declarações comuns e obrigatórias](spice_1.html#declaracoes-comuns-e-obrigatorias)
+    Fluxo de comandos e regras básicas para construção de códigos de simulação Spice.
+    
+- ### [Particularidades do NGSpice](spice_1.html#particularidades-do-ngspice)
+    Variações de código para o NGSpice.
+    
+- ### [Particularidades do LTSpice](spice_1.html#particularidades-do-ltspice)
+    Variações de código para o LTSpice.
+
+## [Elementos e Simulações Básicas](spice_2.html)
+
+- ### [Resistores](spice_2.html#resistores)
+    Declaração e uso de Resistores.
+
+- ### [Análise de Ponto de Operação](spice_2.html#análise-de-ponto-de-operação)
+    Exemplos de simulação de ponto de operação (corrente contínua) usando resistores.
+
+- ### [Capacitores e Indutores](spice_2.html#capacitores-e-indutores)
+    Declaração e uso de capacitores e indutores.
+
+- ### [Análise Transitória (Variação no Tempo)](spice_2.html#análise-transitória-variação-no-tempo)
+    Exemplos de simulação de circuitos no tempo, usando resistores, capacitores e indutores.
+
+- ### [Operações com Sinais](spice_2.html#operações-com-sinais)
+    Manipulação de sinais através de combinações e expressões matemáticas.
+
+- ### [Opções de Simulação](spice_2.html#opções-de-simulação)
+    Modificações de parâmetros para melhorar diversos aspectos das simulações, como por exemplo: velocidade, consumo de memória e visualização e exportação de dados.
+
+## [Dispositivos Eletrônicos](spice_3.html)
+
+- ### [Diodos](spice_3.html#diodos)
+
+- ### [Análise em Corrente Contínua (Varredura)](spice_3.html#análise-em-corrente-contínua-varredura)
+
+- ### [Transistores de Junção Bipolar](spice_3.html#transistores-de-junção-bipolar)
+
+- ### Transistores de Efeito de Campo
+
+- ### Variação de temperatura
+
+## [Parâmetros e inclusões](spice_4.html)
+
+- ### Parâmetros globais
+
+- ### Inclusão de Modelos de Simulação
+
+- ### Biblioteca de Modelos
+
+- ### Variáveis de simulação
+
+## [Medições](spice_5.html)
+
+- ### Medições de sinais dentro da simulação
+
+- ### Medições de tempo
+
+- ### Medições cruzadas ou referenciadas
+
+## [Subcircuitos](spice_6.html)
+
+- ### Estrutura de subcircuitos
+
+- ### Circuitos complexos
+
+
+```{r , echo=FALSE, fig.cap="Electric VLSI Software", out.width = '80%', fig.align = 'center'}
+knitr::include_graphics('https://www.staticfreesoft.com/ScreenShotBusy.png') 
+```
+
+O Electric VLSI, ou simplesmente, é um software bastante completo que permite a realização de projetos de circuitos integrados simples e complexos. Ele foi feito para o gerenciamento de circuitos e subcircuitos e produção de esquemáticos e leiautes (arranjo físico). A partir da própria [página](https://www.staticfreesoft.com/) do Electric é possível baixar projetos completos de circuitos integrados analógicos e digitais. Os projetos são organizados em bibliotecas de circuitos e os circuitos podem ter várias versões (esquemático, leiaute, ícone/símbolo, Verilog, VHDL).
+
+O Electric é um **FOSS** bastante difundido para Linux e, portanto, já está presente nos repositórios oficiais tanto do Ubuntu quanto do Fedora, embora haja diferenças de versão. Por extensão pode-se encontrá-lo no Debian, que é a distribuição em que se baseia o Ubuntu e também no Red Hat, o análogo para o Fedora. 
+
+O Electric inicialmente era apenas para Linux e era programado em C. A partir da versão 8, ele passou a ser programado em Java para se tornar multiplataforma, podendo ser rodado a partir de Windows e Mac também.
+
+## Instalando o _Java Runtime_
+
+Para podermos usar o Electric, precisamos garantir que o sistema operacional possa entender que o _Java ARchive_ (.jar) que é como o Electric é baixado é um executável válido. Para tanto, precisamos instalar alguma versão do _Java Runtime_. 
+
+### Linux {.tabset}
+
+A seguir detalha-se a versão _open source_ do Java, que além do _Runtime_ também tem os pacotes para quem quer desenvolver _software_ baseado em Java, que é o _Java Development Kit_ (JDK). O conjunto completo de pacotes é chamado de `OpenJDK` e está disponível em todos os repositórios oficiais das principais distribuições Linux. Embora seja desenvolvido pela comunidade, o `OpenJDK` é mantido com apoio da Oracle, a original desenvolvedora. Como já sabido, você precisará de permissões de superusário (ou _root_) para a instalação.
+
+
+#### Ubuntu (_OpenJDK_)
+
+No Ubuntu é possível instalar apenas o módulo _Runtime_, para tanto basta executar o comando abaixo:
+```bash
+sudo apt install default-jre
+```
+
+#### Fedora (_OpenJDK_)
+
+No Fedora, não é possível instalar os módulos separadamente, assim instalasse a versão completa do `OpenJDK`. Para saber o número da versão correta disponível para instalação execute o comando abaixo:
+
+```bash
+sudo dnf search openjdk
+```
+
+Uma tela tal como a abaixo irá aparecer com os resultados da busca
+
+```{r , echo=FALSE, fig.cap="Resultados de busca por OpenJDK no Fedora", out.width = '80%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/search-all-openjdk-versions.png') 
+```
+
+A busca mostra os dois resultados válidos: um para 32 bits (.i686) e outro para 64 bits (.x86_64). Para instalar, escolha a versão mais aproriada para o seu sistema e execute o comando de instalação abaixo. No caso da versão acima e para sistemas 64 bits, o comando será:
+
+```bash
+sudo dnf install java-11-openjdk.x86_64
+```
+
+#### Versão da Oracle
+
+A Oracle, desenvolvedora original do Java ainda mantem uma versão gratuita do _Java Runtime_ sob sua tutela que pode ser baixada diretamente da [página](https://java.com/en/download/manual.jsp) deles. Os arquivos que não possuem a identificação `64-bit` em frente a eles é porque são da versão 32 bits.
+
+Há instruções particulares para instalação em cada sistema.
+
+Apesar da versão mais atual da Oracle ser a 8, ela é suficiente para fazer o Electric rodar.
+
+
+#### Teste da instalação
+
+Para testar a instalação do Java basta executar o comando abaixo também no terminal:
+```bash
+java -version
+```
+
+O resultado deve ser parecido com o da tela abaixo deverá aparecer:
+
+```{r , echo=FALSE, fig.cap="Teste da instalação do Java no Linux", out.width = '70%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/java_version.png') 
+```
+
+É possível ver a versão do _Runtime_ instalada com sucesso.
+
+
+### Windows {.tabset}
+
+#### Versão _OpenJDK_
+
+O `OpenJDK` também está disponível para Windows e a versão atual (enquanto essa página é construída) é a 14. Ela pode ser baixada a partir dessa [página](https://jdk.java.net/14/).
+
+O arquivo é um `.zip` e o processo de instalação é o mesmo do NGSpice. Você irá descompactá-lo numa pasta à sua escolha e configurar a variável de ambiente `Path` do sistema para reconhecer o _software_. Para tanto, basta seguir as [instruções](install_2.html#windows) já detalhadas para o NGSpice.
+
+#### Versão da Oracle
+
+A Oracle, desenvolvedora original do Java ainda mantem uma versão gratuita do _Java Runtime_ que pode ser baixada diretamente da [página](https://java.com/en/download/manual.jsp) deles. Há instruções particulares para instalação em cada sistema.
+
+Apesar da versão mais atual da Oracle ser a 8, ela é suficiente para fazer o Electric rodar.
+
+#### Teste da Instalação
+
+Para testar a instalação do Java basta executar o comando abaixo também no terminal:
+```bash
+java -version
+```
+
+O resultado deve ser parecido com o da tela abaixo deverá aparecer:
+
+```{r , echo=FALSE, fig.cap="Teste da instalação do Java no Windows", out.width = '90%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/java_version_win.png') 
+```
+
+É possível ver a versão do _Runtime_ instalada com sucesso.
+
+
+## Instalando o Electric
+
+A versão que será usada e é a mais atual é a 9.07. Na [página](https://www.staticfreesoft.com/productsFree.html) de _downloads_ do Electric há uma lista de extras que podem ser instalados para aumentar as capacidades do Electric. Contudo, não utilizaremos nenhuma delas nesse curso.
+
+### Ubuntu (18.04/20.04)
+
+Os repositórios oficiais do Ubuntu já contem a versão mais recente e você pode instalar o Electric diretamente deles, bastando executar o comando abaixo (com poderes de superusuário):
+
+No Ubuntu:
+```bash
+sudo apt-get install electric
+```
+
+Após a instalação o Electric deverá aparecer automaticamente no menu do seu ambiente de trabalho (Gnome, KDE, Cinnamon, etc.) e estará disponível também para ser invocado diretamente do terminal, bastando executar, de qualquer pasta:
+
+```bash
+electric
+```
+
+### Fedora (30/31/32): 
+
+Infelizmente a versão do Electric que está disponível nos repositórios oficiais do Fedora é a 8.09 que está bem desatualizada. Assim, faremos a "instalação" do Electric de forma uma pouco mais complexa, mas que nos permita fazer o que precisamos.
+
+Acesse a [página](https://www.staticfreesoft.com/productsFree.html) de _downloads_ do Electric e baixe o arquivo da versão 9.07 clicando em `GET THE GNU ELECTRIC BINARY RELEASE, version 9.07`. Salve o arquivo `electricBinary-9.07.jar` numa pasta à sua escolha. Para seguir o tutorial, tomaremos como exemplo a pasta `/home/_seu_usuario_/electric` em que `_seu_usuario_` é o nome da sua pasta `home`.
+
+Após baixado o arquivo, você poderá executá-lo com o comando abaixo no terminal:
+
+```bash
+java -classpath /home/_seu_usuario_/electric/electricBinary-9.07.jar com.sun.electric.Launcher
+```
+
+Para facilitar, você poderá criar uma entrada no menu do sistema, o que depende do seu ambiente de trabalho: Gnome, KDE, Cinnamon, etc. Assim você poderá lançar o Electric sem precisar ficar digitando o comando todas as vezes.
+
+Para personalizar, você poderá adicionar um ícone ao menu. Basta salvar [esse arquivo](https://pmendessantos.github.io/figuras/software/iconplub.ico) e usá-lo como ícone na edição da entrada do menu.
+
+
+### Windows
+
+A "instalação" no Windows é bem parecida com a do Fedora e exige passos adicionais.
+
+Acesse a [página](https://www.staticfreesoft.com/productsFree.html) de _downloads_ do Electric e baixe o arquivo da versão 9.07 clicando em `GET THE GNU ELECTRIC BINARY RELEASE, version 9.07`. Salve o arquivo `electricBinary-9.07.jar` numa pasta à sua escolha. Para seguir o tutorial, tomaremos como exemplo a pasta `C:\electric`
+
+Para facilitar a vida no Windows, já que não há possibilidade fácil de se editar o menu sem mexer no registro, na mesma pasta crie um arquivo de texto com a extensão `.bat` que é um arquivo executável de script do `DOS` reconhecido pelo Windows. Por exemplo um arquivo `electric.bat`. Abra-o com qualquer editor de texto^[Como é no Windows, se clicar com o botão direito num arquivo `.bat` no próprio menu de contexto já aparecerá a opção de Editar (com o Notepad).], copie e cole o código abaixo. Salve o arquivo e saia.
+
+```bash
+@echo off
+start /min java -classpath "electricBinary-9.07.jar" com.sun.electric.Launcher
+exit
+```
+Por fim, crie um `link` simbólico para o arquivo `electric.bat` na área de trabalho, por exemplo: clique com o botão direito em cima do arquivo no `Windows Explorer` e arraste para a área de trabalho. Um pequeno menu de contexto aparecerá dando-lhe a opção de selecionar `Criar atalhos aqui`.
+
+```{r , echo=FALSE, fig.cap="Menu de contexto para criação de atalhos no Windows", out.width = '40%', fig.align = 'center'}
+knitr::include_graphics('https://static.wixstatic.com/media/a27d24_366808cce2b44b5d9a16692cdb3a9fc5~mv2.png/v1/fit/w_320,h_198,al_c,q_80/file.png') 
+```
+
+Alternativamente, você pode clicar com o botão direito na área de trabalho e escolha `Novo->Atalho` e navegue a até o arquivo `.bat` e selecione-o. 
+
+Para personalizar, você poderá adicionar um ícone ao atalho. Salve [esse arquivo](https://pmendessantos.github.io/figuras/software/iconplub.ico) numa pasta, por exemplo, na mesma do Electric e selecioná-lo. Depois clique com o botão direito no atalho na área de trabalho, escolha a opção `Propriedades` e, dentro desta, clique em `Alterar Ícone` e navegue até o arquivo que você baixou.
+
+```{r , echo=FALSE, fig.cap="Alterando ícone de atalhos no Windows", out.width = '70%', fig.align = 'center'}
+knitr::include_graphics('https://img.ibxk.com.br/materias/5529/20144.jpg?w=704') 
+```
+
+Dessa forma você poderá apenas dar dois cliques no atalho da área de trabalho e lançar o Electric mais facilmente.
+
+### Instalação num pendrive
+
+Se você quiser, pode salvar o arquivo `.jar` num pendrive e criar o arquivo `.bat` junto a ele e rodá-lo a partir do pendrive. Basta que o computador em que você vá usá-lo tenha o _Java Runtime_ instalado.
+
+Você poderá também instalar o [NGSpice](install_2.html) e o [LTSpice](install_3.html) num pendrive e levá-los consigo ficando com um pacote completo de projeto e simulação de circuitos eletroeletrônicos.
+
+## Testando a instalação do Electric
+
+Após instalar o Electric, para testar se está tudo certo, lançando o _software_ da forma já detalhada para o seu sitema, deverão aparecer duas janelas: a principal e a de mensagens, tal como na figura abaixo:
+
+```{r , echo=FALSE, fig.cap="Tela inicial do Electric", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_running.png') 
+```
+
+## Configurando o Electric para o Spice
+
+Há como configurar o Electric para usar o simulador Spice instalado no seu computador e, ao construir o esquemático de um circuito, você pode receber os resultados da simulação de volta automaticamente no Electric. Ou então não visualizar no Eletric, mas já ter a simulação executada sem ter que invoca o simulador manualmente, podendo visualizar os resultados onde quiser depois.
+
+A seguir detalha-se a configuração com os dois simuladores que vamos usar: NGSpice e LTSpice. Em quaisquer dos casos modificaremos as opções ligadas à linguagem Spice do Eletric: `File->Preferences...->Categories->Tools->Spice/CDL`.
+
+### NGSpice
+
+As configurações do Electric precisam estar tal como na tela abaixo:
+
+```{r , echo=FALSE, fig.cap="Tela inicial do Electric", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_e_ngspice.png') 
+```
+
+Especificamente para o NGSpice, modifica-se a seção _Running Spice_ com os comandos abaixo:
+
+- **Run program** (programa que será chamado para simular): `ngspice`
+- **With args** (argumentos para o NGspice): `-b -o ${FILENAME_NO_EXT}.log -r ${FILENAME_NO_EXT}.raw ${FILENAME}`
+
+Opcionalmente, você pode ajustar também:
+
+- **Use dir** (diretório onde os arquivos de simulação serão gravados): /home/patrick/Documentos/electric
+- **Overwrite existing output file (no prompt)**: se marcada, a simulação irá sobrescrever os resulados das simulações anteriores para arquivos com o mesmo nome sem lhe perguntar.
+- **Run probe**: se marcada, o Electric abrirá automaticamente o arquivo `.raw` de saída da simulação e abrirá para lhe mostrar os resultados no visualizador interno.
+
+### LTSpice (Windows)
+
+```{r , echo=FALSE, fig.cap="Tela inicial do Electric", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_e_ltspice.png') 
+```
+
+Especificamente para o NGSpice, modifica-se a seção _Running Spice_ com os comandos abaixo:
+
+- **Run program** (programa que será chamado para simular): veja detalhamento abaixo
+- **With args** (argumentos para o NGspice): `-i ${FILENAME} -r ${FILENAME_NO_EXT}.raw -o ${FILENAME_NO_EXT}.out`
+
+No caso do Electric+LTSpice no Windows, para preencher **Run program**, você precisa informar qual o diretório em que foi instalado o LTSpice. Opcionalment você pode seguir os passos descritos [aqui](install_2.html#windows) para colocar o LTSpice disponível para chamada a partir de qualquer pasta. Se você não quiser ou não tiver feito isso não tem problema.
+
+No Windows (7, 8, 8.1 e 10), se você instalar um programa de 32 bits numa máquina de 64 bits^[Computadores a partir de 2 GB de memória RAM já devem ser de 64 bits.] esse programa será, por padrão, instalado na pasta `C:\Program Files (x86)\`. Se o programa for de 64 bits, será na pasta `C:\Program Files\`. 
+
+Para manter compatibilidade com versões anteriores do Windows, o Electric mantém a codificação de pastas antiga, do Windows XP ou inferior em que apenas 8 caracteres máximos são disponíveis para a pasta. Se houver 3 pastas com os mesmos 8 primeiros caracteres, o Windows substitui os dois últimos caracteres por `~#`, em que `#` é o número daquela pasta quando listada via `DOS`^[Comando `dir`].
+
+No caso da maioria dos computadores de 64 bits, haverá as duas pastas `C:\Program Files\` e `C:\Program Files (x86)\`, que, para o Electric serão: `C:\PROGRA~1\` e `C:\PROGRA~2\`, respectivamente. 
+
+Assim, se você instalou o LTSpice como 64 bits, ele estará em: `C:\PROGRA~1\LTC\LTspiceXVII\XVIIx64.exe`.
+Se você instalou em 32 bits, ele estará em: `C:\PROGRA~2\LTC\LTspiceXVII\XVIIx86.exe`.
+E um desses valores é o que você deverá colocar em **Run program** na configuração do Electric.
+
+Se precisar de mais detalhes, você pode consultar essa [página](http://cmosedu.com/cmos1/ltspice/ltspice_electric.htm) (em Inglês).
+
+
+Opcionalmente, você pode ajustar também:
+
+- **Use dir** (diretório onde os arquivos de simulação serão gravados): /home/patrick/Documentos/electric
+- **Overwrite existing output file (no prompt)**: se marcada, a simulação irá sobrescrever os resulados das simulações anteriores para arquivos com o mesmo nome sem lhe perguntar.
+- **Run probe**: se marcada, o Electric abrirá automaticamente o arquivo `.raw` de saída da simulação e abrirá para lhe mostrar os resultados no visualizador interno.
+
+## Suporte
+
+As configurações do Electric precisam estar tal como na tela abaixo:
+
+Na página do Electric há a seção de documentação com o [manual](https://www.staticfreesoft.com/documentsUser.html) _online_, que pode ser baixado PDF também, e a $2^{a}$ edição do livro [Computer Aids for VLSI Design](https://www.rulabinsky.com/cavd/) que foi escrito por **Steven M. Rubin**, o desenvolvedor original do Electric.
+
+Há também um [grupo de discussão](https://groups.google.com/forum/#!forum/electricvlsi) no Google que está aberto para participação mediante pedido de entrada.
+
+Muitas universidades usam o Electric em seus cursos e disciplinas, logo você também encontrará diversos tutoriais e exemplos de uso do Electric (busca em Inglês).
+
+Uma página muito completa é a: [CMOSedu.com](http://cmosedu.com/cmos1/electric/electric.htm). É, na verdade, um portal sobre projetos de circuitos integrados e traz material sobre diversos software. Sobre o Electric, especificamente, além do que há na página acima, pode-se encontrar também diversos [vídeos tutoriais](http://cmosedu.com/videos/electric/electric_videos.htm)^[Em Inglês.] mostrando configurações e ferramentas para edição de circuitos.
+
+Há também uma grande quantidade de vídeos no [Youtube](https://www.youtube.com/results?search_query=electric+vlsi) sobre o Electric que você pode acompanhar. Vários deles retirados da página **CMOSedu.com**.
+

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Instalando o Notepad++</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<script src="libs/ace-1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/holder-2.9.0/holder.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="snippets/snippets.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77306155-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">A Linguagem Spice</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorais de Instalação
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="install_1.html">Instalando o Notepad++</a>
+    </li>
+    <li>
+      <a href="install_2.html">Instalando o NGSpice</a>
+    </li>
+    <li>
+      <a href="install_3.html">Instalando o LTSpice</a>
+    </li>
+    <li>
+      <a href="install_4.html">Instalando o Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Electric VLSI
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="electric_1.html">Configurando o Electric</a>
+    </li>
+    <li>
+      <a href="electric_2.html">Criando biliotecas e circuitos</a>
+    </li>
+    <li>
+      <a href="electric_3.html">Simulando circuitos a partir do Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Spice
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spice.html">Visão Geral</a>
+    </li>
+    <li>
+      <a href="spice_1.html">Estrutura Básica de Simulação</a>
+    </li>
+    <li>
+      <a href="spice_2.html">Elementos e Simulações Básicas</a>
+    </li>
+    <li>
+      <a href="spice_3.html">Modelos de Dispositivos</a>
+    </li>
+    <li>
+      <a href="spice_4.html">Parâmetros e Inclusões</a>
+    </li>
+    <li>
+      <a href="spice_5.html">Medições</a>
+    </li>
+    <li>
+      <a href="spice_6.html">Subcircuitos</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pmendessantos/spice_geral">
+    <span class="&lt;ion &lt;ion-icon name=&quot;git-branch-outline&quot;&gt;&lt;/ion-icon&gt;"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Instalando o Notepad++</h1>
+<h4 class="date">2020-06-10T00:00:00+01:00</h4>
+
+</div>
+
+
+<div id="notepad" class="section level2">
+<h2>Notepad++</h2>
+<div class="figure" style="text-align: center">
+<img src="https://notepad-plus-plus.org/assets/images/notepad4ever.gif" alt="Editor de textos Notepad++" width="50%" />
+<p class="caption">
+Editor de textos Notepad++
+</p>
+</div>
+<p>O <code>Notepadd++</code> é um editor de textos avançado, gratuito e de código livre. Ele dá suporte de destaque de linguagem (<em>syntax highlight</em>) para diversas linguagens diferentes. Como ele foi desenvolvido para Windows, não está presente nos repositórios oficiais de nenhuma plataforma Linux. Para sua instalação no Linux há duas abordagens.</p>
+<p>A motivação de sua escolha, além de ser <strong>FOSS</strong>, está no fato de suas capacidades avançadas de edição, leveza (baixo consumo de memória), altamente configurável e suporte a gravação de áreas de trabalh: você pode manter diversos arquivos abertos, salvos ou não, podendo fechar o aplicativo e abri-lo novamente com todos os arquivos que estavam abertos anteriormente.</p>
+<p>Como a função do Notepad++ é apenas facilitar a produção de códigos de simulação na linguagem Spice, vários outros editores de texto podem ser usados para essa função, tanto no ambiente Windows como no Linux.</p>
+<p>Seguem os métodos de instalação do Notepad++ no Linux e Windows e também as alternativas válidas para substituí-lo.</p>
+</div>
+<div id="linux-ubuntu-fedora" class="section level2 tabset">
+<h2>Linux: Ubuntu / Fedora</h2>
+<div id="usando-o-wine" class="section level3">
+<h3>Usando o Wine</h3>
+<p>O <strong><em>Wine</em></strong> (<em>Wine Is Not an Emulator</em>) é um conjunto de programas que fazem a compatilização, em um certo nível de adequação, de aplicativos Windows de forma que possam ser rodados em Linux. Quando se diz em um certo nível de adequação é porque nem todos os <em>software</em> nativos do Windows terão suporte da equipe de desenvolvimento do Wine. Na <a href="https://www.winehq.org/">página oficial</a> há como obter uma lista dos aplicativos que foram testados em cada uma das versões do Wine, bem como ajuda para a utilização. Não é porque um aplicativo não está na lista dos testados que ele não possa funcionar no Wine. Só quer dizer que não foi testado. Como também é possível, devido à diversos fatores (como versão do Kernel ou <em>drivers</em> específicos de <em>hardware</em>, por exemplo), que um aplicativo listado não funcione com o Wine no seu computador.</p>
+<p>Quanto mais simples um aplicativo, mais chances há dele funcionar. Menos dependências (<em>.dll’s</em>), mais chances de sucesso. Menor exigência de <em>hardware</em>, maiores chances de sucesso. Esse é o caso do Notepad++.</p>
+<p>Tanto no Ubuntu quanto no Fedora você precisará de permissões de superusário (ou <em>root</em>) para a instalação, bastando abrir um terminal e digitar o comandos abaixo.</p>
+<div id="instando-o-wine-no-ubuntu-18.0420.04" class="section level4">
+<h4>Instando o Wine no Ubuntu (18.04/20.04):</h4>
+<p>Se você não tem um gerenciador de pacotes (Synaptic, por exemplo), pode fazer a instalação do Wine via linha de comando mesmo.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">sudo</span> apt-get install wine wine64 wine32 fonts-wine q4wine</a></code></pre></div>
+<p>Sendo que:</p>
+<ul>
+<li>wine: suite padrão.</li>
+<li>wine32: se for necessário o suporte para aplicativos 32 bits.</li>
+<li>wine64: se for necessário o suporte para aplicativos 64 bits.</li>
+<li>fonts-wine: fontes básicas para compatibilização da interface de exibição dos aplicativos com o Linux.</li>
+<li>q4wine: aplicativo que faz uma interface amigável (<em>front-end</em>) para a utilização do wine sem a necessidade de linha de comando.</li>
+</ul>
+</div>
+<div id="instando-o-wine-no-fedora-303132" class="section level4">
+<h4>Instando o Wine no Fedora (30/31/32):</h4>
+<p>Se você não tem um gerenciador de pacotes (dnfdragora, por exemplo), pode fazer a instalação do Wine via linha de comando mesmo.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="fu">sudo</span> dnf install wine wine-desktop q4wine winetricks wine-fonts </a></code></pre></div>
+<p>Sendo que:</p>
+<ul>
+<li>wine: suite padrão, pronta para suporte a 32 e 64 bits.</li>
+<li>wine-desktop: cria menus na área de trabalho Linux para os aplicativos Windows, tal como se eles fossem nativos para Linux. Acrescenta também as ferramentas de configuração e suporte do Wine diretamente na área de trabalho.</li>
+<li>q4wine: aplicativo que faz uma interface amigável (<em>front-end</em>) para a utilização do wine sem a necessidade de linha de comando.</li>
+<li>winetricks: quase a mesma coisa do q4wine, mas pode-se usá-lo como linha de comando ou chamá-lo habilitar uma interface de usuário mais básica.</li>
+<li>wine-fonts: fontes básicas para compatibilização da interface de exibição dos aplicativos com o Linux.</li>
+</ul>
+</div>
+<div id="instando-o-notepad-com-o-wine" class="section level4">
+<h4>Instando o Notepad++ com o Wine</h4>
+<p>Vá até a <a href="https://notepad-plus-plus.org/">página do Notepad++</a> e na seção de <strong>Download</strong> e clique no <strong>Installer</strong> da versão que lhe interessa (32 ou 64 bits). Se estiver usando o <code>Firefox</code>, você poderá escolher em baixar o arquivo num diretório ou abri-lo diretamente com o <code>Q4Wine</code> (veja a figura abaixo).</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/notepadpp_dwnld_q4wine.png" alt="Baixando o Notepad++" width="50%" />
+<p class="caption">
+Baixando o Notepad++
+</p>
+</div>
+<p>Abrindo diretamente com o <code>Q4Wine</code> aparecerá a tela abaixo, em que você pode fazer ajustes de compatibilidade ou modificar parâmetros de instalação tais como diretório. Sugiro continuar sem alterar nenhum dos parâmetros.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/notepadpp_q4wine_1.png" alt="Instalação do Notepad++ com o Wine: tela inicial" width="70%" />
+<p class="caption">
+Instalação do Notepad++ com o Wine: tela inicial
+</p>
+</div>
+<p>Após clicar em <code>Ok</code>, aparecerá a tela original de instalação do programa como se estivesse no Windows:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/notepadpp_q4wine_2.png" alt="Instalação do Notepad++ com o Wine: tal como no Windows" width="45%" />
+<p class="caption">
+Instalação do Notepad++ com o Wine: tal como no Windows
+</p>
+</div>
+<p>Aí basta seguir com a instalação normal. Após a instalação o Wine deverá criar links na área de trabalho para o programa recém instalado.</p>
+</div>
+</div>
+<div id="playonlinux-ubuntu-ou-fedora" class="section level3">
+<h3>PlayOnLinux: Ubuntu ou Fedora</h3>
+<p>Uma outra opção que usa o Wine, mas não é completamente dependente dele é o <em>PlayOnLinux</em> que já vem com uma lista de aplicativos compatíveis, com download automático pelo <em>software</em>, já embutida. Saiba mais sobre ele <a href="https://www.playonlinux.com/en/">aqui</a>.</p>
+<div id="section" class="section level6">
+<h6></h6>
+</div>
+</div>
+<div id="usando-a-snap-store" class="section level3">
+<h3>Usando a Snap Store</h3>
+<p>Se você já instalou a <a href="https://snapcraft.io/"><em>Snap Store</em></a> no seu sistema (Ubuntu ou Fedora), você encontrará o Notepad++ para instalação pronta lá, na forma de contêiner, sem precisar ter o Wine instalado. No caso dos usuários de Ubuntu, a Snap Store já vem pré-instalada</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/notepadpp_snap.png" alt="Instalação do Notepad++ via Snap Store" width="80%" />
+<p class="caption">
+Instalação do Notepad++ via Snap Store
+</p>
+</div>
+<!-- ```{r , echo=FALSE, fig.cap="A caption", out.width = '99%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/notepadpp_snap.png') 
+``` -->
+</div>
+</div>
+<div id="windows" class="section level2">
+<h2>Windows</h2>
+<p>A instalação no Windows não apresenta nenhum aspecto relevante específico que precise ser detalhado aqui. Melhor ir direto para a configuração do Notepad++ para habilitar o destaque de sintaxe da linguagem Spice.</p>
+</div>
+<div id="notepad-com-spice-syntax-hightlight" class="section level2">
+<h2>Notepad++ com Spice <em>syntax hightlight</em></h2>
+<p>O destaque de sintaxe não é necessário para que se conclua o curso, mas ajuda muito a visualizar o código e perceber pequenos erros aqui e ali. Principalmente quando os circuito vão se tornando mais complexos.</p>
+<p>Para testar o destaque, use o código abaixo: abra um arquivo novo, copie e cole o código nesse arquivo. Sem o destaque de sintaxe o Notepa++ trata como se fosse um texto comum (“Normal Text” no canto inferior esquerdo).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb3-1" title="1"><span class="co">*** Definicao dos nos globais</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">.global</span> gnd vcc vee</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">*** Circuito principal</span></a>
+<a class="sourceLine" id="cb3-5" title="5">M_<span class="dv">1</span> vo vin gnd gnd CMOSN L=<span class="dv">0</span><span class="kw">.6u</span> W=48u</a>
+<a class="sourceLine" id="cb3-6" title="6">Rd vdd vo {rd}</a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">*** Definicao de parametros e inclusao de arquivos</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="kw">.include</span> ami_c5n_tt<span class="kw">.txt</span></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="kw">.param</span> offset=<span class="dv">0</span><span class="kw">.73</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="kw">.param</span> amp=10m</a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="kw">.param</span> rd=50k</a>
+<a class="sourceLine" id="cb3-13" title="13"></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">*** Definicao das fontes do circuito</span></a>
+<a class="sourceLine" id="cb3-15" title="15">vdd vdd gnd dc <span class="dv">5</span></a>
+<a class="sourceLine" id="cb3-16" title="16">v1 vin gnd sine ({offset} {amp} 10k) AC <span class="dv">1</span></a>
+<a class="sourceLine" id="cb3-17" title="17"></a>
+<a class="sourceLine" id="cb3-18" title="18"></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="co">*** Definicao das analises</span></a>
+<a class="sourceLine" id="cb3-20" title="20"><span class="kw">.op</span></a>
+<a class="sourceLine" id="cb3-21" title="21"><span class="kw">.tran</span> 10n <span class="dv">0</span><span class="kw">.3m</span></a>
+<a class="sourceLine" id="cb3-22" title="22"><span class="kw">.measure</span> tran vopp pp v(vo)</a>
+<a class="sourceLine" id="cb3-23" title="23"></a>
+<a class="sourceLine" id="cb3-24" title="24"><span class="kw">.END</span></a></code></pre></div>
+<p>Algumas versões do Notepad++ (como a da Snap Store, por exemplo) já vem com o destaque de sintaxe pronto e, para ativá-lo basta ir em: <code>Language-&gt;S-&gt;Spice</code> ou, alternativamente, clicar com o botão direito em “Normal text file” no canto inferior esquerdo e selecionar Spice no menu que aparecerá. Esse é o caso da versão do tutorial (7.8.7).</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/notepadpp_seleciona_spice.png" alt="Ativando o destaque de sintaxe no Notepad++" width="100%" />
+<p class="caption">
+Ativando o destaque de sintaxe no Notepad++
+</p>
+</div>
+<p>Após a ativação o código ficará assim:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/notepadpp_highlight_ativado.png" alt="Ativando o destaque de sintaxe no Notepad++" width="100%" />
+<p class="caption">
+Ativando o destaque de sintaxe no Notepad++
+</p>
+</div>
+<p>Se a sua versão não tem ou quer adicionar outra, que tem um destaque ainda maior, basta baixar <a href="https://www.i-t.com/blog/notepad-spice-language-file/">dessa página</a>. Ou, se preferir, pode pegar <a href="https://pmendessantos.github.io/figuras/files/sintax/spice_win.xml">esse arquivo</a><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> que foi gerado a partir da exportação de um que já uso.</p>
+<p>Para instalar um arquivo de sintaxe, vá até <code>Language-&gt;User Defined Language-&gt;Import</code> e escolha o arquivo que foi baixado. Salve com o nome que lhe interessa e essa linguagem aparecerá no menu <code>Language</code> mostrado anteriormente.</p>
+<p>Por fim, vale ressaltar que o Notepad++ tem suporte a uma quantidade enorme de linguagens e métodos de construção e compilação de arquivos. Ele é extremamente útil para produção de <em>software</em> de uma forma geral.</p>
+</div>
+<div id="suporte" class="section level2">
+<h2>Suporte</h2>
+<p>Para detalhes sobre como usar o Notepad++, você pode acessar o <a href="https://npp-user-manual.org/">manual</a> do <em>software</em>.</p>
+<p>Há também uma grande quantidade de vídeos no <a href="https://www.youtube.com/results?search_query=notepad%2B%2B">Youtube</a> sobre o Notepad++ que você pode acompanhar.</p>
+</div>
+<div id="alternativas" class="section level2">
+<h2>Alternativas</h2>
+<p>Há outros editores de texto tão bons quanto ou ainda mais completos que o Notepad++. Há outros que, além de editores de texto, também são suítes de desenvolvimento de <em>software</em> inclusive com suporte para git/github. Abaixo segue uma lista simplificada de alternativas, todas gratuitas, por ordem de simplicida e leveza (recursos de sistema):</p>
+<ul>
+<li><a href="https://www.vim.org/">Vim</a></li>
+<li><a href="https://kate-editor.org/">Kate</a></li>
+<li><a href="https://wiki.gnome.org/Apps/Gedit">Gedit</a></li>
+<li><a href="https://www.geany.org/">Geany</a></li>
+<li><a href="https://www.sublimetext.com/">Sublime</a></li>
+<li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
+<li><a href="https://www.eclipse.org/">Eclipse</a></li>
+</ul>
+<p>Todos com opções de download para os principais sistemas operacionais.</p>
+<p>Por fim, tudo o que será feito poderá utilizar qualquer editor de texto, ainda que não haja destaque de sintaxe, com o é o caso do <em>Notepad</em> do Windows.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Se clicar com o botão esquerdo, o arquivo XML abrirá e o seu conteúdo ficará visível, basta salvar o arquivo (Ctrl+s) ou acessando o menu. Ou então, clique com o botão direito e selecione “Salvar link como…”.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+
+<p>© Copyright 2020 <a href="https://github.com/pmendessantos">Patrick Mendes dos Santos.</a> </p>
+
+<p>Sob licença <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, v2.0.</a> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+
+</body>
+</html>

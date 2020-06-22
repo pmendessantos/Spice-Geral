@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Estrutura Básica de Simulação</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<script src="libs/ace-1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/holder-2.9.0/holder.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="snippets/snippets.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77306155-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 52px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h2 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h3 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h4 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h5 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h6 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">A Linguagem Spice</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorais de Instalação
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="install_1.html">Instalando o Notepad++</a>
+    </li>
+    <li>
+      <a href="install_2.html">Instalando o NGSpice</a>
+    </li>
+    <li>
+      <a href="install_3.html">Instalando o LTSpice</a>
+    </li>
+    <li>
+      <a href="install_4.html">Instalando o Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Electric VLSI
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="electric_1.html">Configurando o Electric</a>
+    </li>
+    <li>
+      <a href="electric_2.html">Criando biliotecas e circuitos</a>
+    </li>
+    <li>
+      <a href="electric_3.html">Simulando circuitos a partir do Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Spice
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spice.html">Visão Geral</a>
+    </li>
+    <li>
+      <a href="spice_1.html">Estrutura Básica de Simulação</a>
+    </li>
+    <li>
+      <a href="spice_2.html">Elementos e Simulações Básicas</a>
+    </li>
+    <li>
+      <a href="spice_3.html">Modelos de Dispositivos</a>
+    </li>
+    <li>
+      <a href="spice_4.html">Parâmetros e Inclusões</a>
+    </li>
+    <li>
+      <a href="spice_5.html">Medições</a>
+    </li>
+    <li>
+      <a href="spice_6.html">Subcircuitos</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pmendessantos/spice_geral">
+    <span class="&lt;ion &lt;ion-icon name=&quot;git-branch-outline&quot;&gt;&lt;/ion-icon&gt;"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Estrutura Básica de Simulação</h1>
+
+</div>
+
+
+<div id="declarações-comuns-e-obrigatórias" class="section level1">
+<h1>Declarações comuns e obrigatórias</h1>
+<p>Um código Spice só tem duas obrigatoriedades:</p>
+<ol style="list-style-type: decimal">
+<li>A primeira linha é o título. Você pode fazer um título maior, colocando o símbolo de comentário <strong><code>*</code></strong></li>
+<li>A última linha é o fim do circuito e deve ter o comando <code>.end</code> ou <code>.END</code></li>
+</ol>
+<p>A linguagem original é <em>case insensitive</em>, isto é, não distingue se as letras são maiúsculas ou minúsculas. Há versões de Spice que foram modificadas para fazerem essa distinção. Não é o caso do NGSpice e do LTSpíce que são as ferramentas aqui usadas.</p>
+<p>O resto do código Spice pode ser a ordem que se desejar. Isso é bom num primeiro momento pois pode ser fácil a inclusão de comandos em qualquer lugar sem o compromisso de ordem, mas é um dificultador quando se tem circuitos muito grandes e se começa a ter uma desorganização generalizada. Fica difícil encontrar os trechos que se deseja alterar.</p>
+<p>Como essa ordem depende do usuário, estabelece-se aqui uma ordem que será seguida ao longo de todo o curso, quando formos criar os códigos sem a utilização de um editor de esquemático, no nosso caso, do Electric.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb1-1" title="1"><span class="co">* Título</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co">* Subtítulo</span></a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4">&lt;Bloco de opções&gt;</a>
+<a class="sourceLine" id="cb1-5" title="5"></a>
+<a class="sourceLine" id="cb1-6" title="6">&lt;Bloco de parâmetros e arquivos externos&gt;</a>
+<a class="sourceLine" id="cb1-7" title="7"></a>
+<a class="sourceLine" id="cb1-8" title="8">&lt;Descrição do circuito - componentes&gt;</a>
+<a class="sourceLine" id="cb1-9" title="9"></a>
+<a class="sourceLine" id="cb1-10" title="10">&lt;Descrição do circuito - fontes&gt;</a>
+<a class="sourceLine" id="cb1-11" title="11"></a>
+<a class="sourceLine" id="cb1-12" title="12">&lt;Análises&gt;</a>
+<a class="sourceLine" id="cb1-13" title="13"></a>
+<a class="sourceLine" id="cb1-14" title="14">&lt;Medições e exportação de resultados&gt;</a>
+<a class="sourceLine" id="cb1-15" title="15"></a>
+<a class="sourceLine" id="cb1-16" title="16"><span class="kw">.end</span></a></code></pre></div>
+<p>Em detalhes:</p>
+<ul>
+<li><p><strong>Bloco de opções</strong>: A linguagem Spice permite que se altere <a href="http://ngspice.sourceforge.net/docs/ngspice-32-manual.pdf#page=260">diversos tipos de parâmetros</a> que cobrem desde o tipo de arquivos que serão gerados após a simulação, passando pelo controle da precisão e eficiência da convergência do simulador e chegando até a temperatura nominal de trabalho do circuito.</p></li>
+<li><p><strong>Bloco de parâmetros e arquivos externos</strong>: Pode-se definir parâmetros (variáveis) para se aumentar a testabilidade do circuito e para controlar o comportamento do circuito. Além disso pode-se usar diversos tipos de componentes num mesmo circuito e, para não “poluir” visualmente o código, pode-se deixar os modelos de simulação desses componentes em arquivos externos que serão chamados dentro do código atual.</p></li>
+<li><p><strong>Descrição do circuito - componentes</strong>: Aqui vêm todos os componentes usados e suas interconexões com as declarações pertinentes a cada um.</p></li>
+<li><p><strong>Descrição do circuito - fontes</strong>: Como geralmente as fontes têm pontos específicos de conexão, elas são poucas para vários circuitos de teste. Assim, separa-se a sua declaração. Facilita também para que se teste o mesmo circuito com sinais diferentes sem que se tenha que alterar as linhas de código dos componentes ou mesmo sem arriscar a fazer alterações não desejadas nessas linhas.</p></li>
+<li><strong>Análises</strong>: Indicam que tipo de informação se deseja que o simulador calcule. As mais usadas são:
+<ul>
+<li>Ponto de operação: análise em corrente contínua do circuito;</li>
+<li>Transitória: comportamento temporal do circuito;</li>
+<li>Corrente Alternada: comportamento do circuito na frequência.</li>
+</ul></li>
+<li><p><strong>Medições e exportação de resultados</strong>: Pode-se comandar o Spice para separar determinados resultados de interesse enquanto as simulações estão sendo feitas, por exemplo, medir o valor de pico de uma tensão ou corrente ou mesmo medir o tempo entre dois eventos específicos no tempo.</p>
+<p>Pode-se também exportar os dados de simulação para formatos específicos de arquivo para que se possa acessar esses dados depois da simulação e tomar decisões sobre eles.</p></li>
+</ul>
+<p>Num código Spice, uma linha é igual a:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Um componente</strong> ou <strong>elemento de circuito</strong>: desde que seja começada com uma das letras que designam um componente (veja tabela a seguir).</li>
+<li><strong>Um comando de simulação</strong>, desde que seja começada com um ponto: <strong><code>.</code></strong></li>
+<li><strong>A continuação de uma outra linha</strong>, desde que seja começada com um sinal de mais: <strong><code>+</code></strong></li>
+<li><strong>Um comentário de código</strong>, desde que seja começada com um asterisco: <strong><code>*</code></strong></li>
+</ol>
+<p>Qualquer linha que seja diferente disso ou que não seja a última, será considerada errada.</p>
+<p>Os principais componentes de circuito que tem o sua letra reservada são:</p>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Letra
+</th>
+<th style="text-align:center;">
+Componente
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+R ou r
+</td>
+<td style="text-align:center;">
+Resistor
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+C ou c
+</td>
+<td style="text-align:center;">
+Capacitor
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+L ou l
+</td>
+<td style="text-align:center;">
+Indutor
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+D ou d
+</td>
+<td style="text-align:center;">
+Diodo
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Q ou q
+</td>
+<td style="text-align:center;">
+Transistor Bipolar
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M ou m
+</td>
+<td style="text-align:center;">
+MOSFET
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+J ou j
+</td>
+<td style="text-align:center;">
+JFET
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+V ou v
+</td>
+<td style="text-align:center;">
+Fonte de Tensão
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+I ou i
+</td>
+<td style="text-align:center;">
+Fonte de Corrente
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+X ou x
+</td>
+<td style="text-align:center;">
+Subcircuito
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="particularidades-do-ngspice" class="section level1">
+<h1>Particularidades do NGSpice</h1>
+<p>No NGSpice há a opção de se passar comandos que não são de simulação para o simulador como, por exemplo, comando para mostrar os resultados num gráfico logo que a simulação após a realização da simulação. Esses comandos têm de vir num bloco separado do circuito que se chama <code>bloco de controle</code>.</p>
+<p>O bloco de controle poderá vir antes ou depois do <code>.end</code> já que ele não é para a simulação em si, isto é, os comandos que estão no bloco de controle não alterarão a simulação, mas poderão comandar quantas simulações serão feitas ou mesmo modificar parâmetros para a realização de novas simulações.</p>
+<p>Num bloco de controle do NGSpice, você pode colocar estruturas de controle básicas das linguagens de programação clássicas: <code>for</code>, <code>if-else</code>, <code>while</code>, <code>repeat</code> etc. As estruturas disponíveis podem ser encontradas nessa parte do <a href="http://ngspice.sourceforge.net/docs/ngspice-32-manual.pdf#page=367">manual</a>.</p>
+<p>O bloco de controle necessariamente começa com <code>control</code> e termina com <code>.endc</code> ou <code>CONTROL</code> e <code>.ENDC</code>.</p>
+<p>Dessa forma, duas possíveis formas de se construir um código Spice para o NGSpice seriam:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb2-1" title="1"><span class="co">* Título</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="co">* Subtítulo</span></a>
+<a class="sourceLine" id="cb2-3" title="3"></a>
+<a class="sourceLine" id="cb2-4" title="4">&lt;Bloco de opções&gt;</a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6">&lt;Bloco de parâmetros e arquivos externos&gt;</a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8">&lt;Descrição do circuito - componentes&gt;</a>
+<a class="sourceLine" id="cb2-9" title="9"></a>
+<a class="sourceLine" id="cb2-10" title="10">&lt;Descrição do circuito - fontes&gt;</a>
+<a class="sourceLine" id="cb2-11" title="11"></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="kw">.control</span></a>
+<a class="sourceLine" id="cb2-13" title="13">  &lt;Análises&gt;</a>
+<a class="sourceLine" id="cb2-14" title="14">  &lt;Estruturas de Controle&gt;</a>
+<a class="sourceLine" id="cb2-15" title="15">  &lt;Medições e exportação de resultados&gt;</a>
+<a class="sourceLine" id="cb2-16" title="16"><span class="kw">.endc</span></a>
+<a class="sourceLine" id="cb2-17" title="17"></a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="kw">.end</span></a></code></pre></div>
+<p>Ou então:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb3-1" title="1"><span class="co">* Título</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co">* Subtítulo</span></a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4">&lt;Bloco de opções&gt;</a>
+<a class="sourceLine" id="cb3-5" title="5"></a>
+<a class="sourceLine" id="cb3-6" title="6">&lt;Bloco de parâmetros e arquivos externos&gt;</a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8">&lt;Descrição do circuito - componentes&gt;</a>
+<a class="sourceLine" id="cb3-9" title="9"></a>
+<a class="sourceLine" id="cb3-10" title="10">&lt;Descrição do circuito - fontes&gt;</a>
+<a class="sourceLine" id="cb3-11" title="11"></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="kw">.end</span></a>
+<a class="sourceLine" id="cb3-13" title="13"></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="kw">.control</span></a>
+<a class="sourceLine" id="cb3-15" title="15">  &lt;Análises&gt;</a>
+<a class="sourceLine" id="cb3-16" title="16">  &lt;Estruturas de Controle&gt;</a>
+<a class="sourceLine" id="cb3-17" title="17">  &lt;Medições e exportação de resultados&gt;</a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="kw">.endc</span></a></code></pre></div>
+<p>A segunda é mais prudente no sentido de que você alterará comandos em partes diferentes do códgio, evitando que faça edições indevidas.</p>
+</div>
+<div id="particularidades-do-ltspice" class="section level1">
+<h1>Particularidades do LTSpice</h1>
+<p>O LTSpice não possui o bloco de controle. Embora você possa chamar o LTSpice via linha de comando, como <a href="install_4.html#ltspice-(windows)">configuramos o Electric</a> para fazer, o LTSpice não permite que você use estruturas de controle tal como o NGSpice.</p>
+<p>Ele possui comandos que o NGSpice não tem, construídos com as estruturas originais do Spice que estão disponíveis no NGspice, mas não disponibiliza as estruturas para qualquer simulação.</p>
+<p>Também há análises que o NGSpice manteve do Spice original e que não estão presentes no LTSpice.</p>
+<p>Outra particularidade é que o LTSpice não permite que você faça mais de uma análise ao mesmo tempo, com a exceção da análise de ponto de operação. As demais devem ser executadas separadamente, uma a uma e são armazenadas no mesmo tipo de arquivo. Logo, se você precisa verificar ao mesmo tempo as respotas temporal e na frequẽncia de um determinado circuito você precisará:</p>
+<ol style="list-style-type: decimal">
+<li>Executar a primeira e salvar os dados num arquivo;</li>
+<li>Executar a segunda e salvar os dados em outro arquivo;</li>
+<li>Abrir ambos os arquivos num outro <em>software</em> que possa importar os dados que você salvou e, nesse <em>software</em> vocẽ faz os gráficos que lhe interessam e os compara.</li>
+</ol>
+</div>
+
+
+<p>© Copyright 2020 <a href="https://github.com/pmendessantos">Patrick Mendes dos Santos.</a> </p>
+
+<p>Sob licença <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, v2.0.</a> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+
+</body>
+</html>

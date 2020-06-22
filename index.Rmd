@@ -1,0 +1,117 @@
+---
+title: "A Linguagem Spice"
+author: "Patrick Mendes dos Santos"
+website: "https://pmendessantos.github.io/spice_geral"
+output:
+  html_document:
+    toc_depth: 3
+    include:
+      in_header: head.html
+      after_body: footer.html
+    theme: cerulean
+##    highlight: textmate
+    mathjax: null
+    lib_dir: libs
+#     css: styles.css
+#     scss: _bootswatch.scss
+    logo: logo.jpg
+    toc_float: true
+#      collapsed: false
+    highlight: espresso
+    pandoc_args: ["--syntax-definition", "spice.xml"]
+    
+#   #highlight: “default”, “tango”, “pygments”, “kate”, “monochrome”, “espresso”, “zenburn”, “haddock”, “breezedark”, “textmate”
+
+# theme: “cerulean”, “cosmo”, “flatly”, “journal”, “lumen”, “paper”, “readable”, “sandstone”, “simplex”, “spacelab”, “united”, and “yeti”
+---
+
+# Objetivos
+
+Os principais objetivos desse curso são: 
+
+* Possibilitar que os participantes entendendam como funciona e para que serve a linguagem Spice.
+* Mostrar diferenças entre algumas versões Spice.
+* Mostrar que, com alguns poucos comandos é possível fazer estudos avançados sobre circuitos elétricos e eletrônicos.
+* Mostrar que é possível usar a linguagem para projetar circuitos.
+* Fornecer uma visão geral e necessária para que os participantes possam aprender funções avançadas de forma autônoma.
+
+# O que você vai aprender
+
+* Especificamente sobre a linguagem Spice:
+  * Fluxos possíveis para códigos Spice
+  * Representação de elementos de circuitos (resistores, capacitores, etc.)
+  * Representação de elementos de circuitos eletrônicos (diodos, transistores, amplificadores, etc.)
+  * Análises de circuitos possíveis de serem feitas
+  * Medição de dados específicos dos circuitos simulados
+  * Visualização de dados de simulação
+  * Exportação de dados de simulação
+  * Lista de ferramentas avançadas
+  
+* Conteúdo adicional e transversal:
+  * Construção de esquemáticos no Electric VLSI
+  * Organização de biblioteca de circuitos com o Electric VLSI
+  * Utilização do Notepad++
+
+# Duração
+
+O curso está previsto para 4 horas de duração divididas em 2 dias. O conteúdo do curso será flexibilizado no tempo disponível de forma a permitir que todos possam aprender de forma satisfatória.
+
+# Material do curso
+
+Além dos tutoriais de instalação e das demais páginas desse sítio, haverá também material de apoio no AVA (Moodle) do CEFET-MG.
+
+# Atividades pré-curso
+
+Todos os participantes deverão, antes do início do curso seguir os tutoriais de instalação de forma a ter as ferramentas do curso prontas e funcionais para a realização, sendo elas:
+
+* **[Notepad++](install_1.html)**: editor avançado de textos para construção dos códigos de simulação.
+* **[NGSpice](install_2.html)**: simulador Spice gratuito, livre e de código aberto.
+* **[LTSpice](install_3.html)**: simulador Spice gratuito com funcionalidades diferentes do NGSpice.
+* **[Electric](install_4.html)**: _software_ para projeto de circuitos integrados (analógicos, digitais e de sinais mistos). Serve também para projetos mais complexos ainda que não sejam integrados, sem suporte à parte da construção de placas de circuito impresso.
+
+Para que você possa aproveitar melhor esse e os demais cursos do projeto, siga o tutorial abaixo (vídeo) para atrelar o **MindMup 2.0** ao seu _Google Drive_. Nós o usaremos para fazer mapas mentais, de forma a já introduzirmos uma das ferramentas de aprendizado. 
+
+<iframe src="https://www.youtube.com/embed/uCwUXszPBjI" width="100%" height="315" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+\ \ \
+
+
+**O mapa mental para teste é este** [aqui](https://drive.google.com/file/d/1KglI8L9BBS4emMKmuseXomrv_oLDQHlz/view?usp=sharing). 
+
+Se a configuração tiver sido bem sucedida, você será capaz de editar o mapa mental no seu Google Drive, tal como na tela abaixo.
+
+```{r , echo=FALSE, fig.cap="Corrente versus Tensão no capacitor, no LTSpice.", out.width = '60%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/mindmup_teste_conf.png')
+```
+
+# Sala de aula virtual
+
+Os encontros virtuais do projeto serão realizados pelo portal Conferência Web da Rede Nacional de Pesquisas (RNP), na minha sala particular.
+
+O endereço para a sala é: [https://conferenciaweb.rnp.br/webconf/patrick-mendes-dos-santos](https://conferenciaweb.rnp.br/webconf/patrick-mendes-dos-santos). 
+
+Você não precisará ter login ou estar registrado previamente à plataforma da RNP. Basta colocar o seu nome, completo de preferência, na seção **Não tenho uma conta** (veja figura abaixo) e clicar em **Entrar**.
+
+```{r , echo=FALSE, fig.cap="Tela de _login_ na plataforma Conferência Web da RNP.", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://wiki.rnp.br/download/attachments/89114583/image2017-4-28%2011%3A51%3A26.png?version=1&modificationDate=1493391086000&api=v2')
+```
+
+Ao entrar na sala o portal irá lhe perguntar se quer entrar como microfone ou só ouvir. Como precisaremos discutir vários aspectos, ainda que você não vá falar o tempo todo, habilite o microfone inicialmente e depois silencie-o até que você vá falar.
+
+Para aliviar a transmissão, deixe sua câmera desligada até que seja a sua hora de falar. Quando for a sua vez, ative a câmera para que todos possam vê-lo(la).
+
+Para testar a compatibilidade do seu dispositivo com a plataforma, por favor, use [esse link](https://conferenciaweb.rnp.br/teste).
+
+Um manual completo e detalhado sobre a plataforma pode ser encontrado [aqui](https://portal.unila.edu.br/proagi/ctic/manuais-de-uso/manual-de-conferencia-web-rnp).
+
+> A sala de reuniões será aberta **10 minutos** antes do horário para que cada um possa ir testando as configurações e conexão.
+
+> Caso você chegue atrasado(a) à reunião, pode ser que demore um pouco para que eu veja a sua chegada e permita a sua entrada. Qualquer coisa pode me acionar no Hangout do Google.
+
+# Em caso de dúvidas
+
+Entre em contato pela lista de e-mails do grupo: aprendendo_c_foss@googlegroups.com
+
+Ou diretamente comigo: patrickcefet@gmail.com
+
+
+________________________________________________________________

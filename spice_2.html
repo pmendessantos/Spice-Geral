@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Elementos e Simulações Básicas</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<script src="libs/ace-1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/holder-2.9.0/holder.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="snippets/snippets.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77306155-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 52px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h2 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h3 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h4 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h5 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h6 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">A Linguagem Spice</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorais de Instalação
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="install_1.html">Instalando o Notepad++</a>
+    </li>
+    <li>
+      <a href="install_2.html">Instalando o NGSpice</a>
+    </li>
+    <li>
+      <a href="install_3.html">Instalando o LTSpice</a>
+    </li>
+    <li>
+      <a href="install_4.html">Instalando o Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Electric VLSI
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="electric_1.html">Configurando o Electric</a>
+    </li>
+    <li>
+      <a href="electric_2.html">Criando biliotecas e circuitos</a>
+    </li>
+    <li>
+      <a href="electric_3.html">Simulando circuitos a partir do Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Spice
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spice.html">Visão Geral</a>
+    </li>
+    <li>
+      <a href="spice_1.html">Estrutura Básica de Simulação</a>
+    </li>
+    <li>
+      <a href="spice_2.html">Elementos e Simulações Básicas</a>
+    </li>
+    <li>
+      <a href="spice_3.html">Dispositivos Eletrônicos</a>
+    </li>
+    <li>
+      <a href="spice_4.html">Parâmetros e Inclusões</a>
+    </li>
+    <li>
+      <a href="spice_5.html">Medições</a>
+    </li>
+    <li>
+      <a href="spice_6.html">Subcircuitos</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pmendessantos/spice_geral">
+    <span class="&lt;ion &lt;ion-icon name=&quot;git-branch-outline&quot;&gt;&lt;/ion-icon&gt;"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Elementos e Simulações Básicas</h1>
+
+</div>
+
+
+<div id="introdução" class="section level2">
+<h2>Introdução</h2>
+<p>Na <a href="spice_1.html#tab_comps">seção anterior</a> foram apresentados alguns componentes e suas respectivas letras. Aqui um detalhamento maior será feito para alguns dos que lá estão. Como é um curso básico e também pelo fato da linguagem Spice ser muito abrangente, não será aqui esgotado todo o universo de possibilidades, mesmo para os componentes que estão sendo apresentados.</p>
+<p>Para mais detalhes sobre componentes, declarações, funções e comandos, pode-se consultar o <a href="http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/UserGuide/elements_fr.html">manual online do <strong>Spice 3f.5</strong></a>.</p>
+<p>Embora o código Spice possa ser gerado automaticamente no Electric, primeiro vamos construir os códigos para podermos nos familiarizar com eles e podermos, com segurança, rastrear e corrigir os erros depois, quando estivermos usando o Electric.</p>
+<p>Logo, para cada seção a seguir haverá duas versões de código, uma válida para o fluxo do NGSpice e outra para o do LTSpice. Recomenda-se que testem os dois simuladores.</p>
+<p>Uma parte importante que serve para a declaração de componentes e para a realização de simulações no Spice é a utilização de ordens de grandeza nas unidades de cada propriedade. Além disso, as letras e termos usados para isso são <code>protegidos</code>, isto é, não poderão ser usados para outros fins. A seguir uma tabela com todos os prefixos de ordem de grandeza aceitos pelo Spice:</p>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Múltiplo
+</th>
+<th style="text-align:center;">
+Multiplicador
+</th>
+<th style="text-align:center;">
+Código Spice
+</th>
+<th style="text-align:center;">
+Exemplo
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+femto
+</td>
+<td style="text-align:center;">
+1e-15
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+1f
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+pico
+</td>
+<td style="text-align:center;">
+1e-12
+</td>
+<td style="text-align:center;">
+p
+</td>
+<td style="text-align:center;">
+1p
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+nano
+</td>
+<td style="text-align:center;">
+1e-09
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+1n
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+micro
+</td>
+<td style="text-align:center;">
+1e-06
+</td>
+<td style="text-align:center;">
+u
+</td>
+<td style="text-align:center;">
+1u
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+mili
+</td>
+<td style="text-align:center;">
+1e-03
+</td>
+<td style="text-align:center;">
+m
+</td>
+<td style="text-align:center;">
+1m
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+quilo
+</td>
+<td style="text-align:center;">
+1e+03
+</td>
+<td style="text-align:center;">
+k
+</td>
+<td style="text-align:center;">
+1k
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Mega
+</td>
+<td style="text-align:center;">
+1e+06
+</td>
+<td style="text-align:center;">
+meg ou mega
+</td>
+<td style="text-align:center;">
+1meg
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Giga
+</td>
+<td style="text-align:center;">
+1e+09
+</td>
+<td style="text-align:center;">
+g ou gig
+</td>
+<td style="text-align:center;">
+1g
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Tera
+</td>
+<td style="text-align:center;">
+1e+12
+</td>
+<td style="text-align:center;">
+t ou tera
+</td>
+<td style="text-align:center;">
+1t
+</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Como o Spice é <em>case insensitive</em>, usar <code>M</code> (<strong>m</strong> maiúsculo) num valor acarretará em <code>mili</code> da mesma forma. Observar a forma correta para <code>Mega</code>.</p>
+</blockquote>
+<p>Importante também salientar que os múltiplos acima da coluna <strong>Exemplo</strong> já servem como entrada para quaisquer componentes visto que a entrada de unidades nas declarações Spice não é obrigatória. As unidades preassumidas são as da tabela abaixo:</p>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Grandeza
+</th>
+<th style="text-align:center;">
+Unidade Padrão
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Tempo
+</td>
+<td style="text-align:center;">
+Segundos
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Frequência
+</td>
+<td style="text-align:center;">
+Hertz
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Resistência
+</td>
+<td style="text-align:center;">
+Ohm
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Capacitância
+</td>
+<td style="text-align:center;">
+Farad
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Indutância
+</td>
+<td style="text-align:center;">
+Henri
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Temperatura
+</td>
+<td style="text-align:center;">
+Graus Celsius
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Potência
+</td>
+<td style="text-align:center;">
+Watt
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Impedância
+</td>
+<td style="text-align:center;">
+Ohm
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Admitância
+</td>
+<td style="text-align:center;">
+Siemens
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="resistores" class="section level2">
+<h2>Resistores</h2>
+<div id="declaração-padrão" class="section level3">
+<h3>Declaração padrão:</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb1-1" title="1">R[nome_do_componente] nó_<span class="dv">1</span> nó_<span class="dv">2</span> valor</a></code></pre></div>
+<p>ou</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb2-1" title="1">r[nome_do_componente] nó_<span class="dv">1</span> nó_<span class="dv">2</span> valor</a></code></pre></div>
+<p>Ou seja, basta iniciar a linha com a letra <code>R</code>, em qualquer caixa, para declarar a existência de um resistor comum<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. As variações não serão tratadas nesse curso, mas podem ser consultadas no <a href="http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/UserGuide/elements_fr.html">manual</a>.</p>
+<p>Por padrão: <code>nó_1</code> é considerado o nó positivo do resistor e o <code>nó_2</code>, o negativo. Não há polaridade, as referências são unicamente para cálculo de circuito. Veja os Exemplo 1 e 2 a seguir que detalham o uso de resistores juntamente com a análise de ponto de operação.</p>
+</div>
+</div>
+<div id="análise-de-ponto-de-operação" class="section level2">
+<h2>Análise de Ponto de Operação</h2>
+<p>A análise de ponto de operação é a análise em corrente contínua do circuito. Ela calculará em que ponto o circuito está em termos de distribuição contínua de tensão e corrente. É costumeiro dizer que calcula-se o ponto de equilíbrio entre as variáveis <code>através</code> (correntes) e das variáveis <code>entre</code> (tensões).</p>
+<p>Dessa forma, não faz sentido falar em análise de ponto de operação para num circuito que não tenha pelo menos uma fonte com valor estabelecido para correnete contínua. Essas fontes estão contempladas em ambos os exemplos que se seguem.</p>
+<div id="exemplo-1" class="section level3">
+<h3>Exemplo 1</h3>
+<p>Um exemplo muito simples para entender os resistores é um divisor de tensão resistivo: dois resistores em série com uma fonte de tensão. O circuito da figura foi construído no Electric, como apresentado no <a href="electric_2.html#exemplo-1">Exemplo 1</a>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex1_sch.png" alt="Esquemático do Exemplo 1." width="50%" />
+<p class="caption">
+Esquemático do Exemplo 1.
+</p>
+</div>
+<div id="ngspice" class="section level4">
+<h4>NGSpice:</h4>
+<div id="o-código" class="section level5">
+<h5>O código:</h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb3-1" title="1"><span class="co">*** Exemplo 1</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co">** Divisor de Tensao Resistivo</span></a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">*** Circuito</span></a>
+<a class="sourceLine" id="cb3-5" title="5">r1  vi vo 1k</a>
+<a class="sourceLine" id="cb3-6" title="6">r2  vo gnd 1k</a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">*** Fontes</span></a>
+<a class="sourceLine" id="cb3-9" title="9">v1  vi <span class="dv">0</span> dc <span class="dv">1</span></a>
+<a class="sourceLine" id="cb3-10" title="10"></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="kw">.end</span></a>
+<a class="sourceLine" id="cb3-12" title="12"></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="kw">.control</span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">*** Analises</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co">** ponto de operacao</span></a>
+<a class="sourceLine" id="cb3-16" title="16">op</a>
+<a class="sourceLine" id="cb3-17" title="17"></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="co">*** Controles</span></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="co">** roda a simulacao</span></a>
+<a class="sourceLine" id="cb3-20" title="20">run</a>
+<a class="sourceLine" id="cb3-21" title="21"></a>
+<a class="sourceLine" id="cb3-22" title="22"><span class="co">*** Saidas</span></a>
+<a class="sourceLine" id="cb3-23" title="23"><span class="co">** imprime as saidas</span></a>
+<a class="sourceLine" id="cb3-24" title="24">print vi vo</a>
+<a class="sourceLine" id="cb3-25" title="25"></a>
+<a class="sourceLine" id="cb3-26" title="26"><span class="kw">.endc</span></a></code></pre></div>
+</div>
+<div id="simulando" class="section level5">
+<h5>Simulando:</h5>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="ex">ngspice</span> ex1.cir</a></code></pre></div>
+</div>
+<div id="o-resultado" class="section level5">
+<h5>O resultado:</h5>
+<p>Como esperado, <span class="math inline">\(1\ V\)</span> dividido igualmente em dois resistores de <span class="math inline">\(1\ K\Omega\)</span> resulta na saída <span class="math inline">\(0,\!5\ V\)</span>.    <br />
+   <br />
+</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex1_ng_sol.png" alt="Resultado do Exemplo 1 no NGSpice." width="90%" />
+<p class="caption">
+Resultado do Exemplo 1 no NGSpice.
+</p>
+</div>
+</div>
+</div>
+<div id="ltspice" class="section level4">
+<h4>LTSpice:</h4>
+<div id="o-código-1" class="section level5">
+<h5>O código:</h5>
+<div class="sourceCode" id="cb5"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb5-1" title="1"><span class="co">*** Exemplo 1</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="co">** Divisor de Tensao Resistivo</span></a>
+<a class="sourceLine" id="cb5-3" title="3"></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">*** Circuito</span></a>
+<a class="sourceLine" id="cb5-5" title="5">r1  vi vo 1k</a>
+<a class="sourceLine" id="cb5-6" title="6">r2  vo gnd 1k</a>
+<a class="sourceLine" id="cb5-7" title="7"></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="co">*** Fontes</span></a>
+<a class="sourceLine" id="cb5-9" title="9">v1  vi <span class="dv">0</span> dc <span class="dv">1</span></a>
+<a class="sourceLine" id="cb5-10" title="10"></a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="co">** Analises</span></a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="kw">.op</span></a>
+<a class="sourceLine" id="cb5-13" title="13"></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="kw">.end</span></a></code></pre></div>
+</div>
+<div id="o-resultado-1" class="section level5">
+<h5>O resultado:</h5>
+<p>Como esperado, <span class="math inline">\(1\ V\)</span> dividido igualmente em dois resistores de <span class="math inline">\(1\ K\Omega\)</span> resulta na saída <span class="math inline">\(0,\!5\ V\)</span>.    <br />
+   <br />
+</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex1_lt_sol.png" alt="Resultado do Exemplo 1 no LTSpice." width="90%" />
+<p class="caption">
+Resultado do Exemplo 1 no LTSpice.
+</p>
+</div>
+<blockquote>
+<p>Observação sobre o LTSpice: a corrente da fonte <code>I(V1)</code> está negativa. Sinaliza que a corrente sai pelo nó positivo da fonte. A dos resistores é positiva, isto é, entra pelo nó positivo deles.</p>
+<p>Embora se saiba que resistores não tem polaridade, o Spice faz distinção para efeitos de cálculo. Logo, para conferência, vale o valor. O sentido da corrente será importante em alguns casos e deverá ser conferido quando for de interesse.</p>
+<p>No caso em questão, circuito série, a corrente que saida fonte (negativa) é equivalente em valor à que entra nos resistores (positiva).</p>
+</blockquote>
+</div>
+</div>
+</div>
+<div id="exemplo-2" class="section level3">
+<h3>Exemplo 2</h3>
+<p>Um outro exemplo muito simples para entender os resistores é um divisor de corrente resistivo: dois resistores em paralelo com uma fonte de tensão. O circuito da figura foi construído no Electric, como apresentado no <a href="electric_2.html#exemplo-2">Exemplo 2</a>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex2_sch.png" alt="Esquemático do Exemplo 2." width="50%" />
+<p class="caption">
+Esquemático do Exemplo 2.
+</p>
+</div>
+<div id="ngspice-1" class="section level4">
+<h4>NGSpice:</h4>
+<div id="o-código-2" class="section level5">
+<h5>O código:</h5>
+<div class="sourceCode" id="cb6"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb6-1" title="1"><span class="co">*** Exemplo 2</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">** Divisor de Corrente Resistivo</span></a>
+<a class="sourceLine" id="cb6-3" title="3"></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">*** Opcoes</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">** salvar as correntes para poder</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">** mostrar depois</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="kw">.options</span> savecurrents</a>
+<a class="sourceLine" id="cb6-8" title="8"></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">*** Circuito</span></a>
+<a class="sourceLine" id="cb6-10" title="10">r1  vi gnd 1k</a>
+<a class="sourceLine" id="cb6-11" title="11">r2  vi gnd 1k</a>
+<a class="sourceLine" id="cb6-12" title="12"></a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">*** Fontes</span></a>
+<a class="sourceLine" id="cb6-14" title="14">v1  vi gnd dc <span class="dv">1</span></a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="kw">.end</span></a>
+<a class="sourceLine" id="cb6-16" title="16"></a>
+<a class="sourceLine" id="cb6-17" title="17"><span class="kw">.control</span></a>
+<a class="sourceLine" id="cb6-18" title="18"><span class="co">*** Analises</span></a>
+<a class="sourceLine" id="cb6-19" title="19"><span class="co">** ponto de operacao</span></a>
+<a class="sourceLine" id="cb6-20" title="20">op</a>
+<a class="sourceLine" id="cb6-21" title="21"></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co">*** Controles</span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">** roda a simulacao</span></a>
+<a class="sourceLine" id="cb6-24" title="24">run</a>
+<a class="sourceLine" id="cb6-25" title="25"></a>
+<a class="sourceLine" id="cb6-26" title="26"><span class="co">*** Saidas</span></a>
+<a class="sourceLine" id="cb6-27" title="27"><span class="co">** imprime as saidas: correntes em cada resistor</span></a>
+<a class="sourceLine" id="cb6-28" title="28">print @r1[i] @r2[i]</a>
+<a class="sourceLine" id="cb6-29" title="29"></a>
+<a class="sourceLine" id="cb6-30" title="30"><span class="kw">.endc</span></a></code></pre></div>
+</div>
+<div id="simulando-1" class="section level5">
+<h5>Simulando:</h5>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" title="1"><span class="ex">ngspice</span> ex2.cir</a></code></pre></div>
+</div>
+<div id="o-resultado-2" class="section level5">
+<h5>O resultado:</h5>
+<p>Como esperado, <span class="math inline">\(1\ V\)</span> aplicado a dois resistores (de <span class="math inline">\(1\ K\Omega\)</span>) em paralelo daria uma corrente igual em cada um deles, de <span class="math inline">\(1\ mA\)</span>, no caso. Ou seja a corrente da fonte é igual a <span class="math inline">\(2\ mA\)</span>, correspondendo ao resistor equivalente do paralelo: metade da resistência (<span class="math inline">\(500\ \Omega\)</span>).    <br />
+   <br />
+</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex2_ng_sol.png" alt="Resultado do Exemplo 2 no NGSpice." width="80%" />
+<p class="caption">
+Resultado do Exemplo 2 no NGSpice.
+</p>
+</div>
+</div>
+</div>
+<div id="ltspice-1" class="section level4">
+<h4>LTSpice:</h4>
+<div id="o-código-3" class="section level5">
+<h5>O código:</h5>
+<div class="sourceCode" id="cb8"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb8-1" title="1"><span class="co">*** Exemplo 2</span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="co">** Divisor de Corrente Resistivo</span></a>
+<a class="sourceLine" id="cb8-3" title="3"></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">*** Circuito</span></a>
+<a class="sourceLine" id="cb8-5" title="5">r1  vi gnd 1k</a>
+<a class="sourceLine" id="cb8-6" title="6">r2  vi gnd 1k</a>
+<a class="sourceLine" id="cb8-7" title="7"></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">*** Fontes</span></a>
+<a class="sourceLine" id="cb8-9" title="9">v1  vi gnd dc <span class="dv">1</span></a>
+<a class="sourceLine" id="cb8-10" title="10"></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">*** Analises</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">** ponto de operacao</span></a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="kw">.op</span></a>
+<a class="sourceLine" id="cb8-14" title="14"></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="kw">.end</span></a></code></pre></div>
+</div>
+<div id="o-resultado-3" class="section level5">
+<h5>O resultado:</h5>
+<p>Como esperado, <span class="math inline">\(1\ V\)</span> aplicado a dois resistores (de <span class="math inline">\(1\ K\Omega\)</span>) em paralelo daria uma corrente igual em cada um deles, de <span class="math inline">\(1\ mA\)</span>, no caso. Ou seja a corrente da fonte é igual a <span class="math inline">\(2\ mA\)</span>, correspondendo ao resistor equivalente do paralelo: metade da resistência (<span class="math inline">\(500\ \Omega\)</span>).    <br />
+   <br />
+</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex2_lt_sol.png" alt="Resultado do Exemplo 2 no LTSpice." width="80%" />
+<p class="caption">
+Resultado do Exemplo 2 no LTSpice.
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="capacitores-e-indutores" class="section level2">
+<h2>Capacitores e Indutores</h2>
+<div id="declaração-padrão-1" class="section level3">
+<h3>Declaração padrão:</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb9-1" title="1"><span class="co">* Capacitor</span></a>
+<a class="sourceLine" id="cb9-2" title="2">C[nome_do_componente] nó_<span class="dv">1</span> nó_<span class="dv">2</span> valor ic=[valor]</a>
+<a class="sourceLine" id="cb9-3" title="3"></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="co">* Indutor</span></a>
+<a class="sourceLine" id="cb9-5" title="5">L[nome_do_componente] nó_<span class="dv">1</span> nó_<span class="dv">2</span> valor ic=[valor]</a></code></pre></div>
+<p>ou</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb10-1" title="1"><span class="co">* Capacitor</span></a>
+<a class="sourceLine" id="cb10-2" title="2">c[nome_do_componente] nó_<span class="dv">1</span> nó_<span class="dv">2</span> valor ic=[valor]</a>
+<a class="sourceLine" id="cb10-3" title="3"></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="co">* Indutor</span></a>
+<a class="sourceLine" id="cb10-5" title="5">l[nome_do_componente] nó_<span class="dv">1</span> nó_<span class="dv">2</span> valor ic=[valor]</a></code></pre></div>
+<p>Identicamente aos resistores, por padrão: <code>nó_1</code> é considerado o nó positivo do componente e o <code>nó_2</code>, o negativo. Não há polaridade, as referências são unicamente para cálculo de circuito.</p>
+<p>Também como os resistores há variações de ambos os componentes, por exemplo, capacitores de circuitos integrados e indutores acoplados (indutâncias mútuas), mas essa variações não serão tratadas aqui e podem ser consultadas no <a href="http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/UserGuide/elements_fr.html">manual</a>.</p>
+<p>Opcionalmente, para capacitores e indutores, pode-se definir uma condição inicial para a sua tensão e corrente, respectivamente. Isso pode ajudar a economizar tempo de simulação ou mesmo possibilitar que o circuito seja resolvido.</p>
+</div>
+</div>
+<div id="análise-transitória-variação-no-tempo" class="section level2">
+<h2>Análise Transitória (Variação no Tempo)</h2>
+<div id="declaração-padrão-2" class="section level3">
+<h3>Declaração Padrão</h3>
+<p>No NGSpice:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">.tran</span> [tstep] [tstop] [tstart] [tmax] [uic]</a>
+<a class="sourceLine" id="cb11-2" title="2"></a>
+<a class="sourceLine" id="cb11-3" title="3">ou, dentro do bloco de controle, sem o ponto:</a>
+<a class="sourceLine" id="cb11-4" title="4"></a>
+<a class="sourceLine" id="cb11-5" title="5">tran [tstep] [tstop] [tstart] [tmax] [uic]</a></code></pre></div>
+<p>No LTSpice</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">.tran</span> [tstep] [tstop] [tstart] [tmax] [modificadores]</a></code></pre></div>
+<p>Para o NGSpice e LTSpice:</p>
+<ul>
+<li><p><strong>tstep</strong>: passo base para o cálculo da simulação, definirá o número de pontos com valores calculados. Quanto menor o passo, mais instantes de tempo precisam ser calculados, logo maior quantidade de dados precisará ser manipulada e maior será o uso de memória pelo simulador. Melhor sempre começar com valores grandes, isto é, um valor 10 a 100 vezes menor que o <code>tstop</code>. É obrigatório no NGSpice, mas pode ser omitido no LTSpice que usará métodos de tentar prever esse passo a partir do <code>tstop</code>.</p></li>
+<li><p><strong>tstop</strong>: é o tempo no qual a simulação será encerrada. Serve de base para que o Spice possa otimizar a solução: o passo é modificado para que não se perca tempo e memória calculando-se pontos cuja resposta é muito próxima do anterior e diminui-se o passo para os pontos em que a oscilação numérica começa a aumentar. Obrigatório em ambos NGSpice e LTSpice.</p></li>
+<li><p><strong>tstart</strong>: muitas vezes precisa-se calcular o circuito por todo um período de tempo, mas está-se interessado apenas no final desse período. Esse valor, que é opcional para ambos NGSpice e LTSpice, define a partir de que instante a resposta final será mostrada. O simulador calculará tudo entre 0 segundos e <code>tstop</code>, mas só mostrará os resultados a partir de <code>tstep</code>.</p></li>
+<li><p><strong>tmax</strong>: também opcional para ambos, define o máximo passo de integração possível. Existe extamente porque o simulador irá fazer modificações, como dito anteriormente, para diminuir a quantidade de cálculos a serem realizados. Para garantir um período ajustado de tempo de observação pode-se usar esse valor. Importante dizer que, se for usado, necessariamente um valor de <code>tstart</code> deverá vir antes dele.</p></li>
+<li><p><strong>uic</strong>: significa <em>use initial conditions</em> e serve para isso mesmo, usar as condições iniciais. Por exemplo, se o parâmetro <code>ic</code> for ajustado para um capacitor e <code>uic</code> estiver na chamada do comando, então o Spice irá de fato usar o valor ajustado para a tensão inicial do capacitor. Ele pode ser usado no comando sem que <code>tstart</code> e <code>tmax</code> estejam sendo usados. É opcional e é um dos modificadores (ver adiante) do LTSpice.</p></li>
+</ul>
+<p>Os modificadores do LTSpice, além de <code>uic</code>, são:</p>
+<ul>
+<li><strong>steady</strong>: interrompe simulação quando o estado estacionário é alcançado.</li>
+<li><strong>nodiscard</strong>: não apaga os cálculos realizados antes da chegada ao estado estacionário.</li>
+<li><strong>startup</strong>: calcula o ponto de operação com as fontes independentes desligadas e com as condições iniciais, se <code>uic</code> estiver ligado. Então faz uma entrada em rampa linear nessas mesmas fontes independentes nos primeiros <span class="math inline">\(20\ \mu s\)</span> de simulação.</li>
+<li><strong>step</strong>: calcula a resposta ao degrau do circuito.</li>
+</ul>
+</div>
+<div id="ponto-de-operação" class="section level3">
+<h3>Ponto de Operação</h3>
+<p>A análise do comportamento de um circuito no tempo depende de um ponto de partida, isto é, do seu equilíbrio inicial de energia. Para tanto, mesmo que não seja chamada um análise específica de <a href="#analise-de-ponto-de-operacao">ponto de operação</a>, o Spice entende que é preciso primeiro calcular esse ponto de operação para somente então proceder com a análise temporal.</p>
+<p>O ponto de operação inicial é importante para que o Spice consiga chegar em respostas corretas para o circuito e esse pode ser um problema de convergência em circuitos em que se tem indutores em paralelo ou capacitores em série sem a existência de nenhum tipo de resistência. Há formas de se contornar esses problemas, mas não serão tratadas aqui.</p>
+</div>
+<div id="passo-de-simulação" class="section level3">
+<h3>Passo de Simulação</h3>
+<p>Um parâmetro importante da análise temporal ou transitória é o passo de integração ou passo de simulação. Diz-se de integração, pois na grande maioria dos circuitos há elementos acumuladores de energia (capacitores e indutores), ainda que parasitas, e eles demandarão a solução de equações diferenciais. Para chega a essa solução está implícito que algum método de integração numérica (não analítica) deverá ser empregado.</p>
+<p>O tamanho do passo pode levar a soluções erradas ou mesmo não levar a solução alguma pois, em conjunto com o método de solução do circuito, pode não convergir para uma única resposta. Existem também soluções para esse problema de convergência, principalmente quando se tenta solucioná-lo com passos de simulação muito pequenos<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+</div>
+<div id="exemplo-3" class="section level3">
+<h3>Exemplo 3</h3>
+<p>Um exemplo para mostrar o uso de tudo o que já foi visto e introduzir comandos extras: um circuito RLC série. O circuito da figura foi construído no Electric, como apresentado no <a href="electric_2.html#exemplo-3">Exemplo 3</a>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex3_sch.png" alt="Esquemático do Exemplo 3." width="50%" />
+<p class="caption">
+Esquemático do Exemplo 3.
+</p>
+</div>
+<div id="ngspice-2" class="section level4">
+<h4>NGSpice:</h4>
+<div id="o-código-4" class="section level5">
+<h5>O código:</h5>
+<div class="sourceCode" id="cb13"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb13-1" title="1"><span class="co">*** Exemplo 3</span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="co">** Circuito RLC Serie</span></a>
+<a class="sourceLine" id="cb13-3" title="3"></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="co">*** Opcoes</span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="co">** salvar as correntes para poder</span></a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="co">** mostrar depois</span></a>
+<a class="sourceLine" id="cb13-7" title="7"><span class="kw">.options</span> savecurrents</a>
+<a class="sourceLine" id="cb13-8" title="8"></a>
+<a class="sourceLine" id="cb13-9" title="9"><span class="co">*** Parametros</span></a>
+<a class="sourceLine" id="cb13-10" title="10"><span class="kw">.param</span> freq=<span class="dv">60</span></a>
+<a class="sourceLine" id="cb13-11" title="11"><span class="kw">.param</span> T=<span class="dv">1</span>/freq</a>
+<a class="sourceLine" id="cb13-12" title="12"></a>
+<a class="sourceLine" id="cb13-13" title="13"><span class="co">*** Circuito</span></a>
+<a class="sourceLine" id="cb13-14" title="14">R1 vi v2 1k5</a>
+<a class="sourceLine" id="cb13-15" title="15">L1 v2 v3 100u</a>
+<a class="sourceLine" id="cb13-16" title="16">C1 v3 gnd 470n</a>
+<a class="sourceLine" id="cb13-17" title="17"></a>
+<a class="sourceLine" id="cb13-18" title="18"><span class="co">*** Fontes</span></a>
+<a class="sourceLine" id="cb13-19" title="19">v1 vi gnd pulse(<span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span> 10n 10n <span class="st">&#39;1/120&#39;</span> <span class="st">&#39;1/60&#39;</span>)</a>
+<a class="sourceLine" id="cb13-20" title="20"></a>
+<a class="sourceLine" id="cb13-21" title="21"><span class="co">*** Analises</span></a>
+<a class="sourceLine" id="cb13-22" title="22"><span class="kw">.op</span></a>
+<a class="sourceLine" id="cb13-23" title="23"><span class="kw">.tran</span> <span class="dv">0</span><span class="kw">.1u</span> {T}</a>
+<a class="sourceLine" id="cb13-24" title="24"></a>
+<a class="sourceLine" id="cb13-25" title="25"><span class="kw">.end</span></a>
+<a class="sourceLine" id="cb13-26" title="26"></a>
+<a class="sourceLine" id="cb13-27" title="27"><span class="kw">.control</span></a>
+<a class="sourceLine" id="cb13-28" title="28"><span class="co">*** Controles</span></a>
+<a class="sourceLine" id="cb13-29" title="29"><span class="co">** roda a simulacao</span></a>
+<a class="sourceLine" id="cb13-30" title="30">run</a>
+<a class="sourceLine" id="cb13-31" title="31"></a>
+<a class="sourceLine" id="cb13-32" title="32"><span class="co">*** Saidas</span></a>
+<a class="sourceLine" id="cb13-33" title="33"><span class="co">** imprime as saidas: correntes em cada resistor</span></a>
+<a class="sourceLine" id="cb13-34" title="34">plot v(vi) </a>
+<a class="sourceLine" id="cb13-35" title="35">plot v1#branch</a>
+<a class="sourceLine" id="cb13-36" title="36">plot v(vi,v2) v(v2,v3) v(v3)</a>
+<a class="sourceLine" id="cb13-37" title="37"></a>
+<a class="sourceLine" id="cb13-38" title="38"><span class="kw">.endc</span></a></code></pre></div>
+<p>Novidades do código:</p>
+<ol style="list-style-type: decimal">
+<li>Introdução de parâmetros: <code>freq</code> e <code>T</code>. São como variáveis e pode-se fazer cálculos, como mostrado, usando-se esses parâmetros.</li>
+<li>Fonte pulsada, cujos parâmetros são: <code>pulse(valor_inicial valor_final atraso_inicio tempo_subida_pulso tempo_descida_pulso tempo_no_valor_inicial tempo_do_periodo</code>.</li>
+<li>Uso do parâmetro <code>T</code> para modificar um comando (<code>.tran</code>).</li>
+<li>Para usar o parâmetro, as análises foram colocadas dentro do circuito.</li>
+<li>A corrente da fonte de tensão é chamada de <em>branch</em> (ramo). Difere da chamada que fizemos para os resistores no <a href="#exemplo-2">Exemplo 2</a>.</li>
+<li>Mostra-se a forma correta de cálculo de tensão entre dois pontos quaisquer do circuito: <code>v(nó_1,nó_2)</code>. Essa construção é equivalente a <span class="math inline">\(v(no_1) - v(terra) - (v(no_2) - v(terra)) = v(no_1) - v(no_2)\)</span>. Essas tensões são, respectivamente, as tensões sobre o indutor, resistor e capacitor do circuito.</li>
+</ol>
+</div>
+<div id="o-resultado-4" class="section level5">
+<h5>O resultado:</h5>
+<p>Como esperado, um pulso de <span class="math inline">\(1\ V\)</span> aplicado num circuito RLC resulta numa subida gradual da tensão no capacitor enquanto a do indutor vai à zero à medida em que o circuito se estabiliza. O resistor se comportanto apenas como limitador de corrente e corresponsável pelo atraso em ambos os transitórios.    <br />
+   <br />
+</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex3_ng_sol1.png" alt="Resultado do Exemplo 3 no NGSpice: registro." width="85%" />
+<p class="caption">
+Resultado do Exemplo 3 no NGSpice: registro.
+</p>
+</div>
+<p>   <br />
+</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex3_ng_sol2.png" alt="Resultado do Exemplo 3 no NGSpice: tensão de entrada." width="100%" />
+<p class="caption">
+Resultado do Exemplo 3 no NGSpice: tensão de entrada.
+</p>
+</div>
+<p>   <br />
+</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex3_ng_sol3.png" alt="Resultado do Exemplo 3 no NGSpice: corrente da fonte." width="100%" />
+<p class="caption">
+Resultado do Exemplo 3 no NGSpice: corrente da fonte.
+</p>
+</div>
+<p>   <br />
+</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex3_ng_sol4.png" alt="Resultado do Exemplo 3 no NGSpice: tensão no indutor V(vi,v2), no resistor V(v2,v3) e no capacitor V(v3)." width="100%" />
+<p class="caption">
+Resultado do Exemplo 3 no NGSpice: tensão no indutor V(vi,v2), no resistor V(v2,v3) e no capacitor V(v3).
+</p>
+</div>
+<p>   <br />
+</p>
+</div>
+</div>
+<div id="ltspice-2" class="section level4">
+<h4>LTSpice:</h4>
+<div id="o-código-5" class="section level5">
+<h5>O código:</h5>
+<div class="sourceCode" id="cb14"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb14-1" title="1"><span class="co">*** Exemplo 3</span></a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="co">** Circuito RLC Serie</span></a>
+<a class="sourceLine" id="cb14-3" title="3"></a>
+<a class="sourceLine" id="cb14-4" title="4"><span class="co">*** Parametros</span></a>
+<a class="sourceLine" id="cb14-5" title="5"><span class="kw">.param</span> freq=<span class="dv">60</span></a>
+<a class="sourceLine" id="cb14-6" title="6"><span class="kw">.param</span> T=<span class="dv">1</span>/freq</a>
+<a class="sourceLine" id="cb14-7" title="7"></a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="co">*** Circuito</span></a>
+<a class="sourceLine" id="cb14-9" title="9">R1 vi v2 1k5</a>
+<a class="sourceLine" id="cb14-10" title="10">L1 v2 v3 100u</a>
+<a class="sourceLine" id="cb14-11" title="11">C1 v3 gnd 470n</a>
+<a class="sourceLine" id="cb14-12" title="12"></a>
+<a class="sourceLine" id="cb14-13" title="13"><span class="co">*** Fontes</span></a>
+<a class="sourceLine" id="cb14-14" title="14">v1 vi gnd pulse(<span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span> 10n 10n <span class="st">&#39;1/120&#39;</span> <span class="st">&#39;1/60&#39;</span>)</a>
+<a class="sourceLine" id="cb14-15" title="15"></a>
+<a class="sourceLine" id="cb14-16" title="16"><span class="co">*** Analises</span></a>
+<a class="sourceLine" id="cb14-17" title="17"><span class="co">** ponto de operacao</span></a>
+<a class="sourceLine" id="cb14-18" title="18"><span class="kw">.op</span></a>
+<a class="sourceLine" id="cb14-19" title="19"><span class="co">** analise transitoria</span></a>
+<a class="sourceLine" id="cb14-20" title="20"><span class="kw">.tran</span> <span class="dv">0</span><span class="kw">.1u</span> {T}</a>
+<a class="sourceLine" id="cb14-21" title="21"></a>
+<a class="sourceLine" id="cb14-22" title="22"><span class="kw">.end</span></a></code></pre></div>
+</div>
+<div id="o-resultado-5" class="section level5">
+<h5>O resultado:</h5>
+<p>Como esperado, <span class="math inline">\(1\ V\)</span> aplicado a dois resistores (de <span class="math inline">\(1\ K\Omega\)</span>) em paralelo daria uma corrente igual em cada um deles, de <span class="math inline">\(1\ mA\)</span>, no caso. Ou seja a corrente da fonte é igual a <span class="math inline">\(2\ mA\)</span>, correspondendo ao resistor equivalente do paralelo: metade da resistência (<span class="math inline">\(500\ \Omega\)</span>).    <br />
+   <br />
+</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex3_lt_sol.png" alt="Resultado do Exemplo 3 no LTSpice: formas de onda." width="100%" />
+<p class="caption">
+Resultado do Exemplo 3 no LTSpice: formas de onda.
+</p>
+</div>
+<p>E, pode-se ver os resultdos do processamento do circuito, tal como já mostrado para o NGSpice. Basta pressionar <code>Ctrl+l</code> ou então ir até o menu: <code>View-&gt;Spice Error Log</code>. A tela, para esse exemplo, é:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex3_lt_sol2.png" alt="Resultado do Exemplo 3 no LTSpice: registro." width="85%" />
+<p class="caption">
+Resultado do Exemplo 3 no LTSpice: registro.
+</p>
+</div>
+<p>   <br />
+</p>
+</div>
+</div>
+</div>
+<div id="experimente-você-também" class="section level3">
+<h3>Experimente você também</h3>
+<p>Por exemplo, mudando-se os valores dos componentes para: <strong><span class="math inline">\(R_1 = 10\ \Omega\)</span></strong>, <strong><span class="math inline">\(C_1 = 47\ nF\)</span></strong> e <strong><span class="math inline">\(L_1 = 470\ \mu H\)</span></strong>, a resposta do circuito torna-se oscilatória. Isto é, o circuito torna-se subamortecido. É condizente com o que se espera? Aumentou-se a frequência para <strong><span class="math inline">\(1\ kHz\)</span></strong> apenas para facilitar a visualização. Veja os resultados no LTSpice.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex3alt_lt_sol.png" alt="Resultado do Exemplo 3 com variações no LTSpice." width="100%" />
+<p class="caption">
+Resultado do Exemplo 3 com variações no LTSpice.
+</p>
+</div>
+<p>Tente alterar os tempos de simulação e os valores dos componentes. Veja e ente analisar os resultados para ver se são consistentes. Se precisar de consulta para a sua análise,você pode consultar <a href="https://pt.wikipedia.org/wiki/Circuito_RLC#RLC_s%C3%A9rie_com_fonte_da_alimenta%C3%A7%C3%A3o_do_tipo_Th%C3%A9venin">essa página</a> ou então <a href="https://en.wikipedia.org/wiki/RLC_circuit#Series_circuit">essa</a>.    <br />
+   <br />
+</p>
+</div>
+</div>
+<div id="operações-com-sinais" class="section level2">
+<h2>Operações com Sinais</h2>
+<p>Nas seções anteriores, foram apresentadas algumas simulações básicas e introduzidos comandos e opções de simulação e de exibição de resultados.</p>
+<p>Outras opções existem e aqui apresentaremos duas delas. Aproveitando os números da simulação anterior, podemos confirmar uma parte da teoria de circuitos calculando: <strong>a corrente no capacitor</strong> e <strong>a potência drenada na fonte de entrada</strong>.</p>
+<p>O próprio Spice já calcula a corrente no capacitor pois precisa dela para finalizar a solução do circuito. Até mesmo porque, no caso em questão, a corrente é a mesma para todos os dispositivos. Mas, vamos utilizar a teoria de circuitos para podermos verificar a solução e também aprendermos sobre <strong>operações com sinais</strong> que podem ser feitas em qualquer parte do código Spice, desde que o dado já tenha sido gerado.</p>
+<p>A corrente num capacitor é dada pela expressão abaixo:</p>
+<p><span class="math display">\[\begin{equation}\label{eq:ic}
+i_C\ =\ C\dfrac{dv_c}{dt}
+\end{equation}
+\]</span></p>
+<p>tomando-se condições iniciais iguais a zero.</p>
+<p>Se usarmos no código, ou no console do Spice, os comandos de plotagem do código abaixo, podemos conferir essa expressão.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb15-1" title="1"><span class="co">*** Exemplo 4</span></a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="co">** Circuito RLC Serie Subamortecido</span></a>
+<a class="sourceLine" id="cb15-3" title="3"></a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="co">*** Opcoes</span></a>
+<a class="sourceLine" id="cb15-5" title="5"><span class="co">** salvar as correntes para poder</span></a>
+<a class="sourceLine" id="cb15-6" title="6"><span class="co">** mostrar depois</span></a>
+<a class="sourceLine" id="cb15-7" title="7"><span class="kw">.options</span> savecurrents</a>
+<a class="sourceLine" id="cb15-8" title="8"></a>
+<a class="sourceLine" id="cb15-9" title="9"><span class="co">*** Parametros</span></a>
+<a class="sourceLine" id="cb15-10" title="10"><span class="kw">.param</span> freq=1k</a>
+<a class="sourceLine" id="cb15-11" title="11"><span class="kw">.param</span> T=<span class="dv">1</span>/freq</a>
+<a class="sourceLine" id="cb15-12" title="12"></a>
+<a class="sourceLine" id="cb15-13" title="13"><span class="co">*** Circuito</span></a>
+<a class="sourceLine" id="cb15-14" title="14">R1 vi v2 <span class="dv">10</span></a>
+<a class="sourceLine" id="cb15-15" title="15">L1 v2 v3 470u</a>
+<a class="sourceLine" id="cb15-16" title="16">C1 v3 gnd 47n</a>
+<a class="sourceLine" id="cb15-17" title="17"></a>
+<a class="sourceLine" id="cb15-18" title="18"><span class="co">*** Fontes</span></a>
+<a class="sourceLine" id="cb15-19" title="19">v1 vi gnd pulse(<span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span> 10n 10n <span class="st">&#39;T/2&#39;</span> <span class="st">&#39;T&#39;</span>)</a>
+<a class="sourceLine" id="cb15-20" title="20"></a>
+<a class="sourceLine" id="cb15-21" title="21"><span class="co">*** Analises</span></a>
+<a class="sourceLine" id="cb15-22" title="22"><span class="kw">.op</span></a>
+<a class="sourceLine" id="cb15-23" title="23"><span class="kw">.tran</span> <span class="dv">0</span><span class="kw">.1u</span> {T}</a>
+<a class="sourceLine" id="cb15-24" title="24"></a>
+<a class="sourceLine" id="cb15-25" title="25"><span class="kw">.end</span></a>
+<a class="sourceLine" id="cb15-26" title="26"></a>
+<a class="sourceLine" id="cb15-27" title="27"><span class="kw">.control</span></a>
+<a class="sourceLine" id="cb15-28" title="28"><span class="co">*** Opcoes</span></a>
+<a class="sourceLine" id="cb15-29" title="29"><span class="co">** Muda os gráficos para fundo branco com cor preta</span></a>
+<a class="sourceLine" id="cb15-30" title="30">set color0=white</a>
+<a class="sourceLine" id="cb15-31" title="31">set color1=black</a>
+<a class="sourceLine" id="cb15-32" title="32"></a>
+<a class="sourceLine" id="cb15-33" title="33"><span class="co">*** Controles</span></a>
+<a class="sourceLine" id="cb15-34" title="34"><span class="co">** roda a simulacao</span></a>
+<a class="sourceLine" id="cb15-35" title="35">run</a>
+<a class="sourceLine" id="cb15-36" title="36"></a>
+<a class="sourceLine" id="cb15-37" title="37"><span class="co">*** Saidas</span></a>
+<a class="sourceLine" id="cb15-38" title="38"><span class="co">** imprime as saidas: correntes em cada resistor</span></a>
+<a class="sourceLine" id="cb15-39" title="39">plot @c1[i]</a>
+<a class="sourceLine" id="cb15-40" title="40">plot @c1[capacitance]<span class="co">*deriv(v3)</span></a>
+<a class="sourceLine" id="cb15-41" title="41">plot -i(v1)<span class="co">*v(vi)</span></a>
+<a class="sourceLine" id="cb15-42" title="42"></a>
+<a class="sourceLine" id="cb15-43" title="43"><span class="kw">.endc</span></a></code></pre></div>
+<p>A seguir, uma figura com a corrente calculada pelo simulador par solucionar o circuito.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex4_ng_sol1.png" alt="A corrente que o Spice calculou para o Capacitor." width="85%" />
+<p class="caption">
+A corrente que o Spice calculou para o Capacitor.
+</p>
+</div>
+<p>E essa é a corrente calculada com a expressão da teoria de circuitos, usando a operação de multiplicação entre a capacitância e a derivada da tensão sobre o capacitor, via comando <code>deriv()</code>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex4_ng_sol2.png" alt="A corrente que o Spice calculou para o Capacitor." width="85%" />
+<p class="caption">
+A corrente que o Spice calculou para o Capacitor.
+</p>
+</div>
+<p>A potência drenada pela fonte será também dada por uma multiplicação de sinais. No código usou-se o sinal negativo na corrente da fonte pois, lembrando o que já foi dito, a corrente sai da fonte. Pode-se calcular a potência como negativa e interpretá-la como sendo uma potência entregue ao circuito ao invés de absorvida dele. Note que a unidade do sinal resultante da multiplicação já está em <strong>Watts</strong>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex4_ng_sol3.png" alt="Potência drenada da fonte de tensão." width="85%" />
+<p class="caption">
+Potência drenada da fonte de tensão.
+</p>
+</div>
+<p>Outra possibilidade de resultados é a visualização de uma variável em função de outra variável, ainda que a simulação tenha sido no tempo. Por exemplo, a tensão sobre o capacitor (figura abaixo) mostra claramente a resposta oscilatória, mas também a estabilização da resposta nos valores dos patamares da fonte pulsada: <code>0</code> e <code>1</code>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex4_ng_sol4.png" alt="Tensão sobre o capacitor." width="85%" />
+<p class="caption">
+Tensão sobre o capacitor.
+</p>
+</div>
+<p>Se plotarmos a corrente no capacitor em função de sua tensão, obtem-se o gráfico abaixo, mostrando as oscilações de corrente em função da tensão, mas claramente os dois pontos de equilíbrio do circuito: <code>0</code> e <code>1</code>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ex4_ng_sol4.png" alt="Corrente versus Tensão no capacitor." width="85%" />
+<p class="caption">
+Corrente versus Tensão no capacitor.
+</p>
+</div>
+<p>Para gerar esse gráfico, no NGSpice, usa-se o comando:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb16-1" title="1">plot @c1[i] vs v(v3)</a></code></pre></div>
+No LTSpice, primeiro precisamos colocar a variável dependente na tela. No caso, colocamos a corrente no capacitor.
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ltspice_vs_plot_passo1.png" alt="Primeiro plota-se a variável dependente." width="100%" />
+<p class="caption">
+Primeiro plota-se a variável dependente.
+</p>
+</div>
+Após isso, leve o cursor até o eixo horizontal e ele se transformará numa <strong>régua amarela</strong> ao mesmo tempo em que aparecerá uma mensagem na barra de estatus, tal como na tela abaixo.
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ltspice_vs_plot_passo2.png" alt="Leva-se o cursor até o eixo horizontal para editá-lo." width="100%" />
+<p class="caption">
+Leva-se o cursor até o eixo horizontal para editá-lo.
+</p>
+</div>
+<p>Isto é, clicando-se com o botão direito, aparecerá a janela de configuração do eixo horizontal. Estará lá em <code>Quantity Plotted</code> a variável <strong><code>time</code></strong>, como já se esperava. Troca-se <code>time</code> por <code>v(v3)</code> como na figura abaixo.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ltspice_vs_plot_passo3.png" alt="Edita-se o eixo horizontal para incluir a variável independente desejada." width="65%" />
+<p class="caption">
+Edita-se o eixo horizontal para incluir a variável independente desejada.
+</p>
+</div>
+<p>Após a troca da variável independente, clica-se em <code>OK</code> e o gráfico estará pronto, como na figura a seguir.</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/ltspice_vs_plot_passo4.png" alt="Corrente versus Tensão no capacitor, no LTSpice." width="100%" />
+<p class="caption">
+Corrente versus Tensão no capacitor, no LTSpice.
+</p>
+</div>
+<div id="mais-operações" class="section level3">
+<h3>Mais Operações</h3>
+<p>Você encontrará uma lista completa de operações matemáticas e operadores lógicos que podem ser usados tanto para o <a href="http://ngspice.sourceforge.net/docs/ngspice-html-manual/manual.xhtml#magicparlabel-22062">NGSpice</a> quanto para o <a href="http://ltwiki.org/LTspiceHelpXVII/LTspiceHelp/html/Waveform_Arithmetic.htm">LTSpice</a>.</p>
+<p>Essas expressões matemáticas e lógicas também servem para a definição e manipulação de parâmetros, não somente para as formas de onda.</p>
+<p>   <br />
+   <br />
+</p>
+</div>
+</div>
+<div id="opções-de-simulação" class="section level2">
+<h2>Opções de Simulação</h2>
+<p>No Spice original, coberto pelo NGSpice, existem uma infinidade de opções para modificar vários aspectos do processo de simulação. Como na <a href="#operacoes-com-sinais">última simulação</a> em que foram introduzidas modificações de cores.</p>
+<p>Algums opções são mais comumente usadas e serão detalhadas aqui. Para consultar a lista de opções do LTSpice você pode consultar <a href="http://ltwiki.org/LTspiceHelp/LTspiceHelp/_OPTIONS_Set_simulator_options.htm">essa página</a>. Para o NGSpice, <a href="http://ngspice.sourceforge.net/docs/ngspice-html-manual/manual.xhtml#magicparlabel-20113">aqui</a> também tem toda lista de opções para uma consulta mais rápida.</p>
+<p>A forma de se declarar opções no Spice é:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">.options</span> [opção_<span class="dv">1</span>]=[valor_da_opção_<span class="dv">1</span>] [opção_<span class="dv">2</span>]=[valor_da_opção_<span class="dv">2</span>] ...</a></code></pre></div>
+<p>Ou, se preferir, poderá usar várias linhas para ficar mais fácil de rastrear:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">.options</span> [opção_<span class="dv">1</span>]=[valor_da_opção_<span class="dv">1</span>] </a>
+<a class="sourceLine" id="cb18-2" title="2"><span class="kw">.options</span> [opção_<span class="dv">2</span>]=[valor_da_opção_<span class="dv">2</span>] </a>
+<a class="sourceLine" id="cb18-3" title="3">...</a></code></pre></div>
+<div id="opções-comuns" class="section level3">
+<h3>Opções Comuns</h3>
+<p>A seguir, a lista de opções que serão usadas nos nossos exemplos. Caso não seja indicado, a opção é comum ao LTSpice e ao NGSpice.</p>
+<div id="tnom" class="section level4">
+<h4><strong>tnom</strong></h4>
+<ul>
+<li><strong>Valor Padrão:</strong> <span class="math inline">\(27\)</span> (<span class="math inline">\(^oC\)</span>)</li>
+<li><strong>Descrição:</strong> Ajusta temperatura nominal para os dispositivos que não possuem essa informação no seu modelo. Isto é, o ajuste dessa variável diz que os parâmetros de um determiando modelo de simulação, que não possui essa variável, foram medidos no valor ajustado. Caso haja a variável no modelo, mas possua outro valor, esse valor será modificado pelo de <code>tnom</code>.</li>
+<li><strong>Exemplo:</strong> Ajuste da temperatura nominal para <span class="math inline">\(25\ ^oC\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">.options</span> tnom=<span class="dv">25</span></a></code></pre></div>
+</div>
+<div id="temp" class="section level4">
+<h4><strong>temp</strong></h4>
+<ul>
+<li><strong>Valor Padrão:</strong> <span class="math inline">\(27\)</span> (<span class="math inline">\(^oC\)</span>)</li>
+<li><strong>Descrição:</strong> Ajusta temperatura de operação do circuito que está sendo simulado. Isto é, o ajuste dessa variável diz em que temperatura os parâmetros do modelo deverão ser recalculados, baseando-se na temperatura nominal (<code>tnom</code>), que foi ajustada ou no modelo ou pela opção anterior. Particularmente importante para prever o comportamento de circuitos eletrônicos que são altamente dependentes da temperatura ambiente e de junção, no ponto de operação.</li>
+<li><strong>Exemplo:</strong> Ajuste da temperatura de trabalho para <span class="math inline">\(50\ ^oC\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">.options</span> temp=<span class="dv">50</span></a></code></pre></div>
+</div>
+<div id="numdgt" class="section level4">
+<h4><strong>numdgt</strong></h4>
+<ul>
+<li><strong>Valor Padrão:</strong> <span class="math inline">\(6\)</span> (dígitos)</li>
+<li><strong>Descrição:</strong> Ajusta o número de dígitos que serão usados para mostrar os resultados, seja na tela ou para serem gravados em arquivo, no caso de exportação de dados. No NGspice pode-se usar no máximo <span class="math inline">\(16\)</span> dígitos e no LTSpice, <span class="math inline">\(12\)</span>. Torna-se particularmente importante em circuitos eletrônicos pois ajuda a diferenciar pequenas variações de tensões e correntes. É comum, nesse tipo de circuitos, ter-se um valor de corrente ou tensão contínua em que o circuito opera (ponto de operação) e pequenas variações (vindas de sensores ou fontes de sinal, por exemplo) acontecerem sobrepostas a essas variações. Logo, se você usar poucas casas, pode ser que não consiga perceber essas pequenas diferenças. Importante dizer que o ajuste é da quantidade de dígitos para a mantissa do número, seguindo o valor do expoente da potência de 10, que é a base de representação numérica do Spice.</li>
+<li><strong>Exemplo:</strong> Ajuste da quantidade de dígitos para <span class="math inline">\(10\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb21"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb21-1" title="1"><span class="kw">.options</span> numdgt=<span class="dv">10</span></a></code></pre></div>
+</div>
+<div id="measdgt-ltspice" class="section level4">
+<h4><strong>measdgt</strong> (LTSpice)</h4>
+<ul>
+<li><strong>Valor Padrão:</strong> <span class="math inline">\(6\)</span> (dígitos)</li>
+<li><strong>Descrição:</strong> Idem a <code>numdgt</code>, porém modifica o número de dígitos para os resultados do comando <code>.measure</code> para realizar medições nas simulações Spice. Está disponível somente para o LTSpice<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</li>
+<li><strong>Exemplo:</strong> Ajuste da quantidade de dígitos para <span class="math inline">\(10\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb22"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">.options</span> measdgt=<span class="dv">10</span> </a></code></pre></div>
+</div>
+<div id="savecurrents-ngspice" class="section level4">
+<h4><strong>savecurrents</strong> (NGSpice)</h4>
+<ul>
+<li><strong>Valor Padrão:</strong> não possui.</li>
+<li><strong>Descrição:</strong> Não há valor padrão pois, por padrão, o Spice calcula as correntes nos dispositivos, mas não as mantêm gravadas. Se a opção for colocada os cálculos serão feitos e mantidos para uso posterior. Já usamos essa opção nos Exemplos <a href="#exemplo-2">2</a>, <a href="#exemplo-3">3</a> e <a href="#exemplo-4">4</a>.</li>
+<li><strong>Exemplo:</strong> Para declarar ao Spice que grave as correntes calculadas.</li>
+</ul>
+<div class="sourceCode" id="cb23"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">.options</span> savecurrents</a></code></pre></div>
+</div>
+<div id="filetype-ngspice" class="section level4">
+<h4><strong>filetype</strong> (NGSpice)</h4>
+<ul>
+<li><strong>Valor Padrão:</strong> binário.</li>
+<li><strong>Descrição:</strong> Define o tipo de arquivo será gerado com a <em>flag</em> <code>-r</code> quando simulando com o NGSpice em <em>batch</em> (<code>-b</code>). Serve também para ajustar o tipo de arquivo que será gerado quando for dado algum comando para exportar os resultados de simulação. O padrão, <strong><code>binário</code></strong>, é um arquivo que servirá para ser aberto apenas pelo próprio NGSpice. Costuma ser de tamanho bem reduzido quando comparado com a outra opção que é <strong><code>ascii</code></strong>. Se ajustado para <strong><code>ascii</code></strong>, permitirá que os dados sejam lidos como se fossem um arquivo de texto comum, podendo ser importados em quaisquer outros programas como Octave, LibreOffice Calc, Scilab ou SciDAVis, por exemplo. A versão <strong><code>ascii</code></strong> também permite que se visualize resultados de simulação do NGSpice com a interface gráfica do LTSpice.</li>
+<li><strong>Exemplo:</strong> Ajustando o tipo de arquivo para <strong><code>ascii</code></strong>.</li>
+</ul>
+<div class="sourceCode" id="cb24"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb24-1" title="1"><span class="kw">.options</span> filetype=ascii</a></code></pre></div>
+</div>
+</div>
+<div id="opções-extras-ngspice" class="section level3">
+<h3>Opções Extras (NGSpice)</h3>
+<p>Essas opções, que <a href="http://ngspice.sourceforge.net/docs/ngspice-html-manual/manual.xhtml#magicparlabel-25866">não são poucas</a>, ajudam a formatar, modificar a execução das simulações e até permitir que gráficos sejam gravados diretamente em Portable Document Format (<code>.pdf</code>).</p>
+<p>Diferentemente das anteriores, essa opções só podem ser ajustadas dentro da estrutura de controle. Além disso, elas são ajustadas com o comando <strong><code>set</code></strong> e não com <code>.options</code>.</p>
+<p>A variável <code>filetype</code> pode também ser ajustadas com <code>set</code> na seção de controle, ao invés das opções. Os valores são os mesmos apresentados anteriormente.</p>
+<div id="appendwrite" class="section level4">
+<h4><strong>appendwrite</strong></h4>
+<ul>
+<li><strong>Valor Padrão:</strong> não possui.</li>
+<li><strong>Descrição:</strong> Quando se usa comandos para exportar resultados no Spice, se essa variável não estiver no circuito e várias análises da mesma natureza forem usadas, por exemplo, três análises no tempo (com parâmetros diferentes em cada uma), então o Spice irá sobrescrever os resultados da primeira análise com os da segunda e assim por diante. Com a variável ajustada, o Spice irá acrescentar, não sobrescrever, os resultados da simulação ao que já havia sido exportado/gravado.</li>
+<li><strong>Exemplo:</strong> Para comandar o Spice para acrescentar ao invés de sobrescrever.</li>
+</ul>
+<div class="sourceCode" id="cb25"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb25-1" title="1">set appendwrite</a></code></pre></div>
+</div>
+<div id="colorn" class="section level4">
+<h4><strong>colorN</strong></h4>
+<ul>
+<li><strong>Valor Padrão:</strong> possui vários.</li>
+<li><strong>Descrição:</strong> Essa variável controla as cores padrão para fundo dos gráficos, cor dos eixos, títulos e cor das curvas que estão sendo plotadas. No Exemplo <a href="#operacoes-com-sinais">4</a>, modificamos duas das cores: <code>0</code>, do fundo (background) e <code>1</code>, dos eixos dos gráficos.</li>
+<li><strong>Particularidades</strong>: Além das cores de fundo e eixos, existem as cores <code>2</code> a <code>22</code> são para as cores dos gráficos. A cor <code>2</code> é para o primeiro sinal plotado, a cor <code>3</code> para o segundo e assim por diante. Os valores de ajustes podem ser o nome das cores descritos <a href="https://www.codeproject.com/Articles/1276/Naming-Common-Colors">nessa página</a> ou um código <code>rgb</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. Uma ajuda pode ser escolher a cor desejada <a href="https://colornames.org/">nessa página</a> e usar o código <code>rgb</code> que ela lhe dará para a cor escolhida.</li>
+<li><strong>Exemplo 1:</strong> Ajustando o fundo para azul claro e a primeira curva do gráfico para azul escuro.</li>
+</ul>
+<div class="sourceCode" id="cb26"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb26-1" title="1">set color0=aliceblue</a>
+<a class="sourceLine" id="cb26-2" title="2">set color2=darkblue</a></code></pre></div>
+<ul>
+<li><strong>Exemplo 2:</strong> Ajustando o fundo para amarelo e a primeira curva do gráfico para algo próximo de roxo.</li>
+</ul>
+<div class="sourceCode" id="cb27"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb27-1" title="1">set color0=rgbd:<span class="dv">255</span>/<span class="dv">221</span>/<span class="dv">0</span></a>
+<a class="sourceLine" id="cb27-2" title="2">set color2=rgbd:<span class="dv">56</span>/<span class="dv">0</span>/<span class="dv">176</span></a></code></pre></div>
+</div>
+<div id="units" class="section level4">
+<h4><strong>units</strong></h4>
+<ul>
+<li><strong>Valor Padrão:</strong> radians.</li>
+<li><strong>Descrição:</strong> Ajusta se o valor da unidade das funções trigonométricas será em radianos ou graus. Particularmente importante para mostrar a fase de sinais em gráficos de resposta em frequência.</li>
+<li><strong>Exemplo:</strong> Ajustar a visualização/utilização de variáveis trigonométricas para graus.</li>
+</ul>
+<div class="sourceCode" id="cb28"><pre class="sourceCode spice"><code class="sourceCode spice"><a class="sourceLine" id="cb28-1" title="1">set units=degrees</a></code></pre></div>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>As variações não serão tratadas aqui. Apenas para conhecimento: há resistores não lineares, semicondutores (de diversos tipos) e dependentes com outras variáveis.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Passos de integração pequenos são geralmente a solução para problemas de convergência devido às oscilações numéricas dos métodos de solução de circuitos ou mesmo porque, dependendo do caso, quer-se explicar um circuito que possui uma dinâmica muito rápida usando-se um passo de integração muito grande, em comparação com o período dos eventos do circuito.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Na verdade também em outras versões Spice, como o HSpice. Contudo, diz-se que apenas para o LTSpice, pois apenas duas versões estão sendo tratadas nesse curso.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Paleta básica: vermelho, verde e azul (<em>Red</em>, <em>Green</em>, <em>Blue</em>)<a href="#fnref4" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+
+<p>© Copyright 2020 <a href="https://github.com/pmendessantos">Patrick Mendes dos Santos.</a> </p>
+
+<p>Sob licença <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, v2.0.</a> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

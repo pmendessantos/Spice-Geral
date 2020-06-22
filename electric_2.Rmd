@@ -1,0 +1,255 @@
+---
+#date: "2020-06-13T00:00:00+01:00"
+draft: false
+linktitle: Criando Bibliotecas e Circuitos
+title: Criando Bibliotecas e Circuitos
+toc: true
+type: docs
+weight: 2003
+output:
+  html_document:
+    theme: cosmo
+    include:
+      in_header: head.html
+      after_body: footer.html
+    mathjax: null
+    lib_dir: libs
+    css: styles.css
+    logo: logo.jpg
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    highlight: pygments
+    highlight_options:
+      linenos: inline
+    pandoc_args: ["--syntax-definition", "spice.xml"]
+---
+
+## Organização Geral
+
+Ao lançar o Electric, uma biblioteca vazia `noname` (sem nome) será criada automaticamente. Você pode continuar editando essa biblioteca sem nome ou poderá salvá-la com o nome que desejar indo até `File->Save Library As...`.
+
+As bibliotecas são as coleções de circuitos que você pode fazer com a organização que você achar melhor. Você poderá trabalhar com várias bibliotecas ao mesmo tempo e usar circuitos de uma biblioteca em outra. Se assim o fizer elas se torna interdependentes, ou seja, uma biblioteca passa a ser dependência da outra para que se possa ver/editar os circuitos de forma adequada. As bibliotecas abertas e a listagem dos circuitos por biblioteca podem ser encontrados no painel lateral esquerdo, na aba `Explorer` (figura abaixo).
+
+```{r , echo=FALSE, fig.cap="Organização Geral de Documentos no Electric", out.width = '35%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_lib_detail.png') 
+```
+
+Os circuitos no Electric são chamados de células e têm um menu próprio para eles: `Cell`.
+
+## Criando células (circuitos)
+
+Há diversos tipos ou vistas (`views`) disponíveis para uma célula. Cada uma com uma função diferente. Os principais tipos são:
+
+- _schematic_: vista em que se constrói o esquema de ligações de circuito tal como se conhece.
+- _icon_: você pode criar um ícone que representará o circuito em questão quando ele fizer parte de um circuito maior.
+- _layout_: vista importante para o projeto de circuitos integrados, com o arranjo físico dos elementos para fabricação.
+- _VHDL_: código VHSIC-HDL^[Very High Speed Integrated Circuit Hardware Description Language.] da célula. Útil para células/circuitos digitais.
+- _Verilog_: código Verilog HDL da célula. Útil para células/circuitos digitais.
+- _documentation_: célula puramente textual em que você pode colocar suas observações gerais sobre a sua construção. Muito útil quando uma biblioteca está sendo construída por várias pessoas.
+
+Para criar um esquemático, você pode ir em `Cell->New Cell`, coloque o nome do circuito, selecione a vista _schematic_ e clique em `OK`. Importante dizer que, se houver mais de uma biblioteca aberta, você deverá também selecionar em qual biblioteca o circuito será criado. Veja figura do [manual](https://www.staticfreesoft.com/jmanual/mchap01-11-01.html).
+
+```{r , echo=FALSE, fig.cap="Criando Célula com Esquemático - [Manual](https://www.staticfreesoft.com/jmanual/mchap01-11-01.html).", out.width = '40%', fig.align = 'center'}
+knitr::include_graphics('https://www.staticfreesoft.com/jmanual/fig01-32.png') 
+```
+
+Depois de criada a vista de esquemático da célula `MyCircuit` ela será colocada na árvore de circuitos dentro da bilioteca **noname**. O ponto vermelho indica que essa célula tem uma vista de esquemático, bem como o `{sch}` ao final do nome. Como só há essa célula, só aparece o ponto vermelho. Outros tipos de célula terão outras cores e, se houver mais de uma vista para uma determinada célula, ela será identificada com um círculo de cores.
+
+```{r , echo=FALSE, fig.cap="Célula com múltiplas vistas.", out.width = '30%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_cells_detail.png') 
+```
+
+Se um circuito estiver sendo editado ainda não tiver sido salvo, as vistas que foram alteradas aparecerão em negrito no navegador de bibliotecas. Assim como também as bibliotecas que foram alteradas.
+
+## Editando Esquemáticos
+
+### Criando Circuitos
+
+Para editar um esquemático criado, você pode dar dois cliques na vista da célula desejada e ela será invocada para o painel maior de edição, à direita do painel. Na barra de status da janela principal (na parte inferior da janela), aparecerá: `TECH: schematic`, indicando o tipo de vista que está sendo editada.
+
+Para escolher os componentes de circuito, no navegador do painel lateral esquerdo, selecione `Components`. A lista completa irá aparecer. Os campos com uma seta na parte inferior direita possuem várias opções para edição.
+
+Nem todos os elementos estarão desenhados ou disponíveis como desenho. Por exemplo, as fontes de tensão e corrente que usaremos nas simulações não possuem desenho e é preciso saber o que procurar antes. Elas estão no campo `Spice`.
+
+Ao selecionar um componente para inclusão ele já estará para ser incluído no esquemático, bastando levar o cursor para área de edição e clicar com o botão esquerdo. 
+
+> Importante: um componente colocado num esquemático é uma **instância** (ocorrência) desse componente. Por exemplo, se um circuito tiver 3 resistores, haverá três instâncias do componente **resistor**.
+
+Por isso, é sempre importante você atribuir um nome para esse componente, assim que você posicioná-lo no circuito. É o que irá diferenciá-lo dos demais e que permitirá a você poder rastrear os resultados de simulação.
+
+### Editando componentes
+
+#### Propriedades
+
+Para editar as propriedades de uma instância de um componente basta selecioná-la e:
+
+1. Dar dois cliques com o botão esquerdo;
+2. Ou então acionar o atalho: `Ctrl+i`;
+3. Ou ainda via menu: `Edit->Properties->Object Properties...`;
+
+As opções irão variar de componente para componente, mas certamente algumas são comuns a todos:
+
+- _Name_: o nome da instância.
+- _X Position_: posição horizontal na tela de edição.
+- _Y Position_: posição vertical na tela de edição.
+- _Mirror L-R_: se a instância será espelhada da esquerda para a direita e vice-versa.
+- _Mirror U-D_: se a instância será espelhada de cima para baixo e vice-versa.
+- _Rotation_: rotação da instância, em graus.
+
+#### Posicionamento e rotação
+
+Além de modificar o posicionamento nas propriedades, você pode clicar, segurar e arrastar um componente para movê-lo (se ele estiver conectado as conexões serão movidas juntamente).
+
+Para rotacionar uma instância em ângulos de $90^o$ graus, após selecioná-la, você pode acionar o atalho `Ctrl+j` ou então via menu: `Edit->Rotate`.
+
+#### Zoom e Visualização
+
+Você pode aumentar ou diminuir o zoom no circuito, com a vista centralizada no cursor, segurando a tecla `Ctrl` e acionando a roda do mouse.
+
+Se quiser colocar todos os componentes do circuito visíveis na tela, pressione `Ctrl+9`.
+
+Para manter o zoom e mover a visualização você pode:
+
+- Mover a visualização na horizontal: segure `Shift` e acione a roda do mouse;
+- Mover a visulaização na vertical: segure `Alt` e acione a roda do mouse;
+
+Para algumas pessoas pode ficar mais fácil de editar um circuito com a grade (_grid_) de pontos ativada. Ela ajuda a dar a sensação de tamanho, estética e simetria que, para muitos pessoa é considerada essencial.
+
+Para acionar a grade, pressione `Ctrl+g` ou vá ao menu `Window->Toggle Grid...`
+
+Um outro fator que pode ajudar para algumas pessoas é usar um fundo (_background_) claro ou mesmo personalizar as cores do Electric^[Embora não se recomende mudar todas as cores de pronto, dada a complexidade de elementos que envolvem toda a interface de edição do Electric.]. Para alterar o fundo, vá até `Window->Color Schemes`.
+
+### Conectando componentes
+
+Clicando com o botão **esquerdo** perto das extremidades de um componente você o seleciona bem como aquele ponto de conexão.
+
+```{r , echo=FALSE, fig.cap="Conectando componentes.", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_component_connection1.png') 
+```
+
+Após essa seleção basta clicar com o botão **direito** na porta desejada do outro componente e eles estarão conectados. Um som também é emitido quando essa conexão é realizada.
+
+```{r , echo=FALSE, fig.cap="Conectando componentes.", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_component_connection2.png') 
+```
+
+Outra verificação é que os arcos ou conexões são azuis e os componentes são vermelhos. Por fim, como verificação final, na janela de mensagens pode-se verificar `No errors found`. Essa mensagem aparecerá automaticamente já que selecionanmos **DRC** automática nas configurações realizadas.
+
+#### (Re)nomeando arcos
+
+Você pode deixar que o Electric dê nome aos nós (arcos) entre componentes de forma automática ou, para aqueles que considerar mais importante, você pode renomeá-los para poder rastrear os resultados de simulação mais facilmente.
+
+Para fazer isso, selecione o arco de interesse clicando sobre ele. Ele ficará vermelho. Aí você pode fazer como anteriormente para os componentes: dar dois cliques com o botão esquerdo ou acionar `Ctrl+i`.
+
+```{r , echo=FALSE, fig.cap="Propriedades de um arco.", out.width = '40%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_arc_properties.png') 
+```
+
+Na figura acima, por exemplo, o nome `net@0` foi atribuído automaticamente pelo Electric por ser o primeiro arco do circuito. Os próximos seguirão a sequência numérica. Num circuito pequeno pode ser fácil localizar os arcos, mas, à medida em que o circuito aumenta de tamanho, recomenda-se que os arcos importantes sejam renomeados tão logo sejam criados para que não se perca o rastreamento depois.
+
+Ao clicar no botão `More`, outras propriedades aparecem, tal como na figura abaixo.
+
+```{r , echo=FALSE, fig.cap="Propriedades expandidas de um arco - [Manual](https://www.staticfreesoft.com/jmanual/mchap02-05-02.html#mchap02-05-02.html).", out.width = '40%', fig.align = 'center'}
+knitr::include_graphics('https://www.staticfreesoft.com/jmanual/fig02-02.png') 
+```
+
+Ao renomear um arco, o nome dado aparece ostensivamente sobre ele. Por exemplo, ao renomear o arco da [figura](electric_2.html#conectando-componentes) para **v1**, o circuito ficará assim:
+
+```{r , echo=FALSE, fig.cap="Conectando componentes.", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_component_connection3.png') 
+```
+
+### Componentes disponíveis
+
+Os componentes disponíveis estão detalhados na figura abaixo.
+
+```{r , echo=FALSE, fig.cap="Componentes de Esquemáticos - [Manual](https://www.staticfreesoft.com/jmanual/mchap07-05-01.html).", out.width = '40%', fig.align = 'center'}
+knitr::include_graphics('https://www.staticfreesoft.com/jmanual/fig07-03.png') 
+```
+Dentre todos os componentes, destacam-se:
+
+- #### Terra de Circuito (_Ground_):
+    
+    É o nó zero `0` da simulação Spice, isto é, a referência geral para todo o circuito. É relativo a esse nó que serão medidas todas as tensões do circuito.
+
+    No código Spice que será gerado será substituído por `gnd`.
+
+    Um circuito eletroeletrônico pode ter várias referências que não somente o nó zero, mas sem ele a simulação não funciona. O Spice não conseguirá calcular as matrizes de solução do circuito sem ele. Por isso é importante que todo circuito tenha um nó de Terra.
+
+
+- #### Nós Globais (_Global_):
+    
+    Em circuitos grandes é comum setorizá-los por função e cada função separada torna-se um subcircuito. Como nenhum circuito funcionará sem energia e alguns sinais deverão sair e entrar em vários blocos, costuma-se tornar alguns nós como globais. Ou seja, eles são acessíveis dentro de qualquer subcircuito, mesmo que não se tenha declarado uma porta de entrada ou saída de sinal para aquele subcircuito.
+    
+    O componente `Global` serve para isso. Ao criar um nó global você também pode definir, nas suas propriedades, o tipo de sinal que irá fluir, veja na figura abaixo.
+
+    ```{r , echo=FALSE, fig.cap="Propriedades do Nó Global.", out.width = '40%', fig.align = 'center'}
+    knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_global_node_properties.gif') 
+    ```
+
+    Consequentemente, os nós de terra e alimentação (energia) usualmente são tidos como nós globais. O nó de Terra apresentado é um nó global por definição no Electric. Se houver necessidade de outros sinais, usa-se o componente `Global`.
+
+
+- #### Potência (_Power_): 
+
+    O nó _Power_ é um caso especial de nó global para ligação de energia. Ele necessariamente irá ser substituído no código Spice por `vdd` que é o nome comum para circuitos **CMOS** (_Complementary MOS_). Assim, para circuitos com transistores de efeito de campo, o nó _Power_ pode ser usado para a distribuição de potência pelos circuitos.
+
+
+- #### Portas e Exportações (_Off-Page_):
+
+    São conectores que servem para interconectar pontos do circuito construído com o mundo externo caso esse circuito vá se tornar um subcircuito num projeto maior. Ao criar um nó desses, você pode defini-lo como um nó de exportação/importação de sinais ou simplesmente uma porta de sinal.
+
+    Isso pode ser feito selecionando-se uma porta colocada no circuito e pressionando-se `Ctrl+E`, ou via menu, `Export->Create Export...`. Uma janela (veja figura abaixo) irá aparecer onde define-se o tipo de sinal, tal como mostrado para o nó [global](electric_2.html#propriedades-do-no-global).
+
+## Renomeando e Reutilizando Células
+
+Você pode renomear uma célula em grupo ou por vista. Para fazer em grupo, basta clicar no grupo de células com o botão direito do mouse (figura abaixo).
+
+```{r , echo=FALSE, fig.cap="Opções de célula (grupo).", out.width = '40%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_cellgroup_options.png') 
+```
+
+Ou então, por vista (figura abaixo). Contudo, alterar uma das vistas irá mudar o nome do grupo, embora o nome de algumas vistas ainda permaneçam o mesmo.
+
+```{r , echo=FALSE, fig.cap="Opções de célula (vista).", out.width = '40%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_cell_options.png') 
+```
+
+## Exemplo 1
+### Divisor Resistivo (Tensão)
+
+Criando um divisor de tensão resistivo.
+
+## Exemplo 2
+### Divisor Resistivo (Corrente)
+Criando um divisor de corrente resistivo.
+
+## Exemplo 3
+### RC Série
+Criando um circuito RC série.
+
+## Exemplo 4
+### Emissor-Comum com Resistor
+Criando um amplificador Emissor-Comum com carga restiva.
+
+## Exemplo 5
+### Fonte-Comum com Resistor
+Criando um amplificador Fonte-Comum com carga restiva.
+
+## Exemplo 6
+### Emissor-Comum com Carga ativa
+Criando um amplificador Emissor-Comum com carga ativa.
+
+## Exemplo 7
+### Fonte-Comum com Carga ativa
+Criando um amplificador Fonte-Comum com carga ativa.
+
+## Exemplo 8
+### Amplificador EC como subcircuito
+Amplificador emissor-comum com carga ativa como subcircuito.
+
+## Exemplo 9
+### Amplificador FC como subcircuito
+Amplificador fonte-comum com carga ativa como subcircuito.

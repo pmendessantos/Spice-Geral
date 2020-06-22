@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Instalando o Electric</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<script src="libs/ace-1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/holder-2.9.0/holder.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="snippets/snippets.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77306155-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">A Linguagem Spice</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorais de Instalação
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="install_1.html">Instalando o Notepad++</a>
+    </li>
+    <li>
+      <a href="install_2.html">Instalando o NGSpice</a>
+    </li>
+    <li>
+      <a href="install_3.html">Instalando o LTSpice</a>
+    </li>
+    <li>
+      <a href="install_4.html">Instalando o Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Electric VLSI
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="electric_1.html">Configurando o Electric</a>
+    </li>
+    <li>
+      <a href="electric_2.html">Criando biliotecas e circuitos</a>
+    </li>
+    <li>
+      <a href="electric_3.html">Simulando circuitos a partir do Electric</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Spice
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spice.html">Visão Geral</a>
+    </li>
+    <li>
+      <a href="spice_1.html">Estrutura Básica de Simulação</a>
+    </li>
+    <li>
+      <a href="spice_2.html">Elementos e Simulações Básicas</a>
+    </li>
+    <li>
+      <a href="spice_3.html">Modelos de Dispositivos</a>
+    </li>
+    <li>
+      <a href="spice_4.html">Parâmetros e Inclusões</a>
+    </li>
+    <li>
+      <a href="spice_5.html">Medições</a>
+    </li>
+    <li>
+      <a href="spice_6.html">Subcircuitos</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pmendessantos/spice_geral">
+    <span class="&lt;ion &lt;ion-icon name=&quot;git-branch-outline&quot;&gt;&lt;/ion-icon&gt;"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Instalando o Electric</h1>
+
+</div>
+
+
+<div id="electric-vlsi" class="section level2">
+<h2>Electric VLSI</h2>
+<div class="figure" style="text-align: center">
+<img src="https://www.staticfreesoft.com/ScreenShotBusy.png" alt="Electric VLSI Software" width="80%" />
+<p class="caption">
+Electric VLSI Software
+</p>
+</div>
+<p>O Electric VLSI<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, ou simplesmente, é um software bastante completo que permite a realização de projetos de circuitos integrados simples e complexos. Ele foi feito para o gerenciamento de circuitos e subcircuitos e produção de esquemáticos e leiautes (arranjo físico). A partir da própria <a href="https://www.staticfreesoft.com/">página</a> do Electric é possível baixar projetos completos de circuitos integrados analógicos e digitais. Os projetos são organizados em bibliotecas de circuitos e os circuitos podem ter várias versões (esquemático, leiaute, ícone/símbolo, Verilog, VHDL).</p>
+<p>O Electric é um <strong>FOSS</strong> bastante difundido para Linux e, portanto, já está presente nos repositórios oficiais tanto do Ubuntu quanto do Fedora, embora haja diferenças de versão. Por extensão pode-se encontrá-lo no Debian, que é a distribuição em que se baseia o Ubuntu e também no Red Hat, o análogo para o Fedora.</p>
+<p>O Electric inicialmente era apenas para Linux e era programado em C. A partir da versão 8, ele passou a ser programado em Java para se tornar multiplataforma, podendo ser rodado a partir de Windows e Mac também.</p>
+</div>
+<div id="instalando-o-java-runtime" class="section level2">
+<h2>Instalando o <em>Java Runtime</em></h2>
+<p>Para podermos usar o Electric, precisamos garantir que o sistema operacional possa entender que o <em>Java ARchive</em> (.jar) que é como o Electric é baixado é um executável válido. Para tanto, precisamos instalar alguma versão do <em>Java Runtime</em>.</p>
+<div id="linux" class="section level3 tabset">
+<h3>Linux</h3>
+<p>A seguir detalha-se a versão <em>open source</em> do Java, que além do <em>Runtime</em> também tem os pacotes para quem quer desenvolver <em>software</em> baseado em Java, que é o <em>Java Development Kit</em> (JDK). O conjunto completo de pacotes é chamado de <code>OpenJDK</code> e está disponível em todos os repositórios oficiais das principais distribuições Linux. Embora seja desenvolvido pela comunidade, o <code>OpenJDK</code> é mantido com apoio da Oracle, a original desenvolvedora. Como já sabido, você precisará de permissões de superusário (ou <em>root</em>) para a instalação.</p>
+<div id="ubuntu-openjdk" class="section level4">
+<h4>Ubuntu (<em>OpenJDK</em>)</h4>
+<p>No Ubuntu é possível instalar apenas o módulo <em>Runtime</em>, para tanto basta executar o comando abaixo:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">sudo</span> apt install default-jre</a></code></pre></div>
+</div>
+<div id="fedora-openjdk" class="section level4">
+<h4>Fedora (<em>OpenJDK</em>)</h4>
+<p>No Fedora, não é possível instalar os módulos separadamente, assim instalasse a versão completa do <code>OpenJDK</code>. Para saber o número da versão correta disponível para instalação execute o comando abaixo:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="fu">sudo</span> dnf search openjdk</a></code></pre></div>
+<p>Uma tela tal como a abaixo irá aparecer com os resultados da busca</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/search-all-openjdk-versions.png" alt="Resultados de busca por OpenJDK no Fedora" width="80%" />
+<p class="caption">
+Resultados de busca por OpenJDK no Fedora
+</p>
+</div>
+<p>A busca mostra os dois resultados válidos: um para 32 bits (.i686) e outro para 64 bits (.x86_64). Para instalar, escolha a versão mais aproriada para o seu sistema e execute o comando de instalação abaixo. No caso da versão acima e para sistemas 64 bits, o comando será:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="fu">sudo</span> dnf install java-11-openjdk.x86_64</a></code></pre></div>
+</div>
+<div id="versão-da-oracle" class="section level4">
+<h4>Versão da Oracle</h4>
+<p>A Oracle, desenvolvedora original do Java ainda mantem uma versão gratuita do <em>Java Runtime</em> sob sua tutela que pode ser baixada diretamente da <a href="https://java.com/en/download/manual.jsp">página</a> deles. Os arquivos que não possuem a identificação <code>64-bit</code> em frente a eles é porque são da versão 32 bits.</p>
+<p>Há instruções particulares para instalação em cada sistema.</p>
+<p>Apesar da versão mais atual da Oracle ser a 8, ela é suficiente para fazer o Electric rodar.</p>
+</div>
+<div id="teste-da-instalação" class="section level4">
+<h4>Teste da instalação</h4>
+<p>Para testar a instalação do Java basta executar o comando abaixo também no terminal:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="ex">java</span> -version</a></code></pre></div>
+<p>O resultado deve ser parecido com o da tela abaixo deverá aparecer:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/java_version.png" alt="Teste da instalação do Java no Linux" width="70%" />
+<p class="caption">
+Teste da instalação do Java no Linux
+</p>
+</div>
+<p>É possível ver a versão do <em>Runtime</em> instalada com sucesso.</p>
+</div>
+</div>
+<div id="windows" class="section level3 tabset">
+<h3>Windows</h3>
+<div id="versão-openjdk" class="section level4">
+<h4>Versão <em>OpenJDK</em></h4>
+<p>O <code>OpenJDK</code> também está disponível para Windows e a versão atual (enquanto essa página é construída) é a 14. Ela pode ser baixada a partir dessa <a href="https://jdk.java.net/14/">página</a>.</p>
+<p>O arquivo é um <code>.zip</code> e o processo de instalação é o mesmo do NGSpice. Você irá descompactá-lo numa pasta à sua escolha e configurar a variável de ambiente <code>Path</code> do sistema para reconhecer o <em>software</em>. Para tanto, basta seguir as <a href="install_2.html#windows">instruções</a> já detalhadas para o NGSpice.</p>
+</div>
+<div id="versão-da-oracle-1" class="section level4">
+<h4>Versão da Oracle</h4>
+<p>A Oracle, desenvolvedora original do Java ainda mantem uma versão gratuita do <em>Java Runtime</em> que pode ser baixada diretamente da <a href="https://java.com/en/download/manual.jsp">página</a> deles. Há instruções particulares para instalação em cada sistema.</p>
+<p>Apesar da versão mais atual da Oracle ser a 8, ela é suficiente para fazer o Electric rodar.</p>
+</div>
+<div id="teste-da-instalação-1" class="section level4">
+<h4>Teste da Instalação</h4>
+<p>Para testar a instalação do Java basta executar o comando abaixo também no terminal:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1"><span class="ex">java</span> -version</a></code></pre></div>
+<p>O resultado deve ser parecido com o da tela abaixo deverá aparecer:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/java_version_win.png" alt="Teste da instalação do Java no Windows" width="90%" />
+<p class="caption">
+Teste da instalação do Java no Windows
+</p>
+</div>
+<p>É possível ver a versão do <em>Runtime</em> instalada com sucesso.</p>
+</div>
+</div>
+</div>
+<div id="instalando-o-electric" class="section level2">
+<h2>Instalando o Electric</h2>
+<p>A versão que será usada e é a mais atual é a 9.07. Na <a href="https://www.staticfreesoft.com/productsFree.html">página</a> de <em>downloads</em> do Electric há uma lista de extras que podem ser instalados para aumentar as capacidades do Electric. Contudo, não utilizaremos nenhuma delas nesse curso.</p>
+<div id="ubuntu-18.0420.04" class="section level3">
+<h3>Ubuntu (18.04/20.04)</h3>
+<p>Os repositórios oficiais do Ubuntu já contem a versão mais recente e você pode instalar o Electric diretamente deles, bastando executar o comando abaixo (com poderes de superusuário):</p>
+<p>No Ubuntu:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="fu">sudo</span> apt-get install electric</a></code></pre></div>
+<p>Após a instalação o Electric deverá aparecer automaticamente no menu do seu ambiente de trabalho (Gnome, KDE, Cinnamon, etc.) e estará disponível também para ser invocado diretamente do terminal, bastando executar, de qualquer pasta:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" title="1"><span class="ex">electric</span></a></code></pre></div>
+</div>
+<div id="fedora-303132" class="section level3">
+<h3>Fedora (30/31/32):</h3>
+<p>Infelizmente a versão do Electric que está disponível nos repositórios oficiais do Fedora é a 8.09 que está bem desatualizada. Assim, faremos a “instalação” do Electric de forma uma pouco mais complexa, mas que nos permita fazer o que precisamos.</p>
+<p>Acesse a <a href="https://www.staticfreesoft.com/productsFree.html">página</a> de <em>downloads</em> do Electric e baixe o arquivo da versão 9.07 clicando em <code>GET THE GNU ELECTRIC BINARY RELEASE, version 9.07</code>. Salve o arquivo <code>electricBinary-9.07.jar</code> numa pasta à sua escolha. Para seguir o tutorial, tomaremos como exemplo a pasta <code>/home/_seu_usuario_/electric</code> em que <code>_seu_usuario_</code> é o nome da sua pasta <code>home</code>.</p>
+<p>Após baixado o arquivo, você poderá executá-lo com o comando abaixo no terminal:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" title="1"><span class="ex">java</span> -classpath /home/_seu_usuario_/electric/electricBinary-9.07.jar com.sun.electric.Launcher</a></code></pre></div>
+<p>Para facilitar, você poderá criar uma entrada no menu do sistema, o que depende do seu ambiente de trabalho: Gnome, KDE, Cinnamon, etc. Assim você poderá lançar o Electric sem precisar ficar digitando o comando todas as vezes.</p>
+<p>Para personalizar, você poderá adicionar um ícone ao menu. Basta salvar <a href="https://pmendessantos.github.io/figuras/software/iconplub.ico">esse arquivo</a> e usá-lo como ícone na edição da entrada do menu.</p>
+</div>
+<div id="windows-1" class="section level3">
+<h3>Windows</h3>
+<p>A “instalação” no Windows é bem parecida com a do Fedora e exige passos adicionais.</p>
+<p>Acesse a <a href="https://www.staticfreesoft.com/productsFree.html">página</a> de <em>downloads</em> do Electric e baixe o arquivo da versão 9.07 clicando em <code>GET THE GNU ELECTRIC BINARY RELEASE, version 9.07</code>. Salve o arquivo <code>electricBinary-9.07.jar</code> numa pasta à sua escolha. Para seguir o tutorial, tomaremos como exemplo a pasta <code>C:\electric</code></p>
+<p>Para facilitar a vida no Windows, já que não há possibilidade fácil de se editar o menu sem mexer no registro, na mesma pasta crie um arquivo de texto com a extensão <code>.bat</code> que é um arquivo executável de script do <code>DOS</code> reconhecido pelo Windows. Por exemplo um arquivo <code>electric.bat</code>. Abra-o com qualquer editor de texto<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>, copie e cole o código abaixo. Salve o arquivo e saia.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" title="1"><span class="ex">@echo</span> off</a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="ex">start</span> /min java -classpath <span class="st">&quot;electricBinary-9.07.jar&quot;</span> com.sun.electric.Launcher</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="bu">exit</span></a></code></pre></div>
+<p>Por fim, crie um <code>link</code> simbólico para o arquivo <code>electric.bat</code> na área de trabalho, por exemplo: clique com o botão direito em cima do arquivo no <code>Windows Explorer</code> e arraste para a área de trabalho. Um pequeno menu de contexto aparecerá dando-lhe a opção de selecionar <code>Criar atalhos aqui</code>.</p>
+<div class="figure" style="text-align: center">
+<img src="https://static.wixstatic.com/media/a27d24_366808cce2b44b5d9a16692cdb3a9fc5~mv2.png/v1/fit/w_320,h_198,al_c,q_80/file.png" alt="Menu de contexto para criação de atalhos no Windows" width="40%" />
+<p class="caption">
+Menu de contexto para criação de atalhos no Windows
+</p>
+</div>
+<p>Alternativamente, você pode clicar com o botão direito na área de trabalho e escolha <code>Novo-&gt;Atalho</code> e navegue a até o arquivo <code>.bat</code> e selecione-o.</p>
+<p>Para personalizar, você poderá adicionar um ícone ao atalho. Salve <a href="https://pmendessantos.github.io/figuras/software/iconplub.ico">esse arquivo</a> numa pasta, por exemplo, na mesma do Electric e selecioná-lo. Depois clique com o botão direito no atalho na área de trabalho, escolha a opção <code>Propriedades</code> e, dentro desta, clique em <code>Alterar Ícone</code> e navegue até o arquivo que você baixou.</p>
+<div class="figure" style="text-align: center">
+<img src="https://img.ibxk.com.br/materias/5529/20144.jpg?w=704" alt="Alterando ícone de atalhos no Windows" width="70%" />
+<p class="caption">
+Alterando ícone de atalhos no Windows
+</p>
+</div>
+<p>Dessa forma você poderá apenas dar dois cliques no atalho da área de trabalho e lançar o Electric mais facilmente.</p>
+</div>
+<div id="instalação-num-pendrive" class="section level3">
+<h3>Instalação num pendrive</h3>
+<p>Se você quiser, pode salvar o arquivo <code>.jar</code> num pendrive e criar o arquivo <code>.bat</code> junto a ele e rodá-lo a partir do pendrive. Basta que o computador em que você vá usá-lo tenha o <em>Java Runtime</em> instalado.</p>
+<p>Você poderá também instalar o <a href="install_2.html">NGSpice</a> e o <a href="install_3.html">LTSpice</a> num pendrive e levá-los consigo ficando com um pacote completo de projeto e simulação de circuitos eletroeletrônicos.</p>
+</div>
+</div>
+<div id="testando-a-instalação-do-electric" class="section level2">
+<h2>Testando a instalação do Electric</h2>
+<p>Após instalar o Electric, para testar se está tudo certo, lançando o <em>software</em> da forma já detalhada para o seu sitema, deverão aparecer duas janelas: a principal e a de mensagens, tal como na figura abaixo:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_running.png" alt="Tela inicial do Electric" width="100%" />
+<p class="caption">
+Tela inicial do Electric
+</p>
+</div>
+<p>O Electric possui duas janelas ativas, uma em que as biliotecas e circuitos são editados e manipulados e uma outra de mensagens com resultados dos comandos que foram ou estão sendo executados. A janela de mensagens é especialmente importante para acompanhar erros durante a edição de circuitos.</p>
+</div>
+<div id="configurando-o-electric-para-o-spice" class="section level2">
+<h2>Configurando o Electric para o Spice</h2>
+<p>Há como configurar o Electric para usar o simulador Spice instalado no seu computador e, ao construir o esquemático de um circuito, você pode receber os resultados da simulação de volta automaticamente no Electric. Ou então não visualizar no Eletric, mas já ter a simulação executada sem ter que invoca o simulador manualmente, podendo visualizar os resultados onde quiser depois.</p>
+<p>A seguir detalha-se a configuração com os dois simuladores que vamos usar: NGSpice e LTSpice. Em quaisquer dos casos modificaremos as opções ligadas à linguagem Spice do Eletric: <code>File-&gt;Preferences...-&gt;Categories-&gt;Tools-&gt;Spice/CDL</code>.</p>
+<div id="ngspice" class="section level3">
+<h3>NGSpice</h3>
+<p>As configurações do Electric precisam estar tal como na tela abaixo:</p>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_e_ngspice.png" alt="Tela inicial do Electric" width="100%" />
+<p class="caption">
+Tela inicial do Electric
+</p>
+</div>
+<p>Especificamente para o NGSpice, modifica-se a seção <em>Running Spice</em> com os comandos abaixo:</p>
+<ul>
+<li><strong>Run program</strong> (programa que será chamado para simular): <code>ngspice</code></li>
+<li><strong>With args</strong> (argumentos para o NGspice): <code>-b -o ${FILENAME_NO_EXT}.log -r ${FILENAME_NO_EXT}.raw ${FILENAME}</code></li>
+</ul>
+<p>Opcionalmente, você pode ajustar também:</p>
+<ul>
+<li><strong>Use dir</strong> (diretório onde os arquivos de simulação serão gravados): /home/patrick/Documentos/electric</li>
+<li><strong>Overwrite existing output file (no prompt)</strong>: se marcada, a simulação irá sobrescrever os resulados das simulações anteriores para arquivos com o mesmo nome sem lhe perguntar.</li>
+<li><strong>Run probe</strong>: se marcada, o Electric abrirá automaticamente o arquivo <code>.raw</code> de saída da simulação e abrirá para lhe mostrar os resultados no visualizador interno.</li>
+</ul>
+</div>
+<div id="ltspice-windows" class="section level3">
+<h3>LTSpice (Windows)</h3>
+<div class="figure" style="text-align: center">
+<img src="https://pmendessantos.github.io/figuras/software/electric_e_ltspice.png" alt="Tela inicial do Electric" width="100%" />
+<p class="caption">
+Tela inicial do Electric
+</p>
+</div>
+<p>Especificamente para o NGSpice, modifica-se a seção <em>Running Spice</em> com os comandos abaixo:</p>
+<ul>
+<li><strong>Run program</strong> (programa que será chamado para simular): veja detalhamento abaixo</li>
+<li><strong>With args</strong> (argumentos para o NGspice): <code>-i ${FILENAME} -r ${FILENAME_NO_EXT}.raw -o ${FILENAME_NO_EXT}.out</code></li>
+</ul>
+<p>No caso do Electric+LTSpice no Windows, para preencher <strong>Run program</strong>, você precisa informar qual o diretório em que foi instalado o LTSpice. Opcionalment você pode seguir os passos descritos <a href="install_2.html#windows">aqui</a> para colocar o LTSpice disponível para chamada a partir de qualquer pasta. Se você não quiser ou não tiver feito isso não tem problema.</p>
+<p>No Windows (7, 8, 8.1 e 10), se você instalar um programa de 32 bits numa máquina de 64 bits<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> esse programa será, por padrão, instalado na pasta <code>C:\Program Files (x86)\</code>. Se o programa for de 64 bits, será na pasta <code>C:\Program Files\</code>.</p>
+<p>Para manter compatibilidade com versões anteriores do Windows, o Electric mantém a codificação de pastas antiga, do Windows XP ou inferior em que apenas 8 caracteres máximos são disponíveis para a pasta. Se houver 3 pastas com os mesmos 8 primeiros caracteres, o Windows substitui os dois últimos caracteres por <code>~#</code>, em que <code>#</code> é o número daquela pasta quando listada via <code>DOS</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>.</p>
+<p>No caso da maioria dos computadores de 64 bits, haverá as duas pastas <code>C:\Program Files\</code> e <code>C:\Program Files (x86)\</code>, que, para o Electric serão: <code>C:\PROGRA~1\</code> e <code>C:\PROGRA~2\</code>, respectivamente.</p>
+<p>Assim, se você instalou o LTSpice como 64 bits, ele estará em: <code>C:\PROGRA~1\LTC\LTspiceXVII\XVIIx64.exe</code>. Se você instalou em 32 bits, ele estará em: <code>C:\PROGRA~2\LTC\LTspiceXVII\XVIIx86.exe</code>. E um desses valores é o que você deverá colocar em <strong>Run program</strong> na configuração do Electric.</p>
+<p>Se precisar de mais detalhes, você pode consultar essa <a href="http://cmosedu.com/cmos1/ltspice/ltspice_electric.htm">página</a> (em Inglês).</p>
+<p>Opcionalmente, você pode ajustar também:</p>
+<ul>
+<li><strong>Use dir</strong> (diretório onde os arquivos de simulação serão gravados): /home/patrick/Documentos/electric</li>
+<li><strong>Overwrite existing output file (no prompt)</strong>: se marcada, a simulação irá sobrescrever os resulados das simulações anteriores para arquivos com o mesmo nome sem lhe perguntar.</li>
+<li><strong>Run probe</strong>: se marcada, o Electric abrirá automaticamente o arquivo <code>.raw</code> de saída da simulação e abrirá para lhe mostrar os resultados no visualizador interno.</li>
+</ul>
+</div>
+</div>
+<div id="suporte" class="section level2">
+<h2>Suporte</h2>
+<p>As configurações do Electric precisam estar tal como na tela abaixo:</p>
+<p>Na página do Electric há a seção de documentação com o <a href="https://www.staticfreesoft.com/documentsUser.html">manual</a> <em>online</em>, que pode ser <a href="https://www.staticfreesoft.com/jmanual/ElectricManual-9.07.pdf">baixado em PDF também</a>, e a <span class="math inline">2<sup><em>a</em></sup></span> edição do livro <a href="https://www.rulabinsky.com/cavd/"><strong><em>Computer Aids for VLSI Design</em></strong></a> que foi escrito por <strong>Steven M. Rubin</strong>, o desenvolvedor original do Electric.</p>
+<p>Há também um <a href="https://groups.google.com/forum/#!forum/electricvlsi">grupo de discussão</a> no Google que está aberto para participação mediante pedido de entrada.</p>
+<p>Muitas universidades usam o Electric em seus cursos e disciplinas, logo você também encontrará diversos tutoriais e exemplos de uso do Electric (busca em Inglês).</p>
+<p>Uma página muito completa é a: <a href="http://cmosedu.com/cmos1/electric/electric.htm">CMOSedu.com</a>. É, na verdade, um portal sobre projetos de circuitos integrados e traz material sobre diversos software. Sobre o Electric, especificamente, além do que há na página acima, pode-se encontrar também diversos <a href="http://cmosedu.com/videos/electric/electric_videos.htm">vídeos tutoriais</a><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> mostrando configurações e ferramentas para edição de circuitos.</p>
+<p>Há também uma grande quantidade de vídeos no <a href="https://www.youtube.com/results?search_query=electric+vlsi">Youtube</a> sobre o Electric que você pode acompanhar. Vários deles retirados da página <strong>CMOSedu.com</strong>.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><strong><em>VLSI</em></strong>: <em>Very Large Scale of Integration</em>. Uma classificação antiga para circuitos integrados com um alto grau de integração de funções.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Como é no Windows, se clicar com o botão direito num arquivo <code>.bat</code> no próprio menu de contexto já aparecerá a opção de Editar (com o Notepad).<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Computadores a partir de 2 GB de memória RAM já devem ser de 64 bits.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Comando <code>dir</code><a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p>Em Inglês.<a href="#fnref5" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+
+<p>© Copyright 2020 <a href="https://github.com/pmendessantos">Patrick Mendes dos Santos.</a> </p>
+
+<p>Sob licença <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, v2.0.</a> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+
+</body>
+</html>

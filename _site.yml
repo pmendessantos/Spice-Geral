@@ -1,0 +1,90 @@
+output_dir: '.'
+#theme: ipsum
+navbar:
+  title: "A Linguagem Spice"
+  type: inverse
+  left:
+    - text: "Home"
+      icon: fab fa-home
+      href: index.html
+    - text: "Tutorais de Instalação"
+      href: instalacao.html
+      menu:
+        - text: "Instalando o Notepad++"
+          href: install_1.html
+        - text: "Instalando o NGSpice"
+          href: install_2.html
+        - text: "Instalando o LTSpice"
+          href: install_3.html
+        - text: "Instalando o Electric"
+          href: install_4.html
+    - text: "Electric VLSI"
+      menu:
+        - text: "Configurando o Electric"
+          href: electric_1.html
+        - text: "Criando biliotecas e circuitos"
+          href: electric_2.html
+        - text: "Simulando circuitos a partir do Electric"
+          href: electric_3.html
+    - text: "Spice"
+      menu:
+        - text: "Visão Geral"
+          href: spice.html
+        - text: "Estrutura Básica de Simulação"
+          href: spice_1.html
+        - text: "Elementos e Simulações Básicas"
+          href: spice_2.html
+        - text: "Dispositivos Eletrônicos"
+          href: spice_3.html
+        - text: "Parâmetros e Inclusões"
+          href: spice_4.html
+        - text: "Medições"
+          href: spice_5.html
+        - text: "Subcircuitos"
+          href: spice_6.html
+#    - text: "Electric VLSI"
+#      href: geo_R.html
+#    - text: "Blog"
+#      href: blog.html
+#    - text: "Contact"
+#      href: contact.html
+  right:
+#    - text: "Contato"
+#      href: "contact.html"
+    - icon: fab fa-github
+      href: https://github.com/pmendessantos/spice_geral
+    - icon: fab fa-linkedin
+      href: https://www.linkedin.com/in/patrick-mendes-dos-santos-a93a0a37/
+    - icon: fab fa-stack-overflow
+      href: https://stackoverflow.com/users/13710326/patrick-mendes?tab=profile
+output:
+  html_document:
+    self_contained: false
+    theme: cerulean
+#    mathjax: "//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    mathjax: "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    lib_dir: libs
+    css: styles.css
+#    scss: _bootswatch.scss
+    include:
+      in_header: head.html
+#    toc_depth: 3
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    highlight: tango
+    pandoc_args: ["--syntax-definition", "spice.xml"]
+    
+#  rmdformats::readthedown:
+#    include:
+#      in_header: head.html
+#      after_body: footer.html
+#    highlight: espresso
+#    pandoc_args: ["--syntax-definition", "spice.xml"]
+
+#  rmdformats::html_clean:
+#    highlight: espresso
+#    toc: true
+#    toc_float: true
+#    toc_depth: 3
+#    pandoc_args: ["--syntax-definition", "spice.xml"]

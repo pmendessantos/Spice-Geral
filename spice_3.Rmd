@@ -1,0 +1,855 @@
+---
+#date: "2020-06-13T00:00:00+01:00"
+draft: false
+linktitle: Dispositivos Eletrônicos
+title: Dispositivos Eletrônicos
+#  | SPICE
+#  | Simulation Program with Integrated Circuits Emphasis
+#  | "<span style='font-size: 30px'>Hello</style> <span style='font-size: 10px'>Everyone</style>"
+
+toc: true
+type: docs
+weight: 2003
+output:
+  html_document:
+    mathjax: "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    theme: spacelab
+    include:
+      in_header: head.html
+      after_body: footer.html
+    lib_dir: libs
+    css: styles.css
+    logo: logo.jpg
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    highlight: pygments
+    highlight_options:
+      linenos: inline
+    pandoc_args: ["--syntax-definition", "spice.xml"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
+library(mathjaxr)
+```
+
+# Introdução
+
+[Inicialmente](spice_1.html#tab_comps) foram apresentados alguns componentes e seus respectivos códigos. [Depois](spice_2.html), foram detalhados alguns componentes passivos. Aqui um detalhamento maior será feito para os componentes ativos ou eletrônicos: dispositivos semicondutores. Como é um curso básico e também pelo fato da linguagem Spice ser muito abrangente, não será aqui esgotado todo o universo de possibilidades, mesmo para os componentes que estão sendo apresentados.
+
+Para mais detalhes sobre componentes, declarações, funções e comandos, pode-se consultar o [manual online do **Spice 3f.5**](http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/UserGuide/elements_fr.html).
+
+Mais uma vez enfatiza-se que, embora o código Spice possa ser gerado automaticamente no Electric, primeiro vamos construir os códigos para podermos nos familiarizar com eles e podermos, com segurança, rastrear e corrigir os erros depois, quando estivermos usando o Electric.
+
+Logo, para cada seção a seguir haverá duas versões de código, uma válida para o fluxo do NGSpice e outra para o do LTSpice. Recomenda-se que os dois simuladores sejam testados.
+
+Uma diferença importante que aparece nos códigos a seguir é a inclusão de modelos de simulação para os dispositivos eletrônicos. Eles são gerados pelos seus fabricantes e disponibilizados gratuitamente como forma de popularizar o uso de um determinado dispositivo. Se há como simular um circuito e prever o seu comportamento fica mais fácil para que alguém efetivamente compre e utilize esse dispositivo.
+
+Os modelos de simulação vêm preencher uma lacuna que as folhas de dados (_datasheets_) não preenchem: prever o comportamento do dispositivo num circuito em operação. Embora haja várias tabelas e curvas importantes numa folha de dados de um dispositivo eletrônico, na maioria das vezes esses dados foram levantados seguindo-se condições padrão. Por exemplo, é comum que as folhas de dados sejam elaboradas com o dispositivo ensaiado a $25\ ^oC$, alimentado com a tensão nominal de operação e operando com carga padrão, geralmente $2\ k\Omega$ ou $10\ k\Omega$.
+
+Isto é, se você precisa saber como esse dispositivo se comportará num circuito que não tem as condições padrão, você pode comprar os componentes, montá-lo e averiguar. Ou, antes de fazê-lo, usar o simulador com um modelo de dispositivo de fonte confiável e prever o comportamento antes de montá-lo. Assim poderá ter uma ideia se o dispositivo atende às suas espectativas.
+
+> Importante!
+> A linguagem Spice pode lhe avisar se um dispositivo não está operando na chamada **Área de Operação Segura** (**SOA**, do Inglês _Safe Operating Area_). Contudo, você precisa dizer ao Spice para que faça essa conferência. Esse é um ponto que não será tratado aqui.
+>
+> O Spice simplesmente calcula o circuito, mas não necessariamente lhe avisa se o dispositivo está com a sua corrente muito acima do nominal e ela queimaria o dispositivo, por exemplo.
+
+É comum, por exemplo, que o Spice calcule tensões de centenas de quilovolts num circuito por causa de valores de entrada ou de modelos mal ajustados, mas que são impossíveis de acontecer na prática. O simulador, tal como uma planilha do LibreOffice Calc ou do Excel, "não pensa" no que está sendo feito. Você é quem precisa ter certeza de que:
+
+1. o(s) modelo(s) selecionado(s) se aplica(m) à situação em análise.
+2. os dados de entrada e as condições iniciais e de contorno estão corretas.
+3. o método de análise com o modelo selecionado está sendo empregado da forma correta.
+
+Sem isso, os resultados das simulações podem lhe levar a erros: nem todos os resultados serão exdrúxulos como o exemplo acima. Além disso, as observações acima são válidas para qualquer problema em que se possa usar métodos matemáticos como ferramental para levantamento de informação necessária à tomada de decisões. Não são, necessariamente, uma particularidade da Engenharia.
+\   \   \
+\   \   \
+
+
+## Modelos de Dispositivos
+
+A seguir, seguem alguns modelos de simulação para dispositivos comerciais muito usados no ensino de eletrônica e em pequenos projetos. Alguns deles serão usados nas simulações dessa seção e outros, nas próximas páginas.
+
+```{r echo=FALSE}
+componente <- c("Diodo","Diodo","BJT - NPN","BJT - PNP","BJT - NPN","BJT - NPN/PNP","BJT - NPN/PNP","Amp. Op.","Amp. Op.","CMOS","Vários")
+nome <- c("1N4007","1N4148","2N3904","2N3906","CA3046","CA3096","BC337/BC327","LM741","TL074","Onsemi C5N","Biblioteca LTspice")
+descricao <- c("Diodo retificador","Diodo de sinal","Transistor para aplicações gerais, par complementar com o 2N3906","Transistor para aplicações gerais, par complementar com o 2N3904", "Transistor para aplicações gerais - alta frequência","Transistores complementares para aplicações gerais - alta frequência","Transistores complementares para aplicações gerais","Amplificador Operacional para aplicações gerais","Amplificador Operacional para aplicações gerais - baixo ruído","Tecnologia de microfabricação com rótulo de $0,\\!6\\ \\mu m$","Biblioteca de transistores BJT do LTSpice IV")
+datasheets <- c("On Semiconductor","Vishay","On Semiconductor","On Semiconductor","Intersil","Intersil","On Semiconductor","Texas Instruments","Texas Instruments","On Semiconductor","Variados")
+dslinks <- c("https://www.onsemi.com/pub/Collateral/1N4001-D.PDF",
+       "https://www.vishay.com/docs/81857/1n4148.pdf",
+       "https://www.onsemi.com/pub/Collateral/2N3903-D.PDF",
+       "https://www.onsemi.com/pub/Collateral/2N3906-D.PDF",
+       "https://www.mouser.com/catalog/specsheets/intersil_fn341.pdf",
+       "http://www.phys.ufl.edu/courses/phy4802L/fall17/DataSheets/ca3096.pdf",
+       "https://www.onsemi.com/pub/Collateral/BC337-D.PDF",
+       "https://www.ti.com/lit/ds/symlink/lm741.pdf",
+       "https://www.ti.com/lit/ds/symlink/tl074.pdf",
+       "https://www.onsemi.com/products/product-taxonomy/custom-foundry-services/c5-process-technology?currentSession=E652DE0B0C6EE0B10AD6A335E39A6153.tomcat1",
+       "http://ltwiki.org/index.php?title=Standard.bjt")
+
+links <- c("https://pmendessantos.github.io/figuras/files/modelos_spice/1N4007.REV0.SP3",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/1N4148.mod",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/2N3904.SP3",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/2N3906.SP3",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/ca3046v2.txt",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/ca3096.mdl",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/bc327_337_40.txt",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/LM741.MOD",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/TL074.lib",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/c5_models.txt",
+       "https://pmendessantos.github.io/figuras/files/modelos_spice/standard.bjt.ltspice.lib")
+
+x<-data.frame(componente, nome, descricao, datasheets, row.names = NULL, check.rows = FALSE, check.names = TRUE, stringsAsFactors = default.stringsAsFactors())
+
+x$nome <- paste0("[", x$nome, "](", links, ")")
+x$datasheets <- paste0("[", x$datasheets, "](", dslinks, ")")
+names(x) <- c("Componente","Código e Modelo","Descrição","Fabricante e _Datasheet_")
+kable(x, align=c("l","l","l","l"), booktabs=TRUE, escape = F, caption = 'Modelos Spice de Dispositivos Comerciais para Simulação') %>% kable_styling(bootstrap_options = "striped", "hover", full_width = F )
+```
+
+Na tabela acima vale obsevar que:
+
+- **CA3096**: é um circuito integrado com transistores complementares, isto é, ele tem transistores NPN e PNP que se complementam: possuem a mesma tensão base-emissor para a mesma corrente de coletor. O arquivo contém o modelo para ambos os dispositivos.
+- **BC337** e **BC327**: são um par complementar, tal como os transistores do CA3096, mas não coexistem num mesmo circuito integrado. São fabricados separadamente, embora complementares. O arquivo disponível contém o modelo para ambos os dispositivos.
+- **Biblioteca LTSpice**: é um arquivo com a declaração de modelos de centenas de transistores bipolares que faziam parte da versão IV do LTSpice. Embora a versão do _software_ tenha mudado, os transistores ainda estão em uso, em sua maioria.
+
+O que os arquivos de modelo contém são linhas do tipo:
+
+```spice
+** Modelo de diodo
+.MODEL [nome_do_modelo] d [parametro1 = valor] [parametro2 = valor] ...
+
+** Modelo de transistor bipolar NPN e PNP
+.model [nome_do_modelo] NPN [parametro1 = valor] [parametro2 = valor] ...
+.model [nome_do_modelo] PNP [parametro1 = valor] [parametro2 = valor] ...
+
+** Modelo de mosfet NMOS e PMOS
+.model [nome_do_modelo] NMOS [parametro1 = valor] [parametro2 = valor] ...
+.model [nome_do_modelo] PMOS [parametro1 = valor] [parametro2 = valor] ...
+```
+
+Os parâmetros de modelo de cada dispositivo não serão tratados aqui. Só para os MOSFETs usados em circuitos integrados são mais de 40 tipos de modelo, cada um com uma particularidade. O mais popular é o [**BSIM**](https://bsim.berkeley.edu/) ou _Berkeley Short-channel IGFET Model_. De maneira geral os parâmetros dos dispositivos suportados pelo Spice podem ser conferidos [nessa página](http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/UserGuide/elements_fr.html).
+
+Por fim, usaremos os modelos acima como arquivos externos, mas nada impede que a declaração de um modelo seja feita dentro do próprio código Spice, já que `.model` é um comando Spice como outro qualquer. A utilização dos modelos em arquivo externo é uma mera conveniência para deixar o código de circuito mais limpo e fácil de ser verificado.
+
+
+# Diodos
+
+## Declarações de diodo
+
+As declaraçãos de diodo são diferentes em cada simulador. Prestar atenção aos parâmetros que só cabem a um ou outro simulador.
+
+No NGSpice
+```spice
+d[nome_do_componente] nó_1 nó_2 [nome_do_modelo] <AREA> <OFF> <IC=[VD]> <temp=[valor]> <m=[valor]> <pj=[valor]> <dtemp=[valor]>
+```
+
+No LTSpice
+
+```spice
+d[nome_do_componente] nó_1 nó_2 [nome_do_modelo] <AREA> <OFF> <IC=[VD]> <temp=[valor]> <m=[valor]> <n=[valor]>
+```
+
+Em detalhes:
+
+- **nome_do_modelo**: é o nome dado pelo fabricante para o modelo do seu dispositivo. Se o nome não for citado ou citado incorretamente o Spice acusará erro pois não saberá como calcular o circuito com um componente desconhecido.
+
+- **AREA**: é um multiplicador para simular um aumento ou diminuição da área de junção. Se omitido, o valor padrão $1$ será assumido.
+
+- **pj**: é um multiplicador para simular um aumento ou diminuição do perímetro da junção. Se omitido, o valor padrão $1$ será assumido.
+
+- **m**: é um multiplicador para simular um aumento ou diminuição da área e perímetro de junção. Útil para considerar a existência de `m` dispositivos em paralelo, por exemplo. Se omitido, o valor padrão $1$ será assumido.
+
+- **n**: é um multiplicador para indicar a quantidade de diodos em série. Se omitido, o valor padrão $1$ será assumido. 
+
+- **OFF**: indica ao Spice se esse dispositivo está inicialmente desligado. Ajuda o simulador a resolver o ponto de operação. Só deve ser usado se você tiver certeza de que isso é verdadeiro ou mesmo que esteja forçando uma situação. Ou ainda se estiver tendo problemas com a convergência no ponto de operação.
+
+- **IC**: se a opção [`uic`](spice_2.html#análise-de-ponto-de-operação) estiver habilitada, então há como especificar a condição inidial da tensão sobre o diodo: `VD`.
+
+- **temp**: você pode forçar a temperatura de trabalho de um determinado diodo usando esse parâmetro. Importante: o valor de `temp` aqui se sobreporá a qualquer valor estipulado em `.options temp=valor`.
+
+- **dtemp**: você pode forçar a temperatura de trabalho de um determinado diodo usando esse parâmetro. Diferentemente de `temp`, `dtemp` pede que você estabeleça a diferença de temperatura que aquela instância de diodo está em relação ao valor da temperatura do circuito. Exmeplo: se quiser simular um diodo operando $5\ ^oC$ acima da temperatura do circuito, ajuste `dtemp=5`.
+
+
+Ou seja, basta iniciar a linha com a letra `R`, em qualquer caixa, para declarar a existência de um resistor comum^[As variações não serão tratadas aqui. Apenas para conhecimento: há resistores não lineares, semicondutores (de diversos tipos) e dependentes com outras variáveis.]. As variações não serão tratadas nesse curso, mas podem ser consultadas no [manual](http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/UserGuide/elements_fr.html).
+
+Por padrão: `nó_1` é considerado o nó positivo do resistor e o `nó_2`, o negativo. Não há polaridade, as referências são unicamente para cálculo de circuito. Veja os Exemplo 1 e 2 a seguir que detalham o uso de resistores juntamente com a análise de ponto de operação.
+
+# Análise em Corrente Contínua (Varredura)
+
+A maior parte das curvas exibidas numa folha de dados de um dispositivo eletrônico pode ser obtida através da análise de variação de ponto de operação ou varredura (_sweep_) em corrente contínua. Como já mencionado, isso geralmente é feito sob condições conhecidas e estáveis de temperatura, embora seja feito em pelo menos duas temperaturas distintas.
+
+No Spice, podemos essa análise é feita pelo comando `.dc`. O LTSpice 
+
+
+# Transistores de Junção Bipolar
+
+A análise de ponto de operação é a análise em corrente contínua do circuito. Ela calculará em que ponto o circuito está em termos de distribuição contínua de tensão e corrente. É costumeiro dizer que calcula-se o ponto de equilíbrio entre as variáveis `através` (correntes) e das variáveis `entre` (tensões).
+
+Dessa forma, não faz sentido falar em análise de ponto de operação para num circuito que não tenha pelo menos uma fonte com valor estabelecido para correnete contínua. Essas fontes estão contempladas em ambos os exemplos que se seguem.
+
+### Exemplo 1
+Um exemplo muito simples para entender os resistores é um divisor de tensão resistivo: dois resistores em série com uma fonte de tensão. O circuito da figura foi construído no Electric, como apresentado no [Exemplo 1](electric_2.html#exemplo-1).
+
+```{r , echo=FALSE, fig.cap="Esquemático do Exemplo 1.", out.width = '50%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex1_sch.png') 
+```
+
+#### NGSpice:
+##### O código:
+```spice
+*** Exemplo 1
+** Divisor de Tensao Resistivo
+
+*** Circuito
+r1	vi vo 1k
+r2	vo gnd 1k
+
+*** Fontes
+v1	vi 0 dc 1
+
+.end
+
+.control
+*** Analises
+** ponto de operacao
+op
+
+*** Controles
+** roda a simulacao
+run
+
+*** Saidas
+** imprime as saidas
+print vi vo
+
+.endc
+```
+
+##### Simulando:
+```bash
+ngspice ex1.cir
+```
+
+
+
+##### O resultado:
+Como esperado, $1\ V$ dividido igualmente em dois resistores de $1\ K\Omega$ resulta na saída $0,\!5\ V$.
+\   \   \
+\   \   \
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 1 no NGSpice.", out.width = '90%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex1_ng_sol.png') 
+```
+
+#### LTSpice:
+##### O código:
+```spice
+*** Exemplo 1
+** Divisor de Tensao Resistivo
+
+*** Circuito
+r1	vi vo 1k
+r2	vo gnd 1k
+
+*** Fontes
+v1	vi 0 dc 1
+
+** Analises
+.op
+
+.end
+```
+
+##### O resultado:
+Como esperado, $1\ V$ dividido igualmente em dois resistores de $1\ K\Omega$ resulta na saída $0,\!5\ V$.
+\   \   \
+\   \   \
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 1 no LTSpice.", out.width = '90%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex1_lt_sol.png') 
+```
+
+> Observação sobre o LTSpice: a corrente da fonte `I(V1)` está negativa. Sinaliza que a corrente sai pelo nó positivo da fonte. A dos resistores é positiva, isto é, entra pelo nó positivo deles. 
+> 
+> Embora se saiba que resistores não tem polaridade, o Spice faz distinção para efeitos de cálculo.
+> Logo, para conferência, vale o valor. O sentido da corrente será importante em alguns casos e deverá ser conferido quando for de interesse.
+>
+> No caso em questão, circuito série, a corrente que saida fonte (negativa) é equivalente em valor à que entra nos resistores (positiva).
+
+
+### Exemplo 2
+Um outro exemplo muito simples para entender os resistores é um divisor de corrente resistivo: dois resistores em paralelo com uma fonte de tensão. O circuito da figura foi construído no Electric, como apresentado no [Exemplo 2](electric_2.html#exemplo-2).
+
+```{r , echo=FALSE, fig.cap="Esquemático do Exemplo 2.", out.width = '50%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex2_sch.png') 
+```
+
+#### NGSpice:
+##### O código:
+```spice
+*** Exemplo 2
+** Divisor de Corrente Resistivo
+
+*** Opcoes
+** salvar as correntes para poder
+** mostrar depois
+.options savecurrents
+
+*** Circuito
+r1	vi gnd 1k
+r2	vi gnd 1k
+
+*** Fontes
+v1	vi gnd dc 1
+.end
+
+.control
+*** Analises
+** ponto de operacao
+op
+
+*** Controles
+** roda a simulacao
+run
+
+*** Saidas
+** imprime as saidas: correntes em cada resistor
+print @r1[i] @r2[i]
+
+.endc
+```
+
+##### Simulando:
+```bash
+ngspice ex2.cir
+```
+
+##### O resultado:
+Como esperado, $1\ V$ aplicado a dois resistores (de $1\ K\Omega$) em paralelo daria uma corrente igual em cada um deles, de $1\ mA$, no caso. Ou seja a corrente da fonte é igual a $2\ mA$, correspondendo ao resistor equivalente do paralelo: metade da resistência ($500\ \Omega$).
+\   \   \
+\   \   \
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 2 no NGSpice.", out.width = '80%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex2_ng_sol.png') 
+```
+
+#### LTSpice:
+##### O código:
+```spice
+*** Exemplo 2
+** Divisor de Corrente Resistivo
+
+*** Circuito
+r1	vi gnd 1k
+r2	vi gnd 1k
+
+*** Fontes
+v1	vi gnd dc 1
+
+*** Analises
+** ponto de operacao
+.op
+
+.end
+
+```
+
+##### O resultado:
+Como esperado, $1\ V$ aplicado a dois resistores (de $1\ K\Omega$) em paralelo daria uma corrente igual em cada um deles, de $1\ mA$, no caso. Ou seja a corrente da fonte é igual a $2\ mA$, correspondendo ao resistor equivalente do paralelo: metade da resistência ($500\ \Omega$).
+\   \   \
+\   \   \
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 2 no LTSpice.", out.width = '80%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex2_lt_sol.png') 
+```
+
+
+
+## Capacitores e Indutores
+
+### Declaração padrão:
+
+```spice
+* Capacitor
+C[nome_do_componente] nó_1 nó_2 valor ic=[valor]
+
+* Indutor
+L[nome_do_componente] nó_1 nó_2 valor ic=[valor]
+```
+
+ou 
+
+```spice
+* Capacitor
+c[nome_do_componente] nó_1 nó_2 valor ic=[valor]
+
+* Indutor
+l[nome_do_componente] nó_1 nó_2 valor ic=[valor]
+```
+
+Identicamente aos resistores, por padrão: `nó_1` é considerado o nó positivo do componente e o `nó_2`, o negativo. Não há polaridade, as referências são unicamente para cálculo de circuito.
+
+Também como os resistores há variações de ambos os componentes, por exemplo, capacitores de circuitos integrados e indutores acoplados (indutâncias mútuas), mas essa variações não serão tratadas aqui e podem ser consultadas no [manual](http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/UserGuide/elements_fr.html).
+
+Opcionalmente, para capacitores e indutores, pode-se definir uma condição inicial para a sua tensão e corrente, respectivamente. Isso pode ajudar a economizar tempo de simulação ou mesmo possibilitar que o circuito seja resolvido.
+
+## Análise Transitória (Variação no Tempo)
+
+### Declaração Padrão
+
+No NGSpice:
+
+```spice
+.tran [tstep] [tstop] [tstart] [tmax] [uic]
+
+ou, dentro do bloco de controle, sem o ponto:
+
+tran [tstep] [tstop] [tstart] [tmax] [uic]
+```
+
+No LTSpice
+
+```spice
+.tran [tstep] [tstop] [tstart] [tmax] [modificadores]
+```
+
+Para o NGSpice e LTSpice:
+
+- **tstep**: passo base para o cálculo da simulação, definirá o número de pontos com valores calculados. Quanto menor o passo, mais instantes de tempo precisam ser calculados, logo maior quantidade de dados precisará ser manipulada e maior será o uso de memória pelo simulador. Melhor sempre começar com valores grandes, isto é, um valor 10 a 100 vezes menor que o `tstop`. É obrigatório no NGSpice, mas pode ser omitido no LTSpice que usará métodos de tentar prever esse passo a partir do `tstop`.
+
+- **tstop**: é o tempo no qual a simulação será encerrada. Serve de base para que o Spice possa otimizar a solução: o passo é modificado para que não se perca tempo e memória calculando-se pontos cuja resposta é muito próxima do anterior e diminui-se o passo para os pontos em que a oscilação numérica começa a aumentar. Obrigatório em ambos NGSpice e LTSpice.
+
+- **tstart**: muitas vezes precisa-se calcular o circuito por todo um período de tempo, mas está-se interessado apenas no final desse período. Esse valor, que é opcional para ambos NGSpice e LTSpice, define a partir de que instante a resposta final será mostrada. O simulador calculará tudo entre 0 segundos e `tstop`, mas só mostrará os resultados a partir de `tstep`.
+
+- **tmax**: também opcional para ambos, define o máximo passo de integração possível. Existe extamente porque o simulador irá fazer modificações, como dito anteriormente, para diminuir a quantidade de cálculos a serem realizados. Para garantir um período ajustado de tempo de observação pode-se usar esse valor. Importante dizer que, se for usado, necessariamente um valor de `tstart` deverá vir antes dele.
+
+- **uic**: significa _use initial conditions_ e serve para isso mesmo, usar as condições iniciais. Por exemplo, se o parâmetro `ic` for ajustado para um capacitor e `uic` estiver na chamada do comando, então o Spice irá de fato usar o valor ajustado para a tensão inicial do capacitor. Ele pode ser usado no comando sem que `tstart` e `tmax` estejam sendo usados. É opcional e é um dos modificadores (ver adiante) do LTSpice.
+
+Os modificadores do LTSpice, além de `uic`, são:
+
+- **steady**: interrompe simulação quando o estado estacionário é alcançado.
+- **nodiscard**: não apaga os cálculos realizados antes da chegada ao estado estacionário.
+- **startup**: calcula o ponto de operação com as fontes independentes desligadas e com as condições iniciais, se `uic` estiver ligado. Então faz uma entrada em rampa linear nessas mesmas fontes independentes nos primeiros $20\ \mu s$ de simulação.
+- **step**: calcula a resposta ao degrau do circuito.
+
+
+### Ponto de Operação
+
+A análise do comportamento de um circuito no tempo depende de um ponto de partida, isto é, do seu equilíbrio inicial de energia. Para tanto, mesmo que não seja chamada um análise específica de [ponto de operação](#analise-de-ponto-de-operacao), o Spice entende que é preciso primeiro calcular esse ponto de operação para somente então proceder com a análise temporal.
+
+O ponto de operação inicial é importante para que o Spice consiga chegar em respostas corretas para o circuito e esse pode ser um problema de convergência em circuitos em que se tem indutores em paralelo ou capacitores em série sem a existência de nenhum tipo de resistência. Há formas de se contornar esses problemas, mas não serão tratadas aqui.
+
+### Passo de Simulação
+
+Um parâmetro importante da análise temporal ou transitória é o passo de integração ou passo de simulação. Diz-se de integração, pois na grande maioria dos circuitos há elementos acumuladores de energia (capacitores e indutores), ainda que parasitas, e eles demandarão a solução de equações diferenciais. Para chega a essa solução está implícito que algum método de integração numérica (não analítica) deverá ser empregado.
+
+O tamanho do passo pode levar a soluções erradas ou mesmo não levar a solução alguma pois, em conjunto com o método de solução do circuito, pode não convergir para uma única resposta. Existem também soluções para esse problema de convergência, principalmente quando se tenta solucioná-lo com passos de simulação muito pequenos^[Passos de integração pequenos são geralmente a solução para problemas de convergência devido às oscilações numéricas dos métodos de solução de circuitos ou mesmo porque, dependendo do caso, quer-se explicar um circuito que possui uma dinâmica muito rápida usando-se um passo de integração muito grande, em comparação com o período dos eventos do circuito.].
+
+
+### Exemplo 3
+Um exemplo para mostrar o uso de tudo o que já foi visto e introduzir comandos extras: um circuito RLC série. O circuito da figura foi construído no Electric, como apresentado no [Exemplo 3](electric_2.html#exemplo-3).
+
+```{r , echo=FALSE, fig.cap="Esquemático do Exemplo 3.", out.width = '50%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex3_sch.png') 
+```
+
+#### NGSpice:
+##### O código:
+```spice
+*** Exemplo 3
+** Circuito RLC Serie
+
+*** Opcoes
+** salvar as correntes para poder
+** mostrar depois
+.options savecurrents
+
+*** Parametros
+.param freq=60
+.param T=1/freq
+
+*** Circuito
+R1 vi v2 1k5
+L1 v2 v3 100u
+C1 v3 gnd 470n
+
+*** Fontes
+v1 vi gnd pulse(0 1 0 10n 10n '1/120' '1/60')
+
+*** Analises
+.op
+.tran 0.1u {T}
+
+.end
+
+.control
+*** Controles
+** roda a simulacao
+run
+
+*** Saidas
+** imprime as saidas: correntes em cada resistor
+plot v(vi) 
+plot v1#branch
+plot v(vi,v2) v(v2,v3) v(v3)
+
+.endc
+```
+Novidades do código:
+
+1. Introdução de parâmetros: `freq` e `T`. São como variáveis e pode-se fazer cálculos, como mostrado, usando-se esses parâmetros.
+2. Fonte pulsada, cujos parâmetros são: `pulse(valor_inicial valor_final atraso_inicio tempo_subida_pulso tempo_descida_pulso tempo_no_valor_inicial tempo_do_periodo`.
+3. Uso do parâmetro `T` para modificar um comando (`.tran`).
+4. Para usar o parâmetro, as análises foram colocadas dentro do circuito.
+5. A corrente da fonte de tensão é chamada de _branch_ (ramo). Difere da chamada que fizemos para os resistores no [Exemplo 2](#exemplo-2).
+6. Mostra-se a forma correta de cálculo de tensão entre dois pontos quaisquer do circuito: `v(nó_1,nó_2)`. Essa construção é equivalente a $v(no_1) - v(terra) - (v(no_2) - v(terra)) = v(no_1) - v(no_2)$. Essas tensões são, respectivamente, as tensões sobre o indutor, resistor e capacitor do circuito.
+
+##### O resultado:
+Como esperado, um pulso de $1\ V$ aplicado num circuito RLC resulta numa subida gradual da tensão no capacitor enquanto a do indutor vai à zero à medida em que o circuito se estabiliza. O resistor se comportanto apenas como limitador de corrente e corresponsável pelo atraso em ambos os transitórios.
+\   \   \
+\   \   \
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 3 no NGSpice: registro.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex3_ng_sol1.png') 
+```
+\   \   \
+
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 3 no NGSpice: tensão de entrada.", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex3_ng_sol2.png') 
+```
+\   \   \
+
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 3 no NGSpice: corrente da fonte.", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex3_ng_sol3.png') 
+```
+\   \   \
+
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 3 no NGSpice: tensão no indutor V(vi,v2), no resistor V(v2,v3) e no capacitor V(v3).", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex3_ng_sol4.png') 
+```
+\   \   \
+
+
+
+#### LTSpice:
+##### O código:
+```spice
+*** Exemplo 3
+** Circuito RLC Serie
+
+*** Parametros
+.param freq=60
+.param T=1/freq
+
+*** Circuito
+R1 vi v2 1k5
+L1 v2 v3 100u
+C1 v3 gnd 470n
+
+*** Fontes
+v1 vi gnd pulse(0 1 0 10n 10n '1/120' '1/60')
+
+*** Analises
+** ponto de operacao
+.op
+** analise transitoria
+.tran 0.1u {T}
+
+.end
+```
+
+##### O resultado:
+Como esperado, $1\ V$ aplicado a dois resistores (de $1\ K\Omega$) em paralelo daria uma corrente igual em cada um deles, de $1\ mA$, no caso. Ou seja a corrente da fonte é igual a $2\ mA$, correspondendo ao resistor equivalente do paralelo: metade da resistência ($500\ \Omega$).
+\   \   \
+\   \   \
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 3 no LTSpice: formas de onda.", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex3_lt_sol.png') 
+```
+
+E, pode-se ver os resultdos do processamento do circuito, tal como já mostrado para o NGSpice. Basta pressionar `Ctrl+l` ou então ir até o menu: `View->Spice Error Log`. A tela, para esse exemplo, é:
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 3 no LTSpice: registro.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex3_lt_sol2.png') 
+```
+\   \   \
+
+
+### Experimente você também
+Por exemplo, mudando-se os valores dos componentes para: **$R_1 = 10\ \Omega$**, **$C_1 = 47\ nF$** e **$L_1 = 470\ \mu H$**, a resposta do circuito torna-se oscilatória. Isto é, o circuito torna-se subamortecido. É condizente com o que se espera? Aumentou-se a frequência para **$1\ kHz$** apenas para facilitar a visualização. Veja os resultados no LTSpice.
+
+
+```{r , echo=FALSE, fig.cap="Resultado do Exemplo 3 com variações no LTSpice.", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex3alt_lt_sol.png') 
+```
+
+Tente alterar os tempos de simulação e os valores dos componentes. Veja e ente analisar os resultados para ver se são consistentes. Se precisar de consulta para a sua análise,você pode consultar [essa página](https://pt.wikipedia.org/wiki/Circuito_RLC#RLC_s%C3%A9rie_com_fonte_da_alimenta%C3%A7%C3%A3o_do_tipo_Th%C3%A9venin) ou então [essa](https://en.wikipedia.org/wiki/RLC_circuit#Series_circuit).
+\   \   \
+\   \   \
+
+
+
+## Operações com Sinais
+Nas seções anteriores, foram apresentadas algumas simulações básicas e introduzidos comandos e opções de simulação e de exibição de resultados.
+
+Outras opções existem e aqui apresentaremos duas delas. Aproveitando os números da simulação anterior, podemos confirmar uma parte da teoria de circuitos calculando: **a corrente no capacitor** e **a potência drenada na fonte de entrada**.
+
+O próprio Spice já calcula a corrente no capacitor pois precisa dela para finalizar a solução do circuito. Até mesmo porque, no caso em questão, a corrente é a mesma para todos os dispositivos. Mas, vamos utilizar a teoria de circuitos para podermos verificar a solução e também aprendermos sobre **operações com sinais** que podem ser feitas em qualquer parte do código Spice, desde que o dado já tenha sido gerado.
+
+A corrente num capacitor é dada pela expressão abaixo:
+
+$$\begin{equation}\label{eq:ic}
+i_C\ =\ C\dfrac{dv_c}{dt}
+\end{equation}
+$$
+
+tomando-se condições iniciais iguais a zero.
+
+Se usarmos no código, ou no console do Spice, os comandos de plotagem do código abaixo, podemos conferir essa expressão. 
+
+```spice
+*** Exemplo 4
+** Circuito RLC Serie Subamortecido
+
+*** Opcoes
+** salvar as correntes para poder
+** mostrar depois
+.options savecurrents
+
+*** Parametros
+.param freq=1k
+.param T=1/freq
+
+*** Circuito
+R1 vi v2 10
+L1 v2 v3 470u
+C1 v3 gnd 47n
+
+*** Fontes
+v1 vi gnd pulse(0 1 0 10n 10n 'T/2' 'T')
+
+*** Analises
+.op
+.tran 0.1u {T}
+
+.end
+
+.control
+*** Opcoes
+** Muda os gráficos para fundo branco com cor preta
+set color0=white
+set color1=black
+
+*** Controles
+** roda a simulacao
+run
+
+*** Saidas
+** imprime as saidas: correntes em cada resistor
+plot @c1[i]
+plot @c1[capacitance]*deriv(v3)
+plot -i(v1)*v(vi)
+
+.endc
+```
+A seguir, uma figura com a corrente calculada pelo simulador par solucionar o circuito.
+
+```{r , echo=FALSE, fig.cap="A corrente que o Spice calculou para o Capacitor.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex4_ng_sol1.png') 
+```
+
+E essa é a corrente calculada com a expressão da teoria de circuitos, usando a operação de multiplicação entre a capacitância e a derivada da tensão sobre o capacitor, via comando `deriv()`.
+
+```{r , echo=FALSE, fig.cap="A corrente que o Spice calculou para o Capacitor.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex4_ng_sol2.png')
+```
+
+A potência drenada pela fonte será também dada por uma multiplicação de sinais. No código usou-se o sinal negativo na corrente da fonte pois, lembrando o que já foi dito, a corrente sai da fonte. Pode-se calcular a potência como negativa e interpretá-la como sendo uma potência entregue ao circuito ao invés de absorvida dele. Note que a unidade do sinal resultante da multiplicação já está em **Watts**.
+
+```{r , echo=FALSE, fig.cap="Potência drenada da fonte de tensão.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex4_ng_sol3.png')
+```
+
+Outra possibilidade de resultados é a visualização de uma variável em função de outra variável, ainda que a simulação tenha sido no tempo. Por exemplo, a tensão sobre o capacitor (figura abaixo) mostra claramente a resposta oscilatória, mas também a estabilização da resposta nos valores dos patamares da fonte pulsada: `0` e `1`.
+
+```{r , echo=FALSE, fig.cap="Tensão sobre o capacitor.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex4_ng_sol4.png')
+```
+
+Se plotarmos a corrente no capacitor em função de sua tensão, obtem-se o gráfico abaixo, mostrando as oscilações de corrente em função da tensão, mas claramente os dois pontos de equilíbrio do circuito: `0` e `1`.
+
+```{r , echo=FALSE, fig.cap="Corrente versus Tensão no capacitor.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ex4_ng_sol4.png')
+```
+
+Para gerar esse gráfico, no NGSpice, usa-se o comando:
+```spice
+plot @c1[i] vs v(v3)
+```
+
+No LTSpice, primeiro precisamos colocar a variável dependente na tela. No caso, colocamos a corrente no capacitor.
+```{r , echo=FALSE, fig.cap="Primeiro plota-se a variável dependente.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_vs_plot_passo1.png')
+```
+
+Após isso, leve o cursor até o eixo horizontal e ele se transformará numa **régua amarela** ao mesmo tempo em que aparecerá uma mensagem na barra de estatus, tal como na tela abaixo.
+```{r , echo=FALSE, fig.cap="Leva-se o cursor até o eixo horizontal para editá-lo.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_vs_plot_passo2.png')
+```
+
+Isto é, clicando-se com o botão direito, aparecerá a janela de configuração do eixo horizontal. Estará lá em `Quantity Plotted` a variável **`time`**, como já se esperava. Troca-se `time` por `v(v3)` como na figura abaixo.
+
+```{r , echo=FALSE, fig.cap="Edita-se o eixo horizontal para incluir a variável independente desejada.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_vs_plot_passo3.png')
+```
+
+Após a troca da variável independente, clica-se em `OK` e o gráfico estará pronto, como na figura a seguir.
+
+```{r , echo=FALSE, fig.cap="Corrente versus Tensão no capacitor, no LTSpice.", out.width = '85%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_vs_plot_passo4.png')
+```
+
+### Mais Operações
+
+Você encontrará uma lista completa de operações matemáticas e operadores lógicos que podem ser usados tanto para o [NGSpice](http://ngspice.sourceforge.net/docs/ngspice-html-manual/manual.xhtml#magicparlabel-22062) quanto para o [LTSpice](http://ltwiki.org/LTspiceHelpXVII/LTspiceHelp/html/Waveform_Arithmetic.htm).
+
+Essas expressões matemáticas e lógicas também servem para a definição e manipulação de parâmetros, não somente para as formas de onda.
+
+\   \   \
+\   \   \
+
+
+
+## Opções de Simulação
+
+No Spice original, coberto pelo NGSpice, existem uma infinidade de opções para modificar vários aspectos do processo de simulação. Como na [última simulação](#operacoes-com-sinais) em que foram introduzidas modificações de cores.
+
+Algums opções são mais comumente usadas e serão detalhadas aqui. Para consultar a lista de opções do LTSpice você pode consultar [essa página](http://ltwiki.org/LTspiceHelp/LTspiceHelp/_OPTIONS_Set_simulator_options.htm). Para o NGSpice, [aqui](http://ngspice.sourceforge.net/docs/ngspice-html-manual/manual.xhtml#magicparlabel-20113) também tem toda lista de opções para uma consulta mais rápida.
+
+A forma de se declarar opções no Spice é:
+```spice
+.options [opção_1]=[valor_da_opção_1] [opção_2]=[valor_da_opção_2] ...
+```
+Ou, se preferir, poderá usar várias linhas para ficar mais fácil de rastrear:
+
+```spice
+.options [opção_1]=[valor_da_opção_1] 
+.options [opção_2]=[valor_da_opção_2] 
+...
+```
+
+### Opções Comuns
+
+A seguir, a lista de opções que serão usadas nos nossos exemplos. Caso não seja indicado, a opção é comum ao LTSpice e ao NGSpice.
+
+#### **tnom**
+
+- **Valor Padrão:** $27$ ($^oC$)
+- **Descrição:** Ajusta temperatura nominal para os dispositivos que não possuem essa informação no seu modelo. Isto é, o ajuste dessa variável diz que os parâmetros de um determiando modelo de simulação, que não possui essa variável, foram medidos no valor ajustado. Caso haja a variável no modelo, mas possua outro valor, esse valor será modificado pelo de `tnom`.
+- **Exemplo:** Ajuste da temperatura nominal para $25\ ^oC$.
+```spice
+.options tnom=25
+```
+
+#### **temp**
+
+- **Valor Padrão:** $27$ ($^oC$)
+- **Descrição:** Ajusta temperatura de operação do circuito que está sendo simulado. Isto é, o ajuste dessa variável diz em que temperatura os parâmetros do modelo deverão ser recalculados, baseando-se na temperatura nominal (`tnom`), que foi ajustada ou no modelo ou pela opção anterior. Particularmente importante para prever o comportamento de circuitos eletrônicos que são altamente dependentes da temperatura ambiente e de junção, no ponto de operação.
+- **Exemplo:** Ajuste da temperatura de trabalho para $50\ ^oC$.
+```spice
+.options temp=50
+```
+
+#### **numdgt**
+
+- **Valor Padrão:** $6$ (dígitos)
+- **Descrição:** Ajusta o número de dígitos que serão usados para mostrar os resultados, seja na tela ou para serem gravados em arquivo, no caso de exportação de dados. No NGspice pode-se usar no máximo $16$ dígitos e no LTSpice, $12$. Torna-se particularmente importante em circuitos eletrônicos pois ajuda a diferenciar pequenas variações de tensões e correntes. É comum, nesse tipo de circuitos, ter-se um valor de corrente ou tensão contínua em que o circuito opera (ponto de operação) e pequenas variações (vindas de sensores ou fontes de sinal, por exemplo) acontecerem sobrepostas a essas variações. Logo, se você usar poucas casas, pode ser que não consiga perceber essas pequenas diferenças.
+Importante dizer que o ajuste é da quantidade de dígitos para a mantissa do número, seguindo o valor do expoente da potência de 10, que é a base de representação numérica do Spice.
+- **Exemplo:** Ajuste da quantidade de dígitos para $10$.
+```spice
+.options numdgt=10
+```
+#### **measdgt** (LTSpice)
+
+- **Valor Padrão:** $6$ (dígitos)
+- **Descrição:** Idem a `numdgt`, porém modifica o número de dígitos para os resultados do comando `.measure` para realizar medições nas simulações Spice. Está disponível somente para o LTSpice^[Na verdade também em outras versões Spice, como o HSpice. Contudo, diz-se que apenas para o LTSpice, pois apenas duas versões estão sendo tratadas nesse curso.].
+- **Exemplo:** Ajuste da quantidade de dígitos para $10$.
+```spice
+.options measdgt=10 
+```
+#### **savecurrents** (NGSpice)
+
+- **Valor Padrão:** não possui.
+- **Descrição:** Não há valor padrão pois, por padrão, o Spice calcula as correntes nos dispositivos, mas não as mantêm gravadas. Se a opção for colocada os cálculos serão feitos e mantidos para uso posterior. Já usamos essa opção nos Exemplos [2](#exemplo-2), [3](#exemplo-3) e [4](#exemplo-4).
+- **Exemplo:** Para declarar ao Spice que grave as correntes calculadas.
+```spice
+.options savecurrents
+```
+#### **filetype** (NGSpice)
+
+- **Valor Padrão:** binário.
+- **Descrição:** Define o tipo de arquivo será gerado com a _flag_ `-r` quando simulando com o NGSpice em _batch_ (`-b`). Serve também para ajustar o tipo de arquivo que será gerado quando for dado algum comando para exportar os resultados de simulação. O padrão, **`binário`**, é um arquivo que servirá para ser aberto apenas pelo próprio NGSpice. Costuma ser de tamanho bem reduzido quando comparado com a outra opção que é **`ascii`**.
+Se ajustado para **`ascii`**, permitirá que os dados sejam lidos como se fossem um arquivo de texto comum, podendo ser importados em quaisquer outros programas como Octave, LibreOffice Calc, Scilab ou SciDAVis, por exemplo.
+A versão **`ascii`** também permite que se visualize resultados de simulação do NGSpice com a interface gráfica do LTSpice.
+- **Exemplo:** Ajustando o tipo de arquivo para **`ascii`**.
+```spice
+.options filetype=ascii
+```
+
+### Opções Extras (NGSpice)
+
+Essas opções, que [não são poucas](http://ngspice.sourceforge.net/docs/ngspice-html-manual/manual.xhtml#magicparlabel-25866), ajudam a formatar, modificar a execução das simulações e até permitir que gráficos sejam gravados diretamente em Portable Document Format (`.pdf`).
+
+Diferentemente das anteriores, essa opções só podem ser ajustadas dentro da estrutura de controle. Além disso, elas são ajustadas com o comando **`set`** e não com `.options`.
+
+A variável `filetype` pode também ser ajustadas com `set` na seção de controle, ao invés das opções. Os valores são os mesmos apresentados anteriormente.
+
+
+#### **appendwrite**
+
+- **Valor Padrão:** não possui.
+- **Descrição:** Quando se usa comandos para exportar resultados no Spice, se essa variável não estiver no circuito e várias análises da mesma natureza forem usadas, por exemplo, três análises no tempo (com parâmetros diferentes em cada uma), então o Spice irá sobrescrever os resultados da primeira análise com os da segunda e assim por diante. Com a variável ajustada, o Spice irá acrescentar, não sobrescrever, os resultados da simulação ao que já havia sido exportado/gravado.
+- **Exemplo:** Para comandar o Spice para acrescentar ao invés de sobrescrever.
+```spice
+set appendwrite
+```
+#### **colorN**
+
+- **Valor Padrão:** possui vários.
+- **Descrição:** Essa variável controla as cores padrão para fundo dos gráficos, cor dos eixos, títulos e cor das curvas que estão sendo plotadas. No Exemplo [4](#operacoes-com-sinais), modificamos duas das cores: `0`, do fundo (background) e `1`, dos eixos dos gráficos. 
+- **Particularidades**: Além das cores de fundo e eixos, existem as cores `2` a `22` são para as cores dos gráficos. A cor `2` é para o primeiro sinal plotado, a cor `3` para o segundo e assim por diante. Os valores de ajustes podem ser o nome das cores descritos [nessa página](https://www.codeproject.com/Articles/1276/Naming-Common-Colors) ou um código `rgb`^[Paleta básica: vermelho, verde e azul (_Red_, _Green_, _Blue_)]. Uma ajuda pode ser escolher a cor desejada [nessa página](https://colornames.org/) e usar o código `rgb` que ela lhe dará para a cor escolhida.
+- **Exemplo 1:** Ajustando o fundo para azul claro e a primeira curva do gráfico para azul escuro.
+```spice
+set color0=aliceblue
+set color2=darkblue
+```
+
+- **Exemplo 2:** Ajustando o fundo para amarelo e a primeira curva do gráfico para algo próximo de roxo.
+```spice
+set color0=rgbd:255/221/0
+set color2=rgbd:56/0/176
+```
+
+#### **units**
+
+- **Valor Padrão:** radians.
+- **Descrição:** Ajusta se o valor da unidade das funções trigonométricas será em radianos ou graus. Particularmente importante para mostrar a fase de sinais em gráficos de resposta em frequência.
+- **Exemplo:** Ajustar a visualização/utilização de variáveis trigonométricas para graus.
+```spice
+set units=degrees
+```

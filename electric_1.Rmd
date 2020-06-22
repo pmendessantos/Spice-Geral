@@ -1,0 +1,128 @@
+---
+#date: "2020-06-13T00:00:00+01:00"
+draft: false
+linktitle: Configurando o Electric
+title: Configurando o Electric
+toc: true
+type: docs
+weight: 2003
+output:
+  html_document:
+    theme: cosmo
+    include:
+      in_header: head.html
+      after_body: footer.html
+    mathjax: null
+    lib_dir: libs
+    css: styles.css
+    logo: logo.jpg
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    highlight: pygments
+    highlight_options:
+      linenos: inline
+    pandoc_args: ["--syntax-definition", "spice.xml"]
+---
+
+## Menu de Preferências
+
+O menu de preferências pode ser acessado via barra de menus `File->Preferences...` 
+
+
+Ou então no ícone com a chave de fenda: 
+```{r , echo=FALSE, out.width = '5%'}
+ knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_prefs_icon.png')
+```
+
+Nas demais seções os caminhos de preferência estão todos baseados nesse primeiro acesso.
+
+## Memória
+
+Apesar do fato de que não utilizaremos o Electric em circuitos muito grandes, convém designar um pouco mais de memória para o Electric. Na seção `Categories->General->General` você pode configurar a memória disponível, dependendo de quanto de memória RAM você tem instalada e livre (que não está sendo usada pelo sistema) no seu computador. 
+
+Recomenda-se pelo menos **128 MB**.
+
+```{r , echo=FALSE, fig.cap="Configurações de Memória Usada pelo Electric", out.width = '65%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_conf_mem2.png') 
+```
+
+## *DRC* (_Dynamic Rule Check_)
+
+DRC ou _Verificação Dinâmica de Regras_ serve para verificar se há erros no circuito construído antes de submetê-lo à simulação. Há vários tipos de verificação e o que nos interessa é a verficação hierárquica, isto é, se todos os elementos estão devidamente conectados, incluindo todos os subcircuitos.
+
+O uso nosso será restrito, mas importante. Importante ressaltar que `Incremental DRC` deve estar ligado. Como é mais fácil explicar a verificação à medida que usa-se o Electric, pede-se apenas que sejam ajustadas as configurações tal como na figura abaixo.
+
+```{r , echo=FALSE, fig.cap="Configurações de Verificação Dinâmica de Erros (DRC)", out.width = '65%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_conf_drc.png') 
+```
+
+## Atalhos de Teclado
+
+Algumas funções serão usadas várias vezes durante o curso e, portanto, vale a pena configurar atalhos de teclado para elas. Isso pode ser feito em `Categories->General->Key Bindings`.
+
+As configurações de atalhos de teclado que serão usados no _software_ são ou padrão do próprio Electric ou ajustadas pelo usário. Os atalhos que seguem são sugestões que, já se sabe, não são conflitantes com os demais padronizados pelo desenvolvedor. Você poderá mudar para atalhos da sua preferência.
+
+Além dos que estão destacados aqui há também uma lista completa no [manual](https://www.staticfreesoft.com/jmanual/mchap01-09.html#mchap01-09.html) do Electric.
+
+- #### *DRC* (_Dynamic Rule Check_)
+
+O atalho dessa verificação fica em `Tools->Tools | DRC->Tools | DRC | Check Hierarchically`.
+
+E as teclas que uso são: 
+
+Por padrão o atalho é a tecla `F5` (tela abaixo), bastando apenas conferir se está configurado dessa forma.
+
+```{r , echo=FALSE, fig.cap="Configurações de Verificação Dinâmica de Erros (DRC)", out.width = '70%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_conf_key_drc.png') 
+```
+
+- #### *Write Spice Deck* (Construção da Simulação Spice)
+
+Após construir um esquemático de circuito, podemos gerar o código de simulação Spice automaticamente a partir do circuito. Para tanto o Electric irá verificar os nomes dados aos elementos (componentes de circuito) e aos nós e gerará o que se chama lista de rede ou simplesmente **`netlist`**.
+
+Contudo, como será visto a posteriori, é possível que seja incluído códigos de simulação Spice juntamente com o Circuito. Isso é útil pelo fato do Electric não ser um simulador nativo, mas utilizar outros simuladores (e não apenas os que usaremos). Dessa forma, o Electric ganha uma função adicional de simulação.
+
+O tipo de simulação que será usada é configurada da forma como foi descrito lá na [instalação do Electric](install_4.html#configurando-o-electric-para-o-spice). Os passos lá são importantes. Para a geração da simulação foi configurado:
+
+- **_Spice Engine_**: `Spice 3`
+- **_Spice level_**: `3`
+
+Essa configuração é que permitirá que o Electric gere códigos que podem ser "entendidos" pelo NGSpice e pelo LTSpice, além de garantir a aceitação de alguns comandos de simulação que serão usados.
+
+A geração da Simulação Spice com esse comando pode dará início à própria simulação pois também foi configurada a seção `Running Spice->After writing deck:` para **Run, Ignore Output**. Se modificarmos isso para **Don't Run**, então o Electric gerará o código de simulação Spice, mas não chamará o simulador configurado (NGSpice ou LTSpice).
+
+O atalho pode ser ajustado em: `Tools->Tools | Simulation (Spice)->Tools | Simulation (Spice) | Write Spice Deck...`.
+O atalho que foi ajustado foi: `shift S`.
+
+```{r , echo=FALSE, fig.cap="Atalho de teclado para geração de código Spice", out.width = '65%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_conf_key_spice.png') 
+```
+
+- #### *Set Spice Model* (Ajuste do Modelo Spice)
+
+A figura anterior também mostra um comando que será usado muito: atribuir um modelo de simulação para um determinado componente de circuito.
+
+Quando se coloca um transistor bipolar NPN no circuito, por exemplo, ele poderá ser um `BC337`, um `BC546` ou mesmo um `2N3904`. Há diversas opções. Para que se chegue ao resultado desejado é preciso dizer ao Electric que use um determinado modelo de simulação na hora de criar o código de simulação (_spice deck_).
+
+Logo, se houver um circuito com 15 transistores, precisaremos fazer essa atribuição para os 15 componentes.
+
+Como visto na figura, o atalho ajustado foi: `ctrl shift S`.
+
+## *Ports/Exports* (Visualização de portas)
+
+Em `Categories->Display->Ports/Exports` configure a visualização das portas e exportação de nós dos subcircuitos. Será útil quando formos trabalhar com subcircuitos que, como o próprio nome indica, é um circuito que fará parte de outro, mas estará fechado num bloco de controle com suas entradas e saídas configuradas.
+
+Os nomes dessas entradas e saídas é que terão os seus nomes modificados por essa configuração.
+
+```{r , echo=FALSE, fig.cap="Visualização de Portas de Subcircuitos", out.width = '50%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/electric_conf_disp_ports.png') 
+```
+
+Ajuste a configuração para: `Short Names`, tal como na figura acima.
+
+<!---## *NCC* (_Network Consistency Checking_)--->
+
+
+________________________________________________________________

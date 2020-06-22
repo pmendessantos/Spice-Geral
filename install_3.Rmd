@@ -1,0 +1,218 @@
+---
+#date: "2020-06-13T00:00:00+01:00"
+draft: false
+linktitle: Instalando o LTSpice
+title: Instalando o LTSpice
+#author: Patrick Mendes
+resources:
+- src: "**.{png,jpg}"
+  title: "Image #:counter"
+type: docs
+weight: 2001
+
+#output:
+#  rmdformats::readthedown:
+#    include:
+#      in_header: head.html
+#      after_body: footer.html
+#    highlight: espresso
+#    pandoc_args: ["--syntax-definition", "spice.xml"]
+
+#output:
+#  rmdformats::html_clean:
+#    highlight: espresso
+#    toc: true
+#    toc_float: true
+#    toc_depth: 3
+#    pandoc_args: ["--syntax-definition", "spice.xml"]
+    
+output:
+  html_document:
+    toc_depth: 3
+    include:
+      in_header: head.html
+      after_body: footer.html
+# theme: “cerulean”, “cosmo”, “flatly”, “journal”, “lumen”, “paper”, “readable”, “sandstone”, “simplex”, “spacelab”, “united”, and “yeti”
+    theme: yeti
+    mathjax: null
+    lib_dir: libs
+    css: styles.css
+    logo: logo.jpg
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    highlight: pygments
+    highlight_options:
+      linenos: inline
+    pandoc_args: ["--syntax-definition", "spice.xml"]
+
+#   #highlight: “default”, “tango”, “pygments”, “kate”, “monochrome”, “espresso”, “zenburn”, “haddock”, “breezedark”, “textmate”
+
+#<div style="text-align: justify">
+---
+
+```{r echo=FALSE}
+library(vembedr)
+```
+
+## LTSpice
+
+```{r , echo=FALSE, fig.cap="Simulador de circuitos LTSpice &copy; Analog Devices/Linear Technology", out.width = '70%', fig.align = 'center'}
+knitr::include_graphics('https://www.analog.com/-/media/analog/en/design-center/design-tools-calculators/circuit-design-tools-calculator-carousel/ltspice-promo.jpg?la=en') 
+```
+
+O `LTSpice` é um _software_ bastante completo e gratuito para captura de esquemáticos de circuitos, simulação e análise. Importante obsevar que ele é gratuito, mas não livre e nem aberto: você não poderia saber como ele foi feito e nem usá-lo para fazer nada que você queira com ele embutido na solução. Ele dá suporte de destaque de linguagem (_syntax highlight_) para a linguagem Spice, embora você possa simular circuitos sem nem mesmo entender dos detalhes da linguagem, colocando os comandos diretamente na folha de esquemático. Como ele foi desenvolvido para Windows, não está presente nos repositórios oficiais de nenhuma plataforma Linux. Para sua instalação no Linux há duas abordagens que serão detalhadas adiante.
+
+Inicialmente foi desenvolvido pela fabricante de circuitos integrados **Linear Technology** como uma estratégia para facilitar a sua entrada no mercado de circuitos integrados. A biblioteca inicial do LTSpice, além de dispositivos muito difundidos no mundo da eletrônica, desde diodos e transistores básicos, passando por amplificadores operacionais e chegando até osciladores, continha também diversos dispositivos que a própria **Linear Technology** fabricava. Uma [`wiki`](http://ltwiki.org/index.php?title=Main_Page) foi criada e é mantida por vários usuários com diversos tutoriais e exemplos de maneira a fomentar o seu uso.
+
+Além da gratuidade, tamanho da biblioteca (e facilidade de inclusão de modelos), facilidade de uso e vastidão da documentação, o que realmente tornou o LTSpice popular foi o seu solucionador de circuitos. O LTSpice possui uma convergência de fazer inveja em vários simuladores, inclusive pagos: rápida e muito próximo da exatidão. Mesmo pecando com a ausência de funções clássicas e muito usadas no Spice original, como por exemplo a possibilidade de acessar parâmetros internos dos transistores de forma fácil, tornou-se extremamente utilizado mundo afora, para simulação de diversos tipos de circuito.
+
+Ao adquirir a **Linear Technologies**, a **Analog Devices**, uma gigante do mercado de semicondutores adquiriu também os direitos sobre o LTSpice e por isso ele hoje tem sua [página](https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html) hospedada na página principal da **Analog Devices**.
+
+Seguem os métodos de instalação do LTSpice no Linux e Windows.
+
+
+## Linux: Ubuntu / Fedora {.tabset}
+
+
+### Usando o Wine
+
+O **_Wine_** (_Wine Is Not an Emulator_) é um conjunto de programas que fazem a compatilização, em um certo nível de adequação, de aplicativos Windows de forma que possam ser rodados em Linux. Quando se diz em um certo nível de adequação é porque nem todos os _software_ nativos do Windows terão suporte da equipe de desenvolvimento do Wine. Na [página oficial](https://www.winehq.org/) há como obter uma lista dos aplicativos que foram testados em cada uma das versões do Wine, bem como ajuda para a utilização. Não é porque um aplicativo não está na lista dos testados que ele não possa funcionar no Wine. Só quer dizer que não foi testado. Como também é possível, devido à diversos fatores (como versão do Kernel ou _drivers_ específicos de _hardware_, por exemplo), que um aplicativo listado não funcione com o Wine no seu computador.
+
+Quanto mais simples um aplicativo, mais chances há dele funcionar. Menos dependências (_.dll's_), mais chances de sucesso. Menor exigência de _hardware_, maiores chances de sucesso. Esse é o caso do LTSpice.
+
+Tanto no Ubuntu quanto no Fedora você precisará de permissões de superusário (ou _root_) para a instalação, bastando abrir um terminal e digitar o comandos abaixo.
+
+#### Instando o Wine no Ubuntu (18.04/20.04): 
+
+Se você não tem um gerenciador de pacotes (Synaptic, por exemplo), pode fazer a instalação do Wine via linha de comando mesmo.
+
+```bash
+sudo apt-get install wine wine64 wine32 fonts-wine q4wine
+```
+Sendo que:
+
+* wine: suite padrão.
+* wine32: se for necessário o suporte para aplicativos 32 bits.
+* wine64: se for necessário o suporte para aplicativos 64 bits.
+* fonts-wine: fontes básicas para compatibilização da interface de exibição dos aplicativos com o Linux.
+* q4wine: aplicativo que faz uma interface amigável (_front-end_) para a utilização do wine sem a necessidade de linha de comando.
+
+
+#### Instando o Wine no Fedora (30/31/32):
+
+
+Se você não tem um gerenciador de pacotes (dnfdragora, por exemplo), pode fazer a instalação do Wine via linha de comando mesmo.
+
+```bash
+sudo dnf install wine wine-desktop q4wine winetricks wine-fonts 
+```
+Sendo que:
+
+* wine: suite padrão, pronta para suporte a 32 e 64 bits.
+* wine-desktop: cria menus na área de trabalho Linux para os aplicativos Windows, tal como se eles fossem nativos para Linux. Acrescenta também as ferramentas de configuração e suporte do Wine diretamente na área de trabalho.
+* q4wine: aplicativo que faz uma interface amigável (_front-end_) para a utilização do wine sem a necessidade de linha de comando.
+* winetricks: quase a mesma coisa do q4wine, mas pode-se usá-lo como linha de comando ou chamá-lo habilitar uma interface de usuário mais básica. 
+* wine-fonts: fontes básicas para compatibilização da interface de exibição dos aplicativos com o Linux.
+
+#### Instando o LTSpice com o Wine
+
+
+Vá até a [LTSpice](https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html) e selecione sua versão de interesse na seção de **Download** . Se estiver usando o `Firefox`, você poderá escolher em baixar o arquivo num diretório ou abri-lo diretamente com o `Q4Wine` (veja a figura abaixo).
+
+```{r , echo=FALSE, fig.cap="Baixando o Notepad++", out.width = '50%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_dwnld_q4wine.png') 
+```
+
+Abrindo diretamente com o `Q4Wine` aparecerá a tela abaixo, em que você pode fazer ajustes de compatibilidade ou modificar parâmetros de instalação tais como diretório. Sugiro continuar sem alterar nenhum dos parâmetros.
+
+```{r , echo=FALSE, fig.cap="Instalação do Notepad++ com o Wine: tela inicial", out.width = '65%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_q4wine_1.png') 
+```
+
+Após clicar em `Ok`, aparecerá a tela original de instalação do programa como se estivesse no Windows. Clique em `Accept` para aceitar os termos da licença de uso para habilitar as opções de instalação. Aí basta seguir com a instalação normal, selecionando a sua versão de interesse: 32 ou 64 bits.:
+
+```{r , echo=FALSE, fig.cap="Instalação do Notepad++ com o Wine: tal como no Windows", out.width = '65%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_q4wine_2.png') 
+```
+
+Após a instalação o Wine deverá criar links na área de trabalho para o programa recém instalado.
+ 
+###### 
+
+
+### PlayOnLinux: Ubuntu ou Fedora
+
+Uma outra opção que usa o Wine, mas não é completamente dependente dele é o _PlayOnLinux_ que já vem com uma lista de aplicativos compatíveis, com download automático pelo _software_, já embutida. Saiba mais sobre ele [aqui](https://www.playonlinux.com/en/).
+
+######
+
+
+## Windows
+
+A instalação no Windows não apresenta nenhum aspecto relevante específico que precise ser detalhado aqui. Após baixar o LTSpice, execute o arquivo e a aparecerá a tela original de instalação do programa como se estivesse no Windows. Clique em `Accept` para aceitar os termos da licença de uso para habilitar as opções de instalação. Aí basta seguir com a instalação normal, selecionando a sua versão de interesse: 32 ou 64 bits.:
+
+```{r , echo=FALSE, fig.cap="Instalação do Notepad++ com o Wine: tal como no Windows", out.width = '65%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_q4wine_2.png') 
+```
+
+## Instalação num pendrive
+
+<!---```{r echo=FALSE}
+embed_youtube("WKwcDmxsn_c", width = "100%", frameborder = 0, allowfullscreen = TRUE, query = NULL)
+```
+--->
+
+É possível copiar os arquivos do LTSpice já instalado num computador e copiá-los direto para um pendrive e rodar o _software_ direto dessa pasta. Se você for fazer isso, considere instalar ambas as versões do LTSpice, 32 e 64 bits. Assim você pode usar esse pendrive em qualquer computador.
+
+Embora seja demorada a cópia (quantidade de arquivos), o processo é muito simples e funciona muito bem.
+
+Você poderá também instalar o [NGSpice](install_2.html) e o [Electric](install_4.html) num pendrive e levá-los consigo ficando com um pacote completo de projeto e simulação de circuitos eletroeletrônicos.
+
+Segue um vídeo curto (1 min) mostrando o processo feito a partir da instalação no Windows.
+
+<iframe src="https://www.youtube.com/embed/WKwcDmxsn_c" width="100%" height="315" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+## Testando o LTSpice
+
+Como o LTSpice também possui um editor de **_netlists_**, obviamente possui o destaque de sintaxe da linguagem Spice.
+
+Para testar o funcionamento, crie um arquivo de texto `rc.spi` num diretório à sua escolha, copie e cole o código abaixo. 
+
+```spice 
+* Circuito de teste
+R1 1 2 10k
+C1 2 0 10n
+V1 1 0 dc 0 ac 1
+
+.ac dec 100 1 10meg
+.end
+```
+
+Lance o LTSpice e abra o arquivo de dentro dele. Você deverá ver a tela abaixo:
+
+```{r , echo=FALSE, fig.cap="Abrindo um código de circuito no LTSpice", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_teste_1.png') 
+```
+
+Também nessa figura pode-se ver o cursor do mouse no botão `Run` que deve ser acionado para rodar a simulação contida no código. Se tudo der certo, uma segunda subjanela deverá aparecer com os eixos do gráfico de resposta em frequência para que você possa ver os resultados. Diferentemente do NGSpice, o LTSpice não tem comando para mostrar automaticamente os gráficos do seu interesse, então o gráfico da resposta em frequência não aparecerá automaticamente.
+
+```{r , echo=FALSE, fig.cap="Abrindo um código de circuito no LTSpice", out.width = '100%', fig.align = 'center'}
+knitr::include_graphics('https://pmendessantos.github.io/figuras/software/ltspice_teste_2.png') 
+```
+
+Apesar do LTSpice não reconhecer o comando `.plot vdb(2)` ele também não acusa erro e será possível verificar os resulados de simulação. Por enquanto é o que precisamos de teste.
+
+Vê-se que o LTSpice pode ser usado como um editor de códigos de circuito, sem necessidade da instalação do Notepad++, contudo é bastante limitado em recursos de edição, principalmente quando precisamos e/ou queremos trabalhar com diversos circuitos ao mesmo tempo.
+
+## Suporte
+
+Para detalhes sobre como usar o LTSpice, você pode acessar o menu de ajuda pressionando `F1` ou consultar a [`wiki`](http://ltwiki.org/index.php?title=Main_Page) para conferir tutoriais, exemplos, aplicações e modelos de simulação. Há também um [grupo de discussão](https://groups.io/g/LTspice/topics) para resolver dúvidas e discutir resultados.
+
+Uma página muito completa é a: [CMOSedu.com](http://cmosedu.com/cmos1/ltspice/ltspice.htm). É, na verdade, um portal sobre projetos de circuitos integrados e traz material sobre diversos software. Sobre o LTSpice, especificamente, além do que há na página acima, pode-se encontrar também diversos [vídeos tutoriais](http://cmosedu.com/videos/ltspice/ltspice_videos.htm)^[Em Inglês.] mostrando configurações e ferramentas para edição de circuitos.
+
+E [essa excelente apostila](https://edisciplinas.usp.br/pluginfile.php/4873037/mod_resource/content/1/Introdu%C3%A7%C3%A3o%20ao%20LTSpice.pdf), em Português, organizada pelo pessoal da [Escola de Engenharia de São Carlos (USP)](http://www.eesc.usp.br/). Ela é bem detalhada e organizada com práticas em ordem crescente de dificuldade.
+
+Há também uma grande quantidade de vídeos no [Youtube](https://www.youtube.com/results?search_query=ltspice) sobre o LTSpice que você pode acompanhar.
+
+
